@@ -18,5 +18,8 @@ public class UserSessionBean implements UserSessionBeanLocal {
 
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
+
+    public UserSessionBean() {
+    }
     
 }
