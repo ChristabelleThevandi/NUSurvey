@@ -8,10 +8,13 @@ package entity;
 import enumeration.QuestionType;
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -28,6 +31,15 @@ public class Question implements Serializable {
     private File image;
     private QuestionType type;
 
+    @ManyToOne
+    private Survey survey;
+    
+    @OneToMany(mappedBy = "question")
+    private List<Option> options;
+    
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
+    
     public Long getQuestionId() {
         return questionId;
     }

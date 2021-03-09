@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -23,6 +24,15 @@ public class Answer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
+    @ManyToOne
+    private Option option;
+
+    @ManyToOne
+    private Question question;
+    
+    @ManyToOne
+    private Response response;
+    
     public Long getAnswerId() {
         return answerId;
     }

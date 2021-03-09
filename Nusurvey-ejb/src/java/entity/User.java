@@ -5,13 +5,18 @@
  */
 package entity;
 
+import enumeration.FacultyType;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -29,10 +34,28 @@ public class User implements Serializable {
     private Date birth_date;
     private String email;
     private String password;
-    private String faculty;
+    private FacultyType faculty;
     private String major;
     private File avatar;
 
+    @OneToMany(mappedBy = "creator")
+    private List<Survey> mySurveys;
+    
+    @ManyToMany
+    private List<Survey> surveyTaken;
+    
+    @OneToMany(mappedBy = "users")
+    private List<Tag> tag;
+    
+    @OneToOne
+    private CreditCard creditCard;
+    
+    @OneToMany(mappedBy = "user")
+    private List<Transaction> transactions;
+    
+    @OneToMany(mappedBy = "surveyee")
+    private List<Response> responses;
+   
     public Long getUserId() {
         return userId;
     }
@@ -112,20 +135,6 @@ public class User implements Serializable {
     }
 
     /**
-     * @return the faculty
-     */
-    public String getFaculty() {
-        return faculty;
-    }
-
-    /**
-     * @param faculty the faculty to set
-     */
-    public void setFaculty(String faculty) {
-        this.faculty = faculty;
-    }
-
-    /**
      * @return the major
      */
     public String getMajor() {
@@ -151,6 +160,14 @@ public class User implements Serializable {
      */
     public void setAvatar(File avatar) {
         this.avatar = avatar;
+    }
+    
+    public FacultyType getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(FacultyType faculty) {
+        this.faculty = faculty;
     }
     
     @Override

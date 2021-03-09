@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -26,6 +27,12 @@ public class Transaction implements Serializable {
     private Long transactionId;
     private Date transaction_date;
     private TransactionType type;
+    
+    @ManyToOne
+    private User user;
+    
+    @ManyToOne
+    private CreditCard creditCard;
 
     public Long getTransactionId() {
         return transactionId;
