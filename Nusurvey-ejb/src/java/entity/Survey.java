@@ -7,10 +7,14 @@ package entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -29,6 +33,21 @@ public class Survey implements Serializable {
     private String title;
     private Integer max_surveyees;
     private Double price_per_response;
+    
+    @ManyToMany(mappedBy = "surveyTaken")
+    private List<User> surveyees;
+
+    @ManyToOne
+    private User creator;
+    
+    @ManyToMany
+    private List<Tag> tags;
+    
+    @OneToMany(mappedBy = "survey")
+    private List<Question> questions;
+    
+    @OneToMany(mappedBy = "survey")
+    private List<Response> responses;
 
     public Long getSurveyId() {
         return surveyId;

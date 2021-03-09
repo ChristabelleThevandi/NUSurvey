@@ -6,10 +6,13 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -23,6 +26,15 @@ public class Response implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @OneToMany(mappedBy = "response")
+    private List<Answer> answers;
+
+    @ManyToOne
+    private Survey survey;
+
+    @ManyToOne
+    private User surveyee;
+    
     public Long getId() {
         return id;
     }
