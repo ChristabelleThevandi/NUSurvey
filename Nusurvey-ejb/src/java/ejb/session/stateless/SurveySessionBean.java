@@ -11,15 +11,14 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Chrisya
+ * @author hp
  */
 @Stateless
-public class UserSessionBean implements UserSessionBeanLocal {
+public class SurveySessionBean implements SurveySessionBeanLocal {
 
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
 
-    public UserSessionBean() {
+    public SurveySessionBean() {
     }
-    
 }
