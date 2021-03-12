@@ -40,6 +40,22 @@ public class Option implements Serializable {
         this.optionId = optionId;
     }
 
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -64,5 +80,5 @@ public class Option implements Serializable {
     public String toString() {
         return "entity.Option[ id=" + optionId + " ]";
     }
-    
+
 }

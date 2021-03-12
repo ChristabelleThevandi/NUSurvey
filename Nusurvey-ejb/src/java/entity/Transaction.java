@@ -57,7 +57,23 @@ public class Transaction implements Serializable {
     public void setType(TransactionType type) {
         this.type = type;
     }
-    
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+ 
     @Override
     public int hashCode() {
         int hash = 0;
@@ -82,5 +98,5 @@ public class Transaction implements Serializable {
     public String toString() {
         return "entity.Transaction[ id=" + transactionId + " ]";
     }
-    
+
 }

@@ -105,6 +105,46 @@ public class Survey implements Serializable {
         this.price_per_response = price_per_response;
     }
     
+    public List<User> getSurveyees() {
+        return surveyees;
+    }
+
+    public void setSurveyees(List<User> surveyees) {
+        this.surveyees = surveyees;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
+    }
+
+    public List<Response> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<Response> responses) {
+        this.responses = responses;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

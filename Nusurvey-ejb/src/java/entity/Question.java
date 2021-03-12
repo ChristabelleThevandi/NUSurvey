@@ -71,7 +71,31 @@ public class Question implements Serializable {
     public void setType(QuestionType type) {
         this.type = type;
     }
-    
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+
+    public List<Option> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<Option> options) {
+        this.options = options;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -96,5 +120,5 @@ public class Question implements Serializable {
     public String toString() {
         return "entity.Question[ id=" + questionId + " ]";
     }
-    
+
 }

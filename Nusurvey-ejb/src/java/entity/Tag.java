@@ -48,6 +48,22 @@ public class Tag implements Serializable {
     public void setTag_name(String tag_name) {
         this.tag_name = tag_name;
     }
+  
+    public List<Survey> getSurveys() {
+        return surveys;
+    }
+
+    public void setSurveys(List<Survey> surveys) {
+        this.surveys = surveys;
+    }
+
+    public User getUsers() {
+        return users;
+    }
+
+    public void setUsers(User users) {
+        this.users = users;
+    }
 
     @Override
     public int hashCode() {
@@ -73,5 +89,5 @@ public class Tag implements Serializable {
     public String toString() {
         return "entity.Tag[ id=" + tagId + " ]";
     }
-    
+
 }

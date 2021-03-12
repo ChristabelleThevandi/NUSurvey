@@ -40,6 +40,30 @@ public class Answer implements Serializable {
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
     }
+    
+    public Option getOption() {
+        return option;
+    }
+
+    public void setOption(Option option) {
+        this.option = option;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
+    public Response getResponse() {
+        return response;
+    }
+
+    public void setResponse(Response response) {
+        this.response = response;
+    }
 
     @Override
     public int hashCode() {
@@ -65,5 +89,5 @@ public class Answer implements Serializable {
     public String toString() {
         return "entity.Answer[ id=" + answerId + " ]";
     }
-    
+
 }

@@ -37,6 +37,7 @@ public class User implements Serializable {
     private FacultyType faculty;
     private String major;
     private File avatar;
+    private boolean loggedIn;
 
     @OneToMany(mappedBy = "creator")
     private List<Survey> mySurveys;
@@ -170,6 +171,62 @@ public class User implements Serializable {
         this.faculty = faculty;
     }
     
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    public List<Survey> getMySurveys() {
+        return mySurveys;
+    }
+
+    public void setMySurveys(List<Survey> mySurveys) {
+        this.mySurveys = mySurveys;
+    }
+
+    public List<Survey> getSurveyTaken() {
+        return surveyTaken;
+    }
+
+    public void setSurveyTaken(List<Survey> surveyTaken) {
+        this.surveyTaken = surveyTaken;
+    }
+
+    public List<Tag> getTag() {
+        return tag;
+    }
+
+    public void setTag(List<Tag> tag) {
+        this.tag = tag;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
+    }
+
+    public void setCreditCard(CreditCard creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Response> getResponses() {
+        return responses;
+    }
+
+    public void setResponses(List<Response> responses) {
+        this.responses = responses;
+    }
+   
     @Override
     public int hashCode() {
         int hash = 0;
@@ -194,5 +251,5 @@ public class User implements Serializable {
     public String toString() {
         return "entity.User[ id=" + userId + " ]";
     }
-    
+ 
 }

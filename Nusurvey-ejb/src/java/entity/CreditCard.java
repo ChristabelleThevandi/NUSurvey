@@ -77,6 +77,22 @@ public class CreditCard implements Serializable {
         this.expiry_date = expiry_date;
     }
     
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -101,5 +117,5 @@ public class CreditCard implements Serializable {
     public String toString() {
         return "entity.CreditCard[ id=" + creditCardId + " ]";
     }
-    
+
 }

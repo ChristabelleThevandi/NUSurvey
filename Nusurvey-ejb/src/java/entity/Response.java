@@ -42,6 +42,30 @@ public class Response implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+  
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+
+    public User getSurveyee() {
+        return surveyee;
+    }
+
+    public void setSurveyee(User surveyee) {
+        this.surveyee = surveyee;
+    }
 
     @Override
     public int hashCode() {
@@ -67,5 +91,5 @@ public class Response implements Serializable {
     public String toString() {
         return "entity.Response[ id=" + id + " ]";
     }
-    
+
 }

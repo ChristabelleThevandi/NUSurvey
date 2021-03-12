@@ -5,6 +5,12 @@
  */
 package ejb.session.stateless;
 
+import entity.User;
+import exception.EmailExistException;
+import exception.InputDataValidationException;
+import exception.InvalidLoginCredentialException;
+import exception.UnknownPersistenceException;
+import exception.UserNotFoundException;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +19,15 @@ import javax.ejb.Local;
  */
 @Local
 public interface UserSessionBeanLocal {
+
+    public User login(String username, String password) throws InvalidLoginCredentialException;
+
+    public void logout(User user);
+
+    public User retrieveUserByEmail(String email) throws UserNotFoundException;
+
+    public User register(User newUser) throws EmailExistException, UnknownPersistenceException, InputDataValidationException;
+
+    public void changePassword(User user, String password);
     
 }
