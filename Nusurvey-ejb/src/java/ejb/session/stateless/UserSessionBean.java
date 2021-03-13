@@ -5,14 +5,20 @@
  */
 package ejb.session.stateless;
 
+import entity.CreditCard;
+import entity.Survey;
+import entity.Tag;
 import entity.User;
+import exception.CreditCardErrorException;
 import exception.EmailExistException;
 import exception.InputDataValidationException;
 import exception.InvalidLoginCredentialException;
 import exception.UnknownPersistenceException;
 import exception.UserNotFoundException;
+import java.io.File;
 import java.util.List;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -32,10 +38,14 @@ import javax.validation.ValidatorFactory;
 @Stateless
 public class UserSessionBean implements UserSessionBeanLocal {
 
+
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
     private final ValidatorFactory validatorFactory;
     private final Validator validator;
+    
+    @EJB
+    private CreditCardSessionBeanLocal creditCardSessionBean;
 
     public UserSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -139,5 +149,170 @@ public class UserSessionBean implements UserSessionBeanLocal {
     public void changePassword(User user,String password)
     {
         user.setPassword(password);
+    }
+    
+    @Override
+    public void createProfile(User user) throws UserNotFoundException 
+    {
+        try 
+        {
+            User currentUser = retrieveUserByEmail(user.getEmail());
+            
+            currentUser.setFirst_name(user.getFirst_name());
+            currentUser.setLast_name(user.getLast_name());
+            currentUser.setBirth_date(user.getBirth_date());
+            currentUser.setFaculty(user.getFaculty());
+            currentUser.setMajor(user.getMajor());
+            currentUser.setGender(user.getGender());
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
+    
+    @Override
+    public void updateProfile(User user) throws UserNotFoundException 
+    {
+        try 
+        {
+            User currentUser = retrieveUserByEmail(user.getEmail());
+            
+            currentUser.setFirst_name(user.getFirst_name());
+            currentUser.setLast_name(user.getLast_name());
+            currentUser.setGender(user.getGender());
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
+    
+    @Override
+    public void uploadAvatar(User user, File avatar) throws UserNotFoundException
+    {
+        try 
+        {
+            User currentUser = retrieveUserByEmail(user.getEmail());
+            currentUser.setAvatar(avatar);
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
+    
+    @Override
+    public void addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException
+    {
+        try 
+        {
+            User currentUser = retrieveUserByEmail(user.getEmail());
+            if (currentUser.getCreditCard().getCard_number().equals(creditCard.getCard_number()))
+            {
+                throw new CreditCardErrorException("Credit card with card number: " + creditCard.getCard_number() + " has already exists.");
+            }
+            else 
+            {
+                creditCardSessionBean.removeCreditCard(currentUser);
+                CreditCard newCreditCard;
+                newCreditCard = creditCardSessionBean.createCreditCard(creditCard);
+                currentUser.setCreditCard(newCreditCard);
+            }
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
+    
+    /**
+     *
+     * @param user
+     * @param tags
+     * @throws UserNotFoundException
+     */
+    @Override
+    public void updateTag(User user, List<Tag> tags) throws UserNotFoundException
+    {
+        try 
+        {
+            boolean isExist = false;
+            boolean isNew = false;
+            User currentUser = retrieveUserByEmail(user.getEmail());
+            
+            List<Tag> currentTags = currentUser.getTags();
+            
+            // Find new associated tags
+            for (Tag nt : tags)
+            {
+                for (Tag ct : currentTags) 
+                {
+                    if (nt.equals(ct))
+                    {
+                        isNew = true;
+                        break;
+                    }
+                }
+                if (isNew)
+                {
+                   //Add the new tag to it
+                   Long tagId = nt.getTagId();
+                   Tag newTag = em.find(Tag.class,tagId);
+                   currentTags.add(newTag);
+                   List<User> users = newTag.getUsers();
+                   users.add(currentUser);
+                }
+                isNew = false;
+            }
+            
+            // Find deleted old tags that will be disassociated later
+            if (!currentTags.isEmpty()) {
+                for (Tag ct : currentTags)
+                {
+                    for (Tag nt : tags)
+                    {
+                        if (ct.equals(nt))
+                        {
+                            isExist = true;
+                            break;
+                        }
+                    }
+
+                    if (isExist == false)
+                    {
+                        //Disassociate
+                        Long tagId = ct.getTagId();
+                        Tag currentTag = em.find(Tag.class,tagId);
+                        List<User> users = currentTag.getUsers();
+                        users.remove(currentUser);
+                        currentTags.remove(currentTag);
+                    }
+
+                    isExist = false;
+                } 
+            }
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
+    
+    @Override
+    public List<Survey> getRecommendation(User user)
+    {
+        Long userId = user.getUserId();
+        User currentUser = em.find(User.class, userId);
+        List<Survey> recommendationSurvey = null;
+        List<Tag> userTag = currentUser.getTags();
+
+        for (Tag t : userTag) 
+        {
+            Query query = em.createQuery("SELECT s FROM Survey s WHERE s.open= :inOpen ORDER BY s.open DESC");
+            query.setParameter("inOpen", true);
+        }
+        
+        return recommendationSurvey;
     }
 }

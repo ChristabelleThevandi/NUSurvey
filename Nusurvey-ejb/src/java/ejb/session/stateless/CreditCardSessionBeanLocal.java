@@ -5,6 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.CreditCard;
+import entity.User;
+import exception.UserNotFoundException;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +16,9 @@ import javax.ejb.Local;
  */
 @Local
 public interface CreditCardSessionBeanLocal {
+
+    public CreditCard createCreditCard(CreditCard creditCard);
+
+    public void removeCreditCard(User user) throws UserNotFoundException;
     
 }

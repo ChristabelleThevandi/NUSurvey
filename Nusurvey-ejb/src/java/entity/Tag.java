@@ -30,8 +30,8 @@ public class Tag implements Serializable {
     @ManyToMany(mappedBy = "tags")
     private List<Survey> surveys;
 
-    @ManyToOne
-    private User users;
+    @ManyToMany(mappedBy = "tags")
+    private List<User> users;
 
     public Long getTagId() {
         return tagId;
@@ -56,12 +56,12 @@ public class Tag implements Serializable {
     public void setSurveys(List<Survey> surveys) {
         this.surveys = surveys;
     }
-
-    public User getUsers() {
+    
+    public List<User> getUsers() {
         return users;
     }
-
-    public void setUsers(User users) {
+    
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 
