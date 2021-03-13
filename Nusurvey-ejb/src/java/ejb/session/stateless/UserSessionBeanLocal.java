@@ -5,12 +5,18 @@
  */
 package ejb.session.stateless;
 
+import entity.CreditCard;
+import entity.Survey;
+import entity.Tag;
 import entity.User;
+import exception.CreditCardErrorException;
 import exception.EmailExistException;
 import exception.InputDataValidationException;
 import exception.InvalidLoginCredentialException;
 import exception.UnknownPersistenceException;
 import exception.UserNotFoundException;
+import java.io.File;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -29,5 +35,17 @@ public interface UserSessionBeanLocal {
     public User register(User newUser) throws EmailExistException, UnknownPersistenceException, InputDataValidationException;
 
     public void changePassword(User user, String password);
+
+    public void createProfile(User user) throws UserNotFoundException;
+
+    public void updateProfile(User user) throws UserNotFoundException;
+
+    public void uploadAvatar(User user, File avatar) throws UserNotFoundException;
+
+    public void addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException;
+
+    public void updateTag(User user, List<Tag> tags) throws UserNotFoundException;
+
+    public List<Survey> getRecommendation(User user);
     
 }

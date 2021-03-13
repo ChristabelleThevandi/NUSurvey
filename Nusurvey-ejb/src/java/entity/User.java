@@ -6,6 +6,7 @@
 package entity;
 
 import enumeration.FacultyType;
+import enumeration.GenderType;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Date;
@@ -38,6 +39,7 @@ public class User implements Serializable {
     private String major;
     private File avatar;
     private boolean loggedIn;
+    private GenderType gender;
 
     @OneToMany(mappedBy = "creator")
     private List<Survey> mySurveys;
@@ -45,8 +47,8 @@ public class User implements Serializable {
     @ManyToMany
     private List<Survey> surveyTaken;
     
-    @OneToMany(mappedBy = "users")
-    private List<Tag> tag;
+    @ManyToMany
+    private List<Tag> tags;
     
     @OneToOne
     private CreditCard creditCard;
@@ -195,12 +197,12 @@ public class User implements Serializable {
         this.surveyTaken = surveyTaken;
     }
 
-    public List<Tag> getTag() {
-        return tag;
+    public List<Tag> getTags() {
+        return tags;
     }
 
-    public void setTag(List<Tag> tag) {
-        this.tag = tag;
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
     }
 
     public CreditCard getCreditCard() {
@@ -250,6 +252,14 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "entity.User[ id=" + userId + " ]";
+    }
+
+    public GenderType getGender() {
+        return gender;
+    }
+
+    public void setGender(GenderType gender) {
+        this.gender = gender;
     }
  
 }
