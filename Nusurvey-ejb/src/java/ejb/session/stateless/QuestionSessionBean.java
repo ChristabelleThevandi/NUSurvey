@@ -9,11 +9,13 @@ import entity.Option;
 import entity.Question;
 import entity.Survey;
 import entity.Tag;
+import entity.User;
 import exception.UnsupportedDeleteSurveyException;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -64,5 +66,28 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
     public void closeSurvey(Survey survey) {
         survey = em.find(Survey.class, survey.getSurveyId());
         survey.setOpen(false);
+    }
+    
+    public List<Survey> retrieveAllSurveys() {
+        Query query = em.createQuery("SELECT s FROM Survey s");
+        List<Survey> surveys = query.getResultList();
+        
+        return surveys;
+    }
+    
+    public List<Survey> retrieveMyCreatedSurveys(User currUser) {
+        currUser = em.find(User.class, currUser.getUserId());
+        Query query = em.createQuery("SELECT s FROM Survey s WHERE currUser IN s.surveyees");
+        List<Survey> surveys = query.getResultList();
+        
+        return surveys;
+    }
+    
+    public List<Survey> retrieveMyFilledSurveys(User currUser) {
+        currUser = em.find(User.class, currUser.getUserId());
+        Query query = em.createQuery("SELECT s FROM Survey s WHERE s.creator = currUser");
+        List<Survey> surveys = query.getResultList();
+        
+        return surveys;
     }
 }
