@@ -48,6 +48,10 @@ public class Tag implements Serializable {
     public void setTag_name(String tag_name) {
         this.tag_name = tag_name;
     }
+    
+    public List<Survey> getSurveys() {
+        return this.surveys;
+    }
 
     @Override
     public int hashCode() {

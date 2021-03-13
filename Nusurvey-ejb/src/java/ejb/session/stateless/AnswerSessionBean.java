@@ -23,10 +23,4 @@ public class AnswerSessionBean implements AnswerSessionBeanLocal {
     public AnswerSessionBean() {
     }
     
-    public Long createAnswer(Answer newAnswer) {
-        em.persist(newAnswer);
-        em.flush();
-        return newAnswer.getAnswerId();
-    }
-    
 }

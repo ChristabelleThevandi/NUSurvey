@@ -117,6 +117,14 @@ public class Survey implements Serializable {
         this.creator = newCreator;
     }
     
+    public List<User> getSurveyees() {
+        return this.surveyees;
+    }
+    
+    public List<Tag> getTags() {
+        return this.tags;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

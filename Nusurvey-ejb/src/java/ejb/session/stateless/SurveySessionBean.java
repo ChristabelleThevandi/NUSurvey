@@ -32,8 +32,10 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         User creatorPersisted = em.find(User.class, creator.getUserId());
         newSurvey.setCreator(creatorPersisted);
 
+        newSurvey.getQuestions().size();
         List<Question> questions = newSurvey.getQuestions();
         for (Question q : questions) {
+            q.getOptions().size();
             List<Option> options = q.getOptions();
             for (Option o : options) {
                 em.persist(o);

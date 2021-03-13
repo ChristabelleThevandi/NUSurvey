@@ -30,6 +30,7 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
     }
     
     public long createResponse(Response newResponse) {
+        newResponse.getAnswers().size();
         List<Answer> answers = newResponse.getAnswers();
         for (Answer a: answers) {
             Option optionPicked = a.getOption();
