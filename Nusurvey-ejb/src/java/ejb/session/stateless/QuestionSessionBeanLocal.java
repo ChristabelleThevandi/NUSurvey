@@ -6,7 +6,9 @@
 package ejb.session.stateless;
 
 import entity.Survey;
+import entity.User;
 import exception.UnsupportedDeleteSurveyException;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -19,5 +21,9 @@ public interface QuestionSessionBeanLocal {
     public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException;
 
     public void closeSurvey(Survey survey);
+
+    public List<Survey> retrieveMyCreatedSurveys(User currUser);
+
+    public List<Survey> retrieveMyFilledSurveys(User currUser);
     
 }
