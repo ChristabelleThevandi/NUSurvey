@@ -5,6 +5,9 @@
  */
 package ejb.session.stateless;
 
+import entity.Transaction;
+import entity.User;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +16,9 @@ import javax.ejb.Local;
  */
 @Local
 public interface TransactionSessionBeanLocal {
+
+    public List<Transaction> retrieveMyIncomeTransaction(User user);
+
+    public List<Transaction> retrieveMyExpenseTransaction(User user);
     
 }

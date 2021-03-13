@@ -25,6 +25,7 @@ public class Transaction implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
+    private double amount;
     private Date transaction_date;
     private TransactionType type;
     
