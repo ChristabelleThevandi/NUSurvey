@@ -42,6 +42,26 @@ public class Response implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public List<Answer> getAnswers() {
+        return this.answers;
+    }
+    
+    public Survey getSurvey() {
+        return this.survey;
+    }
+    
+    public void setSurvey(Survey newSurvey) {
+        this.survey = newSurvey;
+    }
+    
+    public User getSurveyee() {
+        return this.surveyee;
+    }
+    
+    public void setSurveyee(User newSurveyee) {
+        this.surveyee = newSurveyee;
+    }
 
     @Override
     public int hashCode() {

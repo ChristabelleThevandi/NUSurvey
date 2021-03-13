@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Option;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

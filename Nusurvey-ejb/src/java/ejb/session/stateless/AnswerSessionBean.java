@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.Answer;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +21,12 @@ public class AnswerSessionBean implements AnswerSessionBeanLocal {
     private EntityManager em;
 
     public AnswerSessionBean() {
+    }
+    
+    public Long createAnswer(Answer newAnswer) {
+        em.persist(newAnswer);
+        em.flush();
+        return newAnswer.getAnswerId();
     }
     
 }

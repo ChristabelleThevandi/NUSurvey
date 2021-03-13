@@ -40,6 +40,22 @@ public class Answer implements Serializable {
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
     }
+    
+    public Option getOption() {
+        return this.option;
+    }
+    
+    public void setOption(Option newOption) {
+        this.option = newOption;
+    }
+    
+    public Question getQuestion() {
+        return this.question;
+    }
+    
+    public void setQuestion(Question newQuestion) {
+        this.question = newQuestion;
+    }
 
     @Override
     public int hashCode() {

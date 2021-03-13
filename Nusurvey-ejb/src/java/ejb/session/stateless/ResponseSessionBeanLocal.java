@@ -5,16 +5,13 @@
  */
 package ejb.session.stateless;
 
-import entity.Survey;
 import javax.ejb.Local;
 
 /**
  *
- * @author hp
+ * @author miche
  */
 @Local
-public interface SurveySessionBeanLocal {
-
-    public Long createSurvey(Survey newSurvey);
+public interface ResponseSessionBeanLocal {
     
 }

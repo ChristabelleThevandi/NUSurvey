@@ -5,6 +5,11 @@
  */
 package ejb.session.stateless;
 
+import entity.Option;
+import entity.Question;
+import entity.Survey;
+import entity.User;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,5 +25,23 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
     private EntityManager em;
 
     public SurveySessionBean() {
+    }
+
+    public Long createSurvey(Survey newSurvey) {
+        User creator = newSurvey.getCreator();
+        User creatorPersisted = em.find(User.class, creator.getUserId());
+        newSurvey.setCreator(creatorPersisted);
+
+        List<Question> questions = newSurvey.getQuestions();
+        for (Question q : questions) {
+            List<Option> options = q.getOptions();
+            for (Option o : options) {
+                em.persist(o);
+            }
+            em.persist(q);
+        }
+        em.persist(newSurvey);
+        em.flush();
+        return newSurvey.getSurveyId();
     }
 }

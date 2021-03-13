@@ -72,6 +72,10 @@ public class Question implements Serializable {
         this.type = type;
     }
     
+    public List<Option> getOptions() {
+        return this.options;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

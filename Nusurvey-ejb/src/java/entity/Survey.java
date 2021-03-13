@@ -105,6 +105,18 @@ public class Survey implements Serializable {
         this.price_per_response = price_per_response;
     }
     
+    public User getCreator() {
+        return this.creator;
+    }
+    
+    public List<Question> getQuestions() {
+        return this.questions;
+    }
+    
+    public void setCreator(User newCreator) {
+        this.creator = newCreator;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
