@@ -5,6 +5,8 @@
  */
 package ejb.session.stateless;
 
+import entity.Survey;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +15,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface SurveySessionBeanLocal {
-    
+    public List<Survey> searchSurveysByTitle(String searchString);
+    public List<Survey> sortSurveysByPrice();
+    public List<Survey> filterSurveysByTags(List<Long> tagIds, String condition);
 }
