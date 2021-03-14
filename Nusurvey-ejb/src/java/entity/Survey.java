@@ -32,7 +32,8 @@ public class Survey implements Serializable {
     private String description;
     private String title;
     private Integer max_surveyees;
-    private Double price_per_response;
+    private final Double price_per_response = 0.1;
+    private double reward;
     
     @ManyToMany(mappedBy = "surveyTaken")
     private List<User> surveyees;
@@ -100,10 +101,6 @@ public class Survey implements Serializable {
     public Double getPrice_per_response() {
         return price_per_response;
     }
-
-    public void setPrice_per_response(Double price_per_response) {
-        this.price_per_response = price_per_response;
-    }
     
     public List<User> getSurveyees() {
         return surveyees;
@@ -143,6 +140,14 @@ public class Survey implements Serializable {
 
     public void setResponses(List<Response> responses) {
         this.responses = responses;
+    }
+
+    public double getReward() {
+        return reward;
+    }
+
+    public void setReward(double reward) {
+        this.reward = reward;
     }
 
     @Override
