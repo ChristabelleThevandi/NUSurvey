@@ -38,6 +38,8 @@ public class User implements Serializable {
     private String major;
     private File avatar;
     private boolean loggedIn;
+    private Double milestone;
+    private Double incentive;
 
     @OneToMany(mappedBy = "creator")
     private List<Survey> mySurveys;
@@ -57,6 +59,11 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "surveyee")
     private List<Response> responses;
    
+    public User() {
+        this.incentive = 5.0;
+        this.milestone = 100.0;
+    }
+    
     public Long getUserId() {
         return userId;
     }
@@ -227,6 +234,22 @@ public class User implements Serializable {
         this.responses = responses;
     }
    
+    public Double getMilestone() {
+        return milestone;
+    }
+
+    public void setMilestone(Double milestone) {
+        this.milestone = milestone;
+    }
+
+    public Double getIncentive() {
+        return incentive;
+    }
+
+    public void setIncentive(Double incentive) {
+        this.incentive = incentive;
+    }
+ 
     @Override
     public int hashCode() {
         int hash = 0;
@@ -251,5 +274,5 @@ public class User implements Serializable {
     public String toString() {
         return "entity.User[ id=" + userId + " ]";
     }
- 
+
 }

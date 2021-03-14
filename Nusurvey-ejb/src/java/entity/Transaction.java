@@ -28,6 +28,7 @@ public class Transaction implements Serializable {
     private double amount;
     private Date transaction_date;
     private TransactionType type;
+    private String title;
     
     @ManyToOne
     private User user;
@@ -75,6 +76,22 @@ public class Transaction implements Serializable {
         this.creditCard = creditCard;
     }
  
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

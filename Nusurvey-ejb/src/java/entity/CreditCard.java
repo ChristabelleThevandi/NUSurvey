@@ -30,6 +30,7 @@ public class CreditCard implements Serializable {
     private String card_number;
     private String cvv;
     private Date expiry_date;
+    private Double balance;
     
     @OneToOne(mappedBy = "creditCard")
     private User user;
@@ -38,6 +39,8 @@ public class CreditCard implements Serializable {
     private List<Transaction> transactions;
     
     public Long getCreditCardId() {
+        //assumption initial balance
+        this.balance = 200.0;
         return creditCardId;
     }
 
@@ -93,6 +96,14 @@ public class CreditCard implements Serializable {
         this.transactions = transactions;
     }
     
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
