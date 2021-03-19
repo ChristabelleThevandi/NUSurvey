@@ -18,4 +18,7 @@ public interface SurveySessionBeanLocal {
     public List<Survey> searchSurveysByTitle(String searchString);
     public List<Survey> sortSurveysByPrice();
     public List<Survey> filterSurveysByTags(List<Long> tagIds, String condition);
+
+    public Long createSurvey(Survey newSurvey);
+    
 }

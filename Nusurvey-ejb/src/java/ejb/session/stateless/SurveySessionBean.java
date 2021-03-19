@@ -5,7 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.Option;
+import entity.Question;
 import entity.Survey;
+import entity.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -129,4 +132,24 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
     }
     
     
+
+    public Long createSurvey(Survey newSurvey) {
+        User creator = newSurvey.getCreator();
+        User creatorPersisted = entityManager.find(User.class, creator.getUserId());
+        newSurvey.setCreator(creatorPersisted);
+
+        newSurvey.getQuestions().size();
+        List<Question> questions = newSurvey.getQuestions();
+        for (Question q : questions) {
+            q.getOptions().size();
+            List<Option> options = q.getOptions();
+            for (Option o : options) {
+                entityManager.persist(o);
+            }
+            entityManager.persist(q);
+        }
+        entityManager.persist(newSurvey);
+        entityManager.flush();
+        return newSurvey.getSurveyId();
+    }
 }
