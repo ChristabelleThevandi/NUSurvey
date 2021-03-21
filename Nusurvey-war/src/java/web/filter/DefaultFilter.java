@@ -16,6 +16,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -24,15 +27,18 @@ import javax.servlet.annotation.WebFilter;
 @WebFilter(filterName = "DefaultFilter", urlPatterns = {"/*"})
 public class DefaultFilter implements Filter {
     
-    private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
-    private FilterConfig filterConfig = null;
+    private FilterConfig filterConfig;
     
-    public DefaultFilter() {
-    }    
+    private static final String CONTEXT_ROOT = "/Nusurvey";
+    
+    public void init(FilterConfig filterConfig) throws ServletException
+    {
+        this.filterConfig = filterConfig;
+    }
     
     /**
      *
@@ -43,12 +49,56 @@ public class DefaultFilter implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+    {
+        HttpServletRequest httpServletRequest = (HttpServletRequest)request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse)response;
+        HttpSession httpSession = httpServletRequest.getSession(true);
+        String requestServletPath = httpServletRequest.getServletPath();        
         
-        System.out.println("Default Filter.doFilter");
         
-        chain.doFilter(request, response);
+
+        if(httpSession.getAttribute("isLogin") == null)
+        {
+            httpSession.setAttribute("isLogin", false);
+        }
+
+        Boolean isLogin = (Boolean)httpSession.getAttribute("isLogin");
+        
+        if(!excludeLoginCheck(requestServletPath)) 
+        {
+            if(isLogin == true) 
+            {
+                chain.doFilter(request, response);
+            }
+            else
+            {
+                httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
+            }
+        }
+        else
+        {
+            chain.doFilter(request, response);
+        }
     }
+
+    public void destroy()
+    {
+
+    }
+    
+    private Boolean excludeLoginCheck(String path)
+    {
+        if(path.equals("/index.xhtml") ||
+            path.equals("/accessRightError.xhtml") ||
+            path.startsWith("/javax.faces.resource"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
 }
