@@ -28,6 +28,9 @@ public class Option implements Serializable {
 
     @ManyToOne
     private Question question;
+
+    public Option() {
+    }
     
     @OneToMany(mappedBy = "option")
     private List<Answer> answers;

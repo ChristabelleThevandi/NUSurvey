@@ -31,7 +31,7 @@ public class DefaultFilter implements Filter {
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
-    private FilterConfig filterConfig;
+    FilterConfig filterConfig;
     
     private static final String CONTEXT_ROOT = "/Nusurvey";
     

@@ -34,6 +34,10 @@ public class Transaction implements Serializable {
     @ManyToOne
     private CreditCard creditCard;
 
+    public Transaction() {
+    }
+    
+
     public Long getTransactionId() {
         return transactionId;
     }

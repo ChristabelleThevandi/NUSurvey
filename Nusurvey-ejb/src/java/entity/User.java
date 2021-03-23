@@ -64,6 +64,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "surveyee")
     private List<Response> responses;
 
+    public User() {
+    }
+    
+
     public User(String first_name, String last_name, Date birth_date, String email, String password, FacultyType faculty, String major, GenderType gender) {
         this.first_name = first_name;
         this.last_name = last_name;

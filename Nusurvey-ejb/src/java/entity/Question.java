@@ -39,6 +39,10 @@ public class Question implements Serializable {
     
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
+
+    public Question() {
+    }
+    
     
     public Long getQuestionId() {
         return questionId;
