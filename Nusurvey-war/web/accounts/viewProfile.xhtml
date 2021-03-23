@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:ez="http://xmlns.jcp.org/jsf/composite/ezcomp"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+<!--        <ez:Breadcrumb pageName="viewProfile" />-->
+        <div>
+            <h:form id="viewProfileForm">
+                <p:outputLabel for="firstName" value="First Name: #{sessionScope.currentCustomerEntity.firstName}" />&nbsp;
+                <p:outputLabel for="lastName" value="Last Name: #{sessionScope.currentCustomerEntity.lastName}" />&nbsp;
+                <p:outputLabel for="gender" value="Gender: #{sessionScope.currentCustomerEntity.gender}" />&nbsp;
+                <p:outputLabel for="faculty" value="Faculty: #{sessionScope.currentCustomerEntity.faculty}" />&nbsp;
+                <p:outputLabel for="major" value="Major: #{sessionScope.currentCustomerEntity.major}" />&nbsp;
+                <p:outputLabel for="birth_date" value="Birth Date #{sessionScope.currentCustomerEntity.birth_date}" />&nbsp;
+                <p:commandButton value="Edit Profile" actionListener="#{viewProfileManagedBean.updateProfile}" update="formUpdateProfile" oncomplete="PF('dialogUpdateProfile').show()" icon="ui-icon-pencil" title="Update" />
+            </h:form>
+            
+            <h:form id="formUpdateProfile">
+
+                <p:dialog id="dialogUpdateProfile" widgetVar="dialogUpdateProfile" header="Update Profile" closable="true">
+
+                    <p:messages id="messagesUpdateProfile" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="First Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="firstName" value="#{viewProfileManagedBean.selectedUserToUpdate.firstName}" required="true" requiredMessage="First Name is required" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+
+                         <p:row>
+                            <p:column>
+                                <h:outputLabel value="Last Name: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="lastName" value="#{viewProfileManagedBean.selectedUserToUpdate.lastName}" required="true" requiredMessage="Last Name is required" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Gender: " />
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="gender" value="#{viewProfileManagedBean.selectedUserToUpdate.gender}" required="true" requiredMessage="Gender is required">
+                                    <f:selectItem itemLabel="Male" itemValue="0"/>
+                                    <f:selectItem itemLabel="Female" itemValue="1"/>
+                                    <f:selectItem itemLabel="Others" itemValue="2"/>
+                                </p:selectOneMenu>
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton value="Update Profile" actionListener="#{viewProfileManagedBean.updateProfile}" oncomplete="PF('dialogUpdateProfile').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

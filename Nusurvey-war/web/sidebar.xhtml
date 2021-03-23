@@ -11,15 +11,22 @@
             <h:form>
                     
                 <p:menu style="width:200px;">
-
-                    <p:submenu label="System">
-                        <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
-                        <p:menuitem value="Logout" actionListener="#{customerLoginManagedBean.logout}" icon="pi pi-sign-out" rendered="#{sessionScope.isLogin == true}" />
+                    <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
+                    
+                    <p:submenu label="Survey" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Create Survey" outcome="/survey/createSurvey" icon="pi pi-pencil" />
+                        <p:menuitem value="My Surveys" outcome="/survey/viewMySurvey" icon="pi pi-list" />
+                        <p:menuitem value="Survey History" outcome="/survey/viewSurveyHistory" icon="pi pi-clock" />
                     </p:submenu>
 
-                    <p:submenu label="Products" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="Browse All Products" outcome="/products/browseAllProducts.xhtml" icon="pi pi-shopping-cart" />
-                    </p:submenu>                     
+                    <p:submenu label="Account" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Profile" outcome="/accounts/viewProfile.xhtml" icon="pi pi-user-edit" />
+                        <p:menuitem value="Privacy" outcome="/accounts/viewPrivacy.xhtml" icon="pi pi-lock" />
+                    </p:submenu>  
+                    
+                    <p:submenu label="Transaction" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Transaction History" outcome="/transaction/viewTransaction.xhtml" icon="pi pi-dollar" />
+                    </p:submenu>  
                 </p:menu>
 
             </h:form>
