@@ -9,9 +9,12 @@ import enumeration.FacultyType;
 import enumeration.GenderType;
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,10 +38,12 @@ public class User implements Serializable {
     private Date birth_date;
     private String email;
     private String password;
+    @Enumerated(EnumType.STRING)
     private FacultyType faculty;
     private String major;
     private File avatar;
     private boolean loggedIn;
+    @Enumerated(EnumType.STRING)
     private GenderType gender;
     private Double incentive;
     private Double milestone;
@@ -60,6 +65,26 @@ public class User implements Serializable {
     
     @OneToMany(mappedBy = "surveyee")
     private List<Response> responses;
+
+    public User() {
+    }
+    
+
+    public User(String first_name, String last_name, Date birth_date, String email, String password, FacultyType faculty, String major, GenderType gender) {
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.birth_date = birth_date;
+        this.email = email;
+        this.password = password;
+        this.faculty = faculty;
+        this.major = major;
+        this.gender = gender;
+        this.mySurveys = new ArrayList<>();
+        this.surveyTaken = new ArrayList<>();
+        this.tags = new ArrayList<>();
+        this.transactions = new ArrayList<>();
+        this.responses = new ArrayList<>();
+    }
    
     public User() {
         this.incentive = 5.0;

@@ -25,10 +25,12 @@ build/
 dist/
 
 Nusurvey-ejb/nbproject/private/
+Nusurvey-ejb/nbproject/project.properties/
 Nusurvey-ejb/build/
 Nusurvey-ejb/dist/
 
 Nusurvey-war/nbproject/private/
+Nusurvey-war/nbproject/project.properties/
 Nusurvey-war/build/
 Nusurvey-war/dist/
 

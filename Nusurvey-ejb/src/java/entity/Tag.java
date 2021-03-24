@@ -33,6 +33,10 @@ public class Tag implements Serializable {
     @ManyToMany(mappedBy = "tags")
     private List<User> users;
 
+    public Tag() {
+    }
+   
+
     public Long getTagId() {
         return tagId;
     }

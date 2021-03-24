@@ -37,6 +37,10 @@ public class CreditCard implements Serializable {
 
     @OneToMany(mappedBy = "creditCard")
     private List<Transaction> transactions;
+
+    public CreditCard() {
+    }
+    
     
     public Long getCreditCardId() {
         //assumption initial balance

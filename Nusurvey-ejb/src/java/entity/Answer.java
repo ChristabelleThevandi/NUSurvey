@@ -32,6 +32,9 @@ public class Answer implements Serializable {
     
     @ManyToOne
     private Response response;
+
+    public Answer() {
+    }
     
     public Long getAnswerId() {
         return answerId;
