@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
  * @author Chrisya
  */
 @Entity
-public class Option implements Serializable {
+public class QuestionOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -29,7 +29,7 @@ public class Option implements Serializable {
     @ManyToOne
     private Question question;
 
-    public Option() {
+    public QuestionOption() {
     }
     
     @OneToMany(mappedBy = "option")
@@ -69,10 +69,10 @@ public class Option implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the optionId fields are not set
-        if (!(object instanceof Option)) {
+        if (!(object instanceof QuestionOption)) {
             return false;
         }
-        Option other = (Option) object;
+        QuestionOption other = (QuestionOption) object;
         if ((this.optionId == null && other.optionId != null) || (this.optionId != null && !this.optionId.equals(other.optionId))) {
             return false;
         }

@@ -35,7 +35,7 @@ public class Question implements Serializable {
     private Survey survey;
     
     @OneToMany(mappedBy = "question")
-    private List<Option> options;
+    private List<QuestionOption> options;
     
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
@@ -84,11 +84,11 @@ public class Question implements Serializable {
         this.survey = survey;
     }
 
-    public List<Option> getOptions() {
+    public List<QuestionOption> getOptions() {
         return options;
     }
 
-    public void setOptions(List<Option> options) {
+    public void setOptions(List<QuestionOption> options) {
         this.options = options;
     }
 

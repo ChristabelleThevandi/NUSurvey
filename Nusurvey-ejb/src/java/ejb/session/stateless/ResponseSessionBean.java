@@ -6,7 +6,7 @@
 package ejb.session.stateless;
 
 import entity.Answer;
-import entity.Option;
+import entity.QuestionOption;
 import entity.Question;
 import entity.Response;
 import entity.Survey;
@@ -33,8 +33,8 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         newResponse.getAnswers().size();
         List<Answer> answers = newResponse.getAnswers();
         for (Answer a: answers) {
-            Option optionPicked = a.getOption();
-            Option optionPickedPersisted = em.find(Option.class, optionPicked.getOptionId());
+            QuestionOption optionPicked = a.getOption();
+            QuestionOption optionPickedPersisted = em.find(QuestionOption.class, optionPicked.getOptionId());
             a.setOption(optionPickedPersisted);
             
             Question questionPicked = a.getQuestion();

@@ -25,8 +25,7 @@ import javax.faces.view.ViewScoped;
  */
 @Named(value = "viewProfileManagedBean")
 @ViewScoped
-public class viewProfileManagedBean implements Serializable {
-
+public class ProfileManagementManagedBean implements Serializable {
     @EJB(name = "UserSessionBeanLocal")
     private UserSessionBeanLocal userSessionBeanLocal;
     
@@ -43,8 +42,7 @@ public class viewProfileManagedBean implements Serializable {
     private String cvv;
     private Date expiryDate;
     
-    
-    public viewProfileManagedBean() {
+    public ProfileManagementManagedBean() {
     }
     
     @PostConstruct
@@ -145,5 +143,4 @@ public class viewProfileManagedBean implements Serializable {
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
-    
 }

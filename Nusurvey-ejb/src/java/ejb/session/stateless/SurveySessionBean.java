@@ -5,7 +5,7 @@
  */
 package ejb.session.stateless;
 
-import entity.Option;
+import entity.QuestionOption;
 import entity.Question;
 import entity.Survey;
 import entity.Tag;
@@ -144,8 +144,8 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         List<Question> questions = newSurvey.getQuestions();
         for (Question q : questions) {
             q.getOptions().size();
-            List<Option> options = q.getOptions();
-            for (Option o : options) {
+            List<QuestionOption> options = q.getOptions();
+            for (QuestionOption o : options) {
                 entityManager.persist(o);
             }
             entityManager.persist(q);
@@ -165,8 +165,8 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         List<Question> questions = survey.getQuestions();
         for (Question q: questions) {
             q.getOptions().size();
-            List<Option> options = q.getOptions();
-            for (Option o: options) {
+            List<QuestionOption> options = q.getOptions();
+            for (QuestionOption o: options) {
                 entityManager.remove(o);
             }
             entityManager.remove(q);
