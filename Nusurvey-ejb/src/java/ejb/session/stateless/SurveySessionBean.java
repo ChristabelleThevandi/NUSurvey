@@ -25,7 +25,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
     private EntityManager em;
 
     public SurveySessionBean() {
-    }
+    } 
 
     public Long createSurvey(Survey newSurvey) {
         User creator = newSurvey.getCreator();
