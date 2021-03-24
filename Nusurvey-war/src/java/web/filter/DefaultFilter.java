@@ -6,9 +6,6 @@
 package web.filter;
 
 import java.io.IOException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -73,7 +70,7 @@ public class DefaultFilter implements Filter {
             }
             else
             {
-                httpServletResponse.sendRedirect(CONTEXT_ROOT + "/accessRightError.xhtml");
+                httpServletResponse.sendRedirect(CONTEXT_ROOT + "/index.xhtml");
             }
         }
         else
@@ -89,8 +86,8 @@ public class DefaultFilter implements Filter {
     
     private Boolean excludeLoginCheck(String path)
     {
+        //Jangan lupa access right error page
         if(path.equals("/index.xhtml") ||
-            path.equals("/accessRightError.xhtml") ||
             path.startsWith("/javax.faces.resource"))
         {
             return true;
