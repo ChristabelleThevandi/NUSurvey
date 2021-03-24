@@ -53,8 +53,7 @@ public class DefaultFilter implements Filter {
         HttpSession httpSession = httpServletRequest.getSession(true);
         String requestServletPath = httpServletRequest.getServletPath();        
         
-        
-
+       
         if(httpSession.getAttribute("isLogin") == null)
         {
             httpSession.setAttribute("isLogin", false);
