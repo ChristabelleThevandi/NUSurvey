@@ -18,12 +18,5 @@ import javax.ejb.Local;
 @Local
 public interface QuestionSessionBeanLocal {
 
-    public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException;
-
-    public void closeSurvey(Survey survey);
-
-    public List<Survey> retrieveMyCreatedSurveys(User currUser);
-
-    public List<Survey> retrieveMyFilledSurveys(User currUser);
     
 }
