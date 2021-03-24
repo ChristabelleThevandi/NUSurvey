@@ -25,6 +25,7 @@ build/
 dist/
 
 Nusurvey-ejb/nbproject/private/
+Nusurvey-ejb/nbproject/project.properties/
 Nusurvey-ejb/build/
 Nusurvey-ejb/dist/
 
