@@ -11,15 +11,15 @@
                     <h:form id="registerForm">
 
                         <p:outputLabel for="firstName" value="First Name:" />&nbsp;
-                        <p:inputText id="firstName" value="#{userRegisterManagedBean.firstName}" size="16" required="true" requiredMessage="First Name is required" maxlength="32">
+                        <p:inputText id="firstName" value="#{userRegisterManagedBean.first_name}" size="16" required="true" requiredMessage="First Name is required" maxlength="32">
                         </p:inputText>
                         <br />
                         <p:outputLabel for="lastName" value="Last Name:" />&nbsp;
-                        <p:inputText id="lastName" value="#{userRegisterManagedBean.lastName}" size="16" required="true" requiredMessage="Last Name is required" maxlength="32">
+                        <p:inputText id="lastName" value="#{userRegisterManagedBean.last_name}" size="16" required="true" requiredMessage="Last Name is required" maxlength="32">
                         </p:inputText>
                         <br />
                         <p:outputLabel for="gender" value="Gender:" />&nbsp;
-                        <p:selectOneMenu id="gender" value="#{userRegisterManagedBean.gender}" required="true" requiredMessage="Gender is required">
+                        <p:selectOneMenu id="gender" value="#{userRegisterManagedBean.genderInt}" required="true" requiredMessage="Gender is required">
                             <f:selectItem itemLabel="Male" itemValue="0"/>
                             <f:selectItem itemLabel="Female" itemValue="1"/>
                             <f:selectItem itemLabel="Others" itemValue="2"/>
@@ -35,14 +35,15 @@
                             <f:validateLength minimum="8" />
                         </p:password>
                         <br />
-                        <p:outputLabel for="birthdate" value="Birth Date:" />&nbsp;
-                        <p:calendar id="button" value="#{userRegisterManagedBean.birth_date}" showOn="birthdate"/>
+                        <p:outputLabel for="birth_date" value="Birth Date:" />&nbsp;
+                        <p:inputText id="birth_date" value="#{userRegisterManagedBean.birth_date}"/>
                         <br />
                         <p:outputLabel for="faculty" value="Faculty:" />&nbsp;
-                        <p:selectOneMenu id="faculty" value="#{userRegisterManagedBean.faculty}" required="true" requiredMessage="Faculty is required">
-                            <f:selectItem itemLabel="EMPLOYEE" itemValue="0"/>
-                            <f:selectItem itemLabel="SCIENCE" itemValue="1"/>
-                            <f:selectItem itemLabel="ENGINEERING" itemValue="2"/>
+                        <p:selectOneMenu id="faculty" value="#{userRegisterManagedBean.facultyInt}" required="true" requiredMessage="Faculty is required">
+                            <f:selectItem itemLabel="ART" itemValue="0"/>
+                            <f:selectItem itemLabel="BUSINESS" itemValue="1"/>
+                            <f:selectItem itemLabel="COMPUTING" itemValue="2"/>
+                            <f:selectItem itemLabel="DENTISTRY" itemValue="3"/>
                         </p:selectOneMenu>
                         <br />
                         <p:outputLabel for="major" value="Major:" />&nbsp;

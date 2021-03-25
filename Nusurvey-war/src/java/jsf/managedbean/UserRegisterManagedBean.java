@@ -45,6 +45,8 @@ public class UserRegisterManagedBean {
     private String major;
     private File avatar;
     private GenderType gender;
+    private Integer genderInt;
+    private Integer facultyInt;
     
     /**
      * Creates a new instance of UserRegisterManagedBean
@@ -55,6 +57,26 @@ public class UserRegisterManagedBean {
     {
         try
         {
+            if (getGenderInt() == 0) {
+                setGender(GenderType.MALE);
+            } else if (getGenderInt() == 1) {
+                setGender(GenderType.FEMALE);
+            } else if (getGenderInt() == 2) {
+                setGender(GenderType.OTHERS);
+            }
+            
+            int tempFaculty = getFacultyInt();
+            
+            if (tempFaculty == 0) {
+                setFaculty(FacultyType.ART);
+            } else if (tempFaculty == 1) {
+                setFaculty(FacultyType.BUSINESS);
+            } else if (tempFaculty == 2) {
+                setFaculty(FacultyType.COMPUTING);
+            } else if (tempFaculty == 3) {
+                setFaculty(FacultyType.DENTISTRY);
+            } 
+            
             User newUser = new User(getFirst_name(), getLast_name(), getBirth_date(), getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
             User user = userSessionBeanLocal.register(newUser);
             userSessionBeanLocal.login(getEmail(), getPassword());
@@ -139,5 +161,33 @@ public class UserRegisterManagedBean {
 
     public void setGender(GenderType gender) {
         this.gender = gender;
+    }
+
+    /**
+     * @return the genderInt
+     */
+    public Integer getGenderInt() {
+        return genderInt;
+    }
+
+    /**
+     * @param genderInt the genderInt to set
+     */
+    public void setGenderInt(Integer genderInt) {
+        this.genderInt = genderInt;
+    }
+
+    /**
+     * @return the facultyInt
+     */
+    public Integer getFacultyInt() {
+        return facultyInt;
+    }
+
+    /**
+     * @param facultyInt the facultyInt to set
+     */
+    public void setFacultyInt(Integer facultyInt) {
+        this.facultyInt = facultyInt;
     }
 }
