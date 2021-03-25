@@ -58,7 +58,7 @@ public class LoginManagedBean {
     
     public void register(ActionEvent event) throws IOException
     {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/register.xhtml");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/registerUser.xhtml");
     }
 
     public String getEmail() {
