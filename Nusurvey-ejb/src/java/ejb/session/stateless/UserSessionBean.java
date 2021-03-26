@@ -148,7 +148,9 @@ public class UserSessionBean implements UserSessionBeanLocal {
     @Override
     public void changePassword(User user,String password)
     {
-        user.setPassword(password);
+        Long userId = user.getUserId();
+        User currentUser = em.find(User.class,userId);
+        currentUser.setPassword(password);
     }
     
     @Override
