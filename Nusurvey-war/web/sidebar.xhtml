@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <section id="mainmenu" class="mainmenu">
+        <h3>Main Menu</h3>
+        <nav>
+            <h:form>
+                    
+                <p:menu style="width:200px;">
+                    <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
+                    
+                    <p:submenu label="Survey" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Create Survey" outcome="/survey/createSurvey.xhtml" icon="pi pi-pencil" />
+                        <p:menuitem value="My Surveys" outcome="/survey/viewMySurvey.xhtml" icon="pi pi-list" />
+                        <p:menuitem value="Survey History" outcome="/survey/viewSurveyHistory.xhtml" icon="pi pi-clock" />
+                    </p:submenu>
+
+                    <p:submenu label="Account" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Profile" outcome="/accounts/viewProfile.xhtml" icon="pi pi-user-edit" />
+                        <p:menuitem value="Privacy" outcome="/accounts/viewPrivacy.xhtml" icon="pi pi-lock" />
+                    </p:submenu>  
+                    
+                    <p:submenu label="Transaction" rendered="#{sessionScope.isLogin == true}">
+                        <p:menuitem value="Transaction History" outcome="/transaction/viewTransaction.xhtml" icon="pi pi-dollar" />
+                    </p:submenu>  
+                </p:menu>
+
+            </h:form>
+        </nav>
+            
+    </section>
+
+</ui:composition>
+

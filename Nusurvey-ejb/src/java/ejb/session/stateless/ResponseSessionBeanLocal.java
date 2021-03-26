@@ -5,18 +5,13 @@
  */
 package ejb.session.stateless;
 
-import entity.Survey;
-import entity.User;
-import exception.UnsupportedDeleteSurveyException;
-import java.util.List;
 import javax.ejb.Local;
 
 /**
  *
- * @author hp
+ * @author miche
  */
 @Local
-public interface QuestionSessionBeanLocal {
-
+public interface ResponseSessionBeanLocal {
     
 }

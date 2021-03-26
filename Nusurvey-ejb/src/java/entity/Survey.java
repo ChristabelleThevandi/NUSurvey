@@ -50,6 +50,11 @@ public class Survey implements Serializable {
     @OneToMany(mappedBy = "survey")
     private List<Response> responses;
 
+    public Survey() {
+    }
+    
+    
+
     public Long getSurveyId() {
         return surveyId;
     }

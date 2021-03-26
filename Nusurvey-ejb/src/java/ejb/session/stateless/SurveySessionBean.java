@@ -5,7 +5,12 @@
  */
 package ejb.session.stateless;
 
+import entity.QuestionOption;
+import entity.Question;
 import entity.Survey;
+import entity.Tag;
+import entity.User;
+import exception.UnsupportedDeleteSurveyException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -129,4 +134,86 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
     }
     
     
+
+    public Long createSurvey(Survey newSurvey) {
+        User creator = newSurvey.getCreator();
+        User creatorPersisted = entityManager.find(User.class, creator.getUserId());
+        newSurvey.setCreator(creatorPersisted);
+
+        newSurvey.getQuestions().size();
+        List<Question> questions = newSurvey.getQuestions();
+        for (Question q : questions) {
+            q.getOptions().size();
+            List<QuestionOption> options = q.getOptions();
+            for (QuestionOption o : options) {
+                entityManager.persist(o);
+            }
+            entityManager.persist(q);
+        }
+        entityManager.persist(newSurvey);
+        entityManager.flush();
+        return newSurvey.getSurveyId();
+    }
+    
+    public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException {
+        survey = entityManager.find(Survey.class, survey.getSurveyId());
+        if (!survey.getSurveyees().isEmpty()) {
+            throw new UnsupportedDeleteSurveyException("Cannot delete survey that has been answered!");
+        }
+        
+        survey.getQuestions().size();
+        List<Question> questions = survey.getQuestions();
+        for (Question q: questions) {
+            q.getOptions().size();
+            List<QuestionOption> options = q.getOptions();
+            for (QuestionOption o: options) {
+                entityManager.remove(o);
+            }
+            entityManager.remove(q);
+        }
+        
+        survey.getTags().size();
+        List<Tag> tags = survey.getTags();
+        for (Tag t: tags) {
+            t.getSurveys().size();
+            t.getSurveys().remove(survey);
+        }
+        
+        survey.getTags().size();
+        tags = survey.getTags();
+        for (Tag t: tags) {
+            survey.getTags().remove(t);
+        }
+        
+        entityManager.remove(survey);
+    }
+    
+    public void closeSurvey(Survey survey) {
+        survey = entityManager.find(Survey.class, survey.getSurveyId());
+        survey.setOpen(false);
+    }
+    
+    public List<Survey> retrieveAllSurveys() {
+        Query query = entityManager.createQuery("SELECT s FROM Survey s");
+        List<Survey> surveys = query.getResultList();
+        
+        return surveys;
+    }
+    
+    public List<Survey> retrieveMyCreatedSurveys(User currUser) {
+        currUser = entityManager.find(User.class, currUser.getUserId());
+        Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE currUser IN s.surveyees");
+        List<Survey> surveys = query.getResultList();
+        
+        return surveys;
+    }
+    
+    public List<Survey> retrieveMyFilledSurveys(User currUser) {
+        currUser = entityManager.find(User.class, currUser.getUserId());
+        Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE s.creator := cUser");
+        query.setParameter("cUser", currUser);
+        List<Survey> surveys = query.getResultList();
+        
+        return surveys;
+    }
 }

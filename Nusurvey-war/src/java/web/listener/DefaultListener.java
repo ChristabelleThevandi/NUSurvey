@@ -31,6 +31,7 @@ public class DefaultListener implements ServletContextListener, HttpSessionListe
 
     @Override
     public void sessionCreated(HttpSessionEvent se) {
+        se.getSession().setAttribute("isLogin",false);
         System.out.println("DefaultListener.sessionCreated()");
     }
 

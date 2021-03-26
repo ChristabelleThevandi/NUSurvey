@@ -5,9 +5,17 @@
  */
 package ejb.session.stateless;
 
+import entity.QuestionOption;
+import entity.Question;
+import entity.Survey;
+import entity.Tag;
+import entity.User;
+import exception.UnsupportedDeleteSurveyException;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -21,6 +29,5 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
 
     public QuestionSessionBean() {
     }
-
-
+   
 }
