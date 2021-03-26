@@ -8,6 +8,7 @@ package jsf.managedbean;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.CreditCard;
 import entity.User;
+import enumeration.GenderType;
 import exception.UserNotFoundException;
 import java.io.Serializable;
 import java.util.Date;
@@ -32,11 +33,12 @@ public class ProfileManagementManagedBean implements Serializable {
     //User Profile
     private String first_name;
     private String last_name;
-    private String gender;
+    private GenderType gender;
     private User selectedUserToUpdate;
     private String placeHolderName;
     private String placeHolderLastName;
     private String placeHolderGender;
+    private Integer genderInt;
     
     //Credit Card
     private CreditCard creditCard;
@@ -58,15 +60,25 @@ public class ProfileManagementManagedBean implements Serializable {
     
     public void doUpdateProfile(ActionEvent event) 
     {
-        setSelectedUserToUpdate((User) event.getComponent().getAttributes().get("userToUpdate"));
+       System.out.println("Selected this button");
     }
     
     public void updateProfile(ActionEvent event)
     {
         try 
         {
+            System.out.println("Pressed the button for update");
+            
+            if (getGenderInt() == 0) {
+                getSelectedUserToUpdate().setGender(GenderType.MALE);
+            } else if (getGenderInt() == 1) {
+                getSelectedUserToUpdate().setGender(GenderType.FEMALE);
+            } else if (getGenderInt() == 2) {
+                getSelectedUserToUpdate().setGender(GenderType.OTHERS);
+            }
+            
             userSessionBeanLocal.updateProfile(getSelectedUserToUpdate());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Product updated successfully", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
         }
         catch (UserNotFoundException ex)
         {
@@ -77,11 +89,11 @@ public class ProfileManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-    public String getGender() {
+    public GenderType getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(GenderType gender) {
         this.gender = gender;
     }
 
@@ -201,5 +213,13 @@ public class ProfileManagementManagedBean implements Serializable {
      */
     public void setPlaceHolderGender(String placeHolderGender) {
         this.placeHolderGender = placeHolderGender;
+    }
+
+    public Integer getGenderInt() {
+        return genderInt;
+    }
+
+    public void setGenderInt(Integer genderInt) {
+        this.genderInt = genderInt;
     }
 }
