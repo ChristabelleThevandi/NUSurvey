@@ -30,10 +30,13 @@ public class ProfileManagementManagedBean implements Serializable {
     private UserSessionBeanLocal userSessionBeanLocal;
     
     //User Profile
-    private String firstName;
-    private String lastName;
+    private String first_name;
+    private String last_name;
     private String gender;
     private User selectedUserToUpdate;
+    private String placeHolderName;
+    private String placeHolderLastName;
+    private String placeHolderGender;
     
     //Credit Card
     private CreditCard creditCard;
@@ -47,7 +50,10 @@ public class ProfileManagementManagedBean implements Serializable {
     
     @PostConstruct
     public void postConstruct(){
-        
+        selectedUserToUpdate = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
+        setPlaceHolderName(selectedUserToUpdate.getFirst_name());
+        setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
+        setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
     }
     
     public void doUpdateProfile(ActionEvent event) 
@@ -71,23 +77,6 @@ public class ProfileManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
     public String getGender() {
         return gender;
     }
@@ -142,5 +131,75 @@ public class ProfileManagementManagedBean implements Serializable {
 
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
+    }
+
+    /**
+     * @return the first_name
+     */
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    /**
+     * @param first_name the first_name to set
+     */
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    /**
+     * @return the last_name
+     */
+    public String getLast_name() {
+        return last_name;
+    }
+
+    /**
+     * @param last_name the last_name to set
+     */
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    /**
+     * @return the placeHolderName
+     */
+    public String getPlaceHolderName() {
+        return placeHolderName;
+    }
+
+    /**
+     * @param placeHolderName the placeHolderName to set
+     */
+    public void setPlaceHolderName(String placeHolderName) {
+        this.placeHolderName = placeHolderName;
+    }
+
+    /**
+     * @return the placeHolderLastName
+     */
+    public String getPlaceHolderLastName() {
+        return placeHolderLastName;
+    }
+
+    /**
+     * @param placeHolderLastName the placeHolderLastName to set
+     */
+    public void setPlaceHolderLastName(String placeHolderLastName) {
+        this.placeHolderLastName = placeHolderLastName;
+    }
+
+    /**
+     * @return the placeHolderGender
+     */
+    public String getPlaceHolderGender() {
+        return placeHolderGender;
+    }
+
+    /**
+     * @param placeHolderGender the placeHolderGender to set
+     */
+    public void setPlaceHolderGender(String placeHolderGender) {
+        this.placeHolderGender = placeHolderGender;
     }
 }
