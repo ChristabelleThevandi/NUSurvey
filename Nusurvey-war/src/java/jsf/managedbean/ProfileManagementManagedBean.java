@@ -102,7 +102,16 @@ public class ProfileManagementManagedBean implements Serializable {
     }
     
     public void updateCreditCard(ActionEvent event) {
-        
+        creditCard = new CreditCard(nameOnCard, cardNumber, cvv, expiryDate);
+        creditCardSessionBeanLocal.createCreditCard(creditCard);
+        try {
+            userSessionBeanLocal.addCreditCard(selectedUserToUpdate, creditCard);
+        }catch (UserNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
+        }catch (CreditCardErrorException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credit Card exception has occured: " + ex.getMessage(), null));
+        }
+    
     }
 
     public GenderType getGender() {

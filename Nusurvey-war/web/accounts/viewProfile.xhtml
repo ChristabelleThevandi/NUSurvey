@@ -124,7 +124,7 @@
                                 <h:outputLabel value="Card Number: " />
                             </p:column>
                             <p:column>
-                                <p:inputText id="cardNum" value="#{viewProfileManagedBean.cardNumber}" required="true" requiredMessage="Card Number is required" />
+                                <p:inputText id="cardNum" value="#{viewProfileManagedBean.selectedUserToUpdate.cardNumber}" required="true" requiredMessage="Card Number is required" />
                             </p:column>
                             <p:column>
                                 &nbsp;
@@ -136,7 +136,7 @@
                                 <h:outputLabel value="CVV: " />
                             </p:column>
                             <p:column>
-                                <p:inputText id="cvv" value="#{viewProfileManagedBean.cvv}" required="true" requiredMessage="CVV is required" />
+                                <p:inputText id="cvv" value="#{viewProfileManagedBean.selectedUserToUpdate.cvv}" required="true" requiredMessage="CVV is required" />
                             </p:column>
                             <p:column>
                                 &nbsp;
@@ -148,7 +148,7 @@
                             </p:column>
                             <p:column>
                                 <p:outputLabel for="expiryDate"/>
-                                <p:calendar id="expiryDate" value="#{viewProfileManagedBean.expiryDate}" showOn="button" pattern="yyyy-MM-dd"/>
+                                <p:calendar id="expiryDate" value="#{viewProfileManagedBean.selectedUserToUpdate.expiryDate}" showOn="button" pattern="yyyy-MM-dd"/>
                             </p:column>
                             <p:column>
                                 &nbsp;
