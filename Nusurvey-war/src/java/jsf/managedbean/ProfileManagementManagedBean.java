@@ -89,6 +89,12 @@ public class ProfileManagementManagedBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
+    public void doAddCreditCard(ActionEvent event){
+        
+    }
+    public void updateCreditCard(ActionEvent event){
+        
+    }
     public GenderType getGender() {
         return gender;
     }
