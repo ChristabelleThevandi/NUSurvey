@@ -92,6 +92,7 @@ public class ProfileManagementManagedBean implements Serializable {
     public void doAddCreditCard(ActionEvent event){
         
     }
+    
     public void updateCreditCard(ActionEvent event){
         
     }

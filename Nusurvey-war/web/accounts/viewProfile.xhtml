@@ -86,7 +86,7 @@
             <h2>Credit Card</h2>
             <h:panelGroup rendered="#{sessionScope.currentCustomerEntity.creditCard == null}">
                 <h:form id="addCreditCard">
-                    <p:commandButton value="Add Credit Card" actionListener="#{profileManagementManagedBean.doAddCreditCard}" icon="pi pi-plus-circle" />
+                    <p:commandButton value="Add Credit Card" actionListener="#{viewProfileManagedBean.doAddCreditCard}" update="formAddCreditCard" oncomplete="PF('dialogAddCreditCard').show()" icon="pi pi-plus-circle"/>
                 </h:form>
             </h:panelGroup>
             <h:panelGroup rendered="#{sessionScope.currentCustomerEntity.creditCard != null}">
@@ -95,10 +95,76 @@
                     <h:outputText value="Card Number: #{sessionScope.currentCustomerEntity.creditCard.cardNumber}" />&nbsp;
                     <h:outputText value="CVV: #{sessionScope.currentCustomerEntity.creditCard.cvv}" />&nbsp;
                     <h:outputText value="Expiry Date: #{sessionScope.currentCustomerEntity.creditCard.expiryDate}" />&nbsp;
-                    <h:outputText value="Balance: #{sessionScope.currentCustomerEntity.creditCard.balance}" />&nbsp;
-                    <p:commandButton value="Update Credit Card" actionListener="#{profileManagementManagedBean.updateCreditCard}" icon="pi pi-pencil" />
+                    <p:commandButton value="Update Credit Card" actionListener="#{viewProfileManagedBean.updateCreditCard}" icon="pi pi-pencil" />
                 </h:form>
             </h:panelGroup>
+
+            <h:form id="formAddCreditCard">
+
+                <p:dialog id="dialogAddCreditCard" widgetVar="dialogAddCreditCard" header="Add Credit Card" closable="true">
+
+                    <p:messages id="messagesAddCreditCard" redisplay="false" />
+
+                    <p:panelGrid>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="NameOnCard: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="name" value="#{viewProfileManagedBean.nameOnCard}" required="true" requiredMessage="Name on card is required" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Card Number: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="cardNum" value="#{viewProfileManagedBean.cardNumber}" required="true" requiredMessage="Card Number is required" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="CVV: " />
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="cvv" value="#{viewProfileManagedBean.cvv}" required="true" requiredMessage="CVV is required" />
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Expiry Date: " />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel for="expiryDate"/>
+                                <p:calendar id="expiryDate" value="#{viewProfileManagedBean.expiryDate}" showOn="button" pattern="yyyy-MM-dd"/>
+                            </p:column>
+                            <p:column>
+                                &nbsp;
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column colspan="3">
+                                <p:commandButton value="Add Credit Card" update="@form formAddCreditCard" actionListener="#{viewProfileManagedBean.doAddCreditCard}" oncomplete="PF('dialogAddCreditCard').show();" />
+                            </p:column>
+                        </p:row>
+
+                    </p:panelGrid>
+
+                </p:dialog>
+
+            </h:form>
         </div>
     </ui:define>
 
