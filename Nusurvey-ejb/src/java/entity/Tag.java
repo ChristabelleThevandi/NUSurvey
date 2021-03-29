@@ -36,6 +36,9 @@ public class Tag implements Serializable {
     public Tag() {
     }
    
+    public Tag(String name) {
+        this.tag_name = name;
+    }
 
     public Long getTagId() {
         return tagId;
