@@ -92,9 +92,9 @@
             <h:panelGroup rendered="#{sessionScope.currentCustomerEntity.creditCard != null}">
                 <h:form id="updateCreditCard">
                     <h:outputText value="Name: #{sessionScope.currentCustomerEntity.creditCard.name}" />&nbsp;
-                    <h:outputText value="Card Number: #{sessionScope.currentCustomerEntity.creditCard.cardNumber}" />&nbsp;
+                    <h:outputText value="Card Number: #{sessionScope.currentCustomerEntity.creditCard.card_number}" />&nbsp;
                     <h:outputText value="CVV: #{sessionScope.currentCustomerEntity.creditCard.cvv}" />&nbsp;
-                    <h:outputText value="Expiry Date: #{sessionScope.currentCustomerEntity.creditCard.expiryDate}" />&nbsp;
+                    <h:outputText value="Expiry Date: #{sessionScope.currentCustomerEntity.creditCard.expiry_date}" />&nbsp;
                     <p:commandButton value="Update Credit Card" actionListener="#{viewProfileManagedBean.updateCreditCard}" icon="pi pi-pencil" />
                 </h:form>
             </h:panelGroup>
@@ -156,7 +156,7 @@
                         </p:row>
                         <p:row>
                             <p:column colspan="3">
-                                <p:commandButton value="Add Credit Card" update="@form formAddCreditCard" actionListener="#{viewProfileManagedBean.doAddCreditCard}" oncomplete="PF('dialogAddCreditCard').show();" />
+                                <p:commandButton value="Add Credit Card" update="@form formAddCreditCard" actionListener="#{viewProfileManagedBean.addCreditCard}" oncomplete="PF('dialogAddCreditCard').show();" />
                             </p:column>
                         </p:row>
 

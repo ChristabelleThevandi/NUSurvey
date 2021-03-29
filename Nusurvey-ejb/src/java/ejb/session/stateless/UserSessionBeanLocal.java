@@ -43,6 +43,7 @@ public interface UserSessionBeanLocal {
     public void uploadAvatar(User user, File avatar) throws UserNotFoundException;
 
     public void addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException;
+    public void updateCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException;
 
     public void updateTag(User user, List<Tag> tags) throws UserNotFoundException;
 
