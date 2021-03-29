@@ -39,6 +39,10 @@ public class CreditCard implements Serializable {
     @OneToMany(mappedBy = "creditCard")
     private List<Transaction> transactions;
 
+    public CreditCard() {
+        this.transactions=new ArrayList<>();
+    }
+
     public CreditCard(String name, String card_number, String cvv, Date expiry_date) {
         this.name = name;
         this.card_number = card_number;
