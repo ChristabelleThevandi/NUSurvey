@@ -1,10 +1,35 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml">
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        content
+        <h:form id="registerForm">
+
+            <p:outputLabel for="password" value="Old Password:" />&nbsp;
+            <p:inputText id="password" value="#{privacyManagedBean.password}" size="16" required="true" requiredMessage="Old password does not match" maxlength="32">
+            </p:inputText>
+            <br> </br>
+            <p:outputLabel for="newpassword" value="New password:" />&nbsp;
+            <p:inputText id="newpassword" value="#{privacyManagedBean.newPassword}" size="16" required="true" requiredMessage="New passoword is required" maxlength="32">
+            </p:inputText>
+            <br> </br>
+            <p:outputLabel value="Confirm Your New password:" />&nbsp;
+            <p:inputText id="confirmPassword" value="#{privacyManagedBean.confirmPassword}" size="16" required="true" requiredMessage="New password does not match" maxlength="32">
+            </p:inputText>
+           <br> </br>
+            <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
+            <p:commandButton type="submit" value="Change Password" actionListener="#{privacyManagedBean.doChangePassword()}" icon="pi pi-sign-in" />
+
+            <p:growl>
+                <p:autoUpdate />
+            </p:growl>
+
+        </h:form>
+
     </ui:define>
 
 </ui:composition>
