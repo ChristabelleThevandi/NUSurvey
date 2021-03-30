@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -39,7 +40,18 @@ public class CreditCard implements Serializable {
     private List<Transaction> transactions;
 
     public CreditCard() {
+        this.transactions=new ArrayList<>();
     }
+
+    public CreditCard(String name, String card_number, String cvv, Date expiry_date) {
+        this.name = name;
+        this.card_number = card_number;
+        this.cvv = cvv;
+        this.expiry_date = expiry_date;
+        this.transactions=new ArrayList<>();
+    }
+
+    
     
     
     public Long getCreditCardId() {

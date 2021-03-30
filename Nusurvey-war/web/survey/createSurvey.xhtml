@@ -1,10 +1,78 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml">
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        content
+        <h:panelGroup>
+            <article>
+                <h3>Create Survey</h3>
+                <p>
+                    Please create survey below            
+                </p>
+            </article>
+        </h:panelGroup>
+
+        <h:panelGroup>
+            <h:form id="surveyForm">
+                <p:inputText id="surveyTitle" value="#{createSurveyManagedBean.surveyTitle}" placeholder="Survey Title Here" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
+                </p:inputText>
+                <br /><br />
+                <p:inputText id="surveyDescription" value="#{createSurveyManagedBean.surveyDescription}" placeholder="Survey Description Here (Optional)" size="120" required="true" maxlength="500">
+                </p:inputText>
+                <br /><br /><br />
+                <p:inputText id="maxNumberOfResponse" value="#{createSurveyManagedBean.maxNumberOfResponse}" placeholder="Maximum number of Response" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
+                </p:inputText>
+                <br /><br />
+
+                <p:selectBooleanCheckbox value="#{createSurveyManagedBean.giveIncentive}" itemLabel="Give Incentive">
+                    <f:ajax event="change" render="@form" />
+                </p:selectBooleanCheckbox>
+                <br />
+
+                <h:panelGroup id="incentiveGroup" rendered="#{createSurveyManagedBean.giveIncentive}">
+                    <p:outputLabel for="incentivePerResponse" value="Incentives per response:" />&nbsp; $
+                    <p:inputText id="incentivePerResponse" value="#{createSurveyManagedBean.incentivePerResponse}" placeholder="00.00" size="10" required="false" maxlength="5">
+                    </p:inputText>
+                </h:panelGroup>
+                <br /><br />
+
+                <h:panelGroup>  
+                    <p:outputLabel for="faculties" value="Faculties allowed to response:"/>&nbsp;
+                    <br /><br />
+                    <p:selectBooleanCheckbox id="selectAll" value="#{createSurveyManagedBean.selectAllFaculties}" itemLabel="SELECT ALL" >
+                        <f:ajax listener="#{createSurveyManagedBean.onSelectAllFaculties}" render="faculties" />
+                    </p:selectBooleanCheckbox>
+                    <br />
+                    <p:selectManyCheckbox id="faculties" value="#{createSurveyManagedBean.selectedFaculties}" layout="grid" columns="3" >
+                        <f:selectItems value="#{createSurveyManagedBean.faculties}" var="faculty" itemLabel="#{faculty}" itemValue="#{faculty}" />
+                    </p:selectManyCheckbox>
+                </h:panelGroup>
+                <br /><br />
+
+                <h:panelGroup>  
+                    <p:outputLabel for="tags" value="Tags:"/>&nbsp;
+                    <br /><br />
+                    <p:autoComplete id="tags" multiple="true" value="#{createSurveyManagedBean.selectedTags}"
+                                    completeMethod="#{createSurveyManagedBean.tags}"
+                                    var="tag" itemLabel="#{tag.tag_name}" itemValue="#{tag}"
+                                    forceSelection="true" scrollHeight="250">
+                        <p:column>
+                            <!--<span class="flag flag-{tags.code}" style="width: 30px; height: 20px" />-->
+                            <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag.tag_name}"/>
+                        </p:column>
+                    </p:autoComplete>
+                </h:panelGroup>
+
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+
+            </h:form>
+        </h:panelGroup>
     </ui:define>
 
 </ui:composition>

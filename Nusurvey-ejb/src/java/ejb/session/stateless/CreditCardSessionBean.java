@@ -7,11 +7,15 @@ package ejb.session.stateless;
 
 import entity.CreditCard;
 import entity.User;
+import exception.CreditCardErrorException;
 import exception.UserNotFoundException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,6 +33,20 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
     public CreditCardSessionBean() {
     }
     
+    @Override
+    public CreditCard retrieveCreditCardByCardId(Long cardId) throws CreditCardErrorException{
+        Query query = em.createQuery("SELECT c FROM CreidtCard c WHERE c.creditCardId = :inNumber");
+        query.setParameter("inNumber", cardId);
+        
+        try
+        {
+            return (CreditCard)query.getSingleResult();
+        }
+        catch(NoResultException | NonUniqueResultException ex)
+        {
+            throw new CreditCardErrorException("Card with number " + cardId + " does not exist!");
+        }
+    }
     @Override
     public CreditCard createCreditCard(CreditCard creditCard)
     {

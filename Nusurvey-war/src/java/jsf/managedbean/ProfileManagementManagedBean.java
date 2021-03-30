@@ -5,10 +5,12 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.CreditCardSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.CreditCard;
 import entity.User;
 import enumeration.GenderType;
+import exception.CreditCardErrorException;
 import exception.UserNotFoundException;
 import java.io.Serializable;
 import java.util.Date;
@@ -27,9 +29,13 @@ import javax.faces.view.ViewScoped;
 @Named(value = "viewProfileManagedBean")
 @ViewScoped
 public class ProfileManagementManagedBean implements Serializable {
+
+    @EJB(name = "CreditCardSessionBeanLocal")
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
+
     @EJB(name = "UserSessionBeanLocal")
     private UserSessionBeanLocal userSessionBeanLocal;
-    
+
     //User Profile
     private String first_name;
     private String last_name;
@@ -39,7 +45,7 @@ public class ProfileManagementManagedBean implements Serializable {
     private String placeHolderLastName;
     private String placeHolderGender;
     private Integer genderInt;
-    
+
     //Credit Card
     private CreditCard creditCard;
     private String nameOnCard;
@@ -51,22 +57,19 @@ public class ProfileManagementManagedBean implements Serializable {
     }
     
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         selectedUserToUpdate = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
         setPlaceHolderName(selectedUserToUpdate.getFirst_name());
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
     }
     
-    public void doUpdateProfile(ActionEvent event) 
-    {
-       System.out.println("Selected this button");
+    public void doUpdateProfile(ActionEvent event) {
+        System.out.println("Selected this button");
     }
     
-    public void updateProfile(ActionEvent event)
-    {
-        try 
-        {
+    public void updateProfile(ActionEvent event) {
+        try {
             System.out.println("Pressed the button for update");
             
             if (getGenderInt() == 0) {
@@ -79,68 +82,95 @@ public class ProfileManagementManagedBean implements Serializable {
             
             userSessionBeanLocal.updateProfile(getSelectedUserToUpdate());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
-        }
-        catch (UserNotFoundException ex)
-        {
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
-        }
-        catch(Exception ex)
-        {
+        } catch (UserNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
+        } catch (Exception ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An unexpected error has occurred: " + ex.getMessage(), null));
         }
     }
+
+    public void doAddCreditCard(ActionEvent event) {
+        System.out.println("Selected this button");
+    }
+    
+     public void addCreditCard(ActionEvent event) {
+        creditCard = new CreditCard(getNameOnCard(), getCardNumber(), getCvv(), getExpiryDate());
+        try {
+            userSessionBeanLocal.addCreditCard(getSelectedUserToUpdate(), getCreditCard());
+        }catch (UserNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
+        }catch (CreditCardErrorException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credit Card exception has occured: " + ex.getMessage(), null));
+        }
+     }
+     public void doUpdateCreditCard(ActionEvent event) {
+        System.out.println("Selected this button");
+    }
+    public void updateCreditCard(ActionEvent event) {
+        creditCard = selectedUserToUpdate.getCreditCard();
+        try {
+            
+            userSessionBeanLocal.updateCreditCard(getSelectedUserToUpdate(), getCreditCard());
+        }catch (UserNotFoundException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
+        }catch (CreditCardErrorException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credit Card exception has occured: " + ex.getMessage(), null));
+        }
+    
+    }
+
     public GenderType getGender() {
         return gender;
     }
-
+    
     public void setGender(GenderType gender) {
         this.gender = gender;
     }
-
+    
     public User getSelectedUserToUpdate() {
         return selectedUserToUpdate;
     }
-
+    
     public void setSelectedUserToUpdate(User selectedUserToUpdate) {
         this.selectedUserToUpdate = selectedUserToUpdate;
     }
-
+    
     public CreditCard getCreditCard() {
         return creditCard;
     }
-
+    
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
     }
-
+    
     public String getNameOnCard() {
         return nameOnCard;
     }
-
+    
     public void setNameOnCard(String nameOnCard) {
         this.nameOnCard = nameOnCard;
     }
-
+    
     public String getCardNumber() {
         return cardNumber;
     }
-
+    
     public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
-
+    
     public String getCvv() {
         return cvv;
     }
-
+    
     public void setCvv(String cvv) {
         this.cvv = cvv;
     }
-
+    
     public Date getExpiryDate() {
         return expiryDate;
     }
-
+    
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
@@ -214,11 +244,11 @@ public class ProfileManagementManagedBean implements Serializable {
     public void setPlaceHolderGender(String placeHolderGender) {
         this.placeHolderGender = placeHolderGender;
     }
-
+    
     public Integer getGenderInt() {
         return genderInt;
     }
-
+    
     public void setGenderInt(Integer genderInt) {
         this.genderInt = genderInt;
     }

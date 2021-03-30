@@ -19,7 +19,7 @@ import javax.persistence.OneToMany;
  * @author Chrisya
  */
 @Entity
-public class QuestionOption implements Serializable {
+public abstract class QuestionOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

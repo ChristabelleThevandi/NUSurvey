@@ -210,13 +210,8 @@ public class UserSessionBean implements UserSessionBeanLocal {
         try 
         {
             User currentUser = retrieveUserByEmail(user.getEmail());
-            if (currentUser.getCreditCard().getCard_number().equals(creditCard.getCard_number()))
+            if (currentUser.getCreditCard()==null)
             {
-                throw new CreditCardErrorException("Credit card with card number: " + creditCard.getCard_number() + " has already exists.");
-            }
-            else 
-            {
-                creditCardSessionBean.removeCreditCard(currentUser);
                 CreditCard newCreditCard;
                 newCreditCard = creditCardSessionBean.createCreditCard(creditCard);
                 currentUser.setCreditCard(newCreditCard);
@@ -227,7 +222,32 @@ public class UserSessionBean implements UserSessionBeanLocal {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }
     }
-    
+    @Override
+    public void updateCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException{
+        try 
+        {
+            User currentUser = retrieveUserByEmail(user.getEmail());
+           /* if (currentUser.getCreditCard().getCard_number().equals(creditCard.getCard_number()))
+            {
+                throw new CreditCardErrorException("Credit card with card number: " + creditCard.getCard_number() + " has already exists.");
+            }
+            else 
+            {*/
+                creditCardSessionBean.removeCreditCard(currentUser);
+                CreditCard newCreditCard = creditCardSessionBean.retrieveCreditCardByCardId(creditCard.getCreditCardId());
+                newCreditCard.setBalance(creditCard.getBalance());
+                newCreditCard.setCard_number(creditCard.getCard_number());
+                newCreditCard.setCvv(creditCard.getCvv());
+                newCreditCard.setExpiry_date(creditCard.getExpiry_date());
+                newCreditCard.setName(creditCard.getName());
+                currentUser.setCreditCard(newCreditCard);
+            
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
     /**
      *
      * @param user
