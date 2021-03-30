@@ -58,6 +58,7 @@ public class LoginManagedBean {
     
     public void register(ActionEvent event) throws IOException
     {
+        System.out.println("Pencet");
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/registerUser.xhtml");
     }
 

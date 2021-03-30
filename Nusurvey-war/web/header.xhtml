@@ -11,6 +11,10 @@
                 <h2> NUSURVEY </h2>
             </h:panelGroup>
 
+            <h:form id="openRegisterForm">
+                <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon ="pi pi-sign-in"/>
+            </h:form>
+
             <h:form id="loginForm">
 
                 <p:outputLabel for="email" value="Email" />&nbsp;
@@ -26,14 +30,11 @@
 
                 <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
 
-                <h:form id="openRegisterForm">
-                    <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon ="pi pi-sign-in"/>
-                </h:form>
-
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
             </h:form>
+
         </h:panelGroup>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">

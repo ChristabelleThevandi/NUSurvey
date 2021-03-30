@@ -1,68 +1,69 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./template/defaultTemplate.xhtml"
-                xmlns:h="http://xmlns.jcp.org/jsf/html"
-                xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                xmlns:c="http://java.sun.com/jstl/core">
+                 template="./template/defaultTemplate.xhtml"
+                 xmlns:h="http://xmlns.jcp.org/jsf/html"
+                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                 xmlns:p="http://primefaces.org/ui">
 
-        <ui:define name="content">
-        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
-                    <h:form id="registerForm">
+    <ui:define name="content">
+        <p:panelGrid columns="2" layout = "flex" 
 
-                        <p:outputLabel for="firstName" value="First Name:" />&nbsp;
-                        <p:inputText id="firstName" value="#{userRegisterManagedBean.first_name}" size="16" required="true" requiredMessage="First Name is required" maxlength="32">
-                        </p:inputText>
-                        <br />
-                        <p:outputLabel for="lastName" value="Last Name:" />&nbsp;
-                        <p:inputText id="lastName" value="#{userRegisterManagedBean.last_name}" size="16" required="true" requiredMessage="Last Name is required" maxlength="32">
-                        </p:inputText>
-                        <br />
-                        <p:outputLabel for="gender" value="Gender:" />&nbsp;
-                        <p:selectOneMenu id="gender" value="#{userRegisterManagedBean.genderInt}" required="true" requiredMessage="Gender is required">
-                            <f:selectItem itemLabel="Male" itemValue="0"/>
-                            <f:selectItem itemLabel="Female" itemValue="1"/>
-                            <f:selectItem itemLabel="Others" itemValue="2"/>
-                        </p:selectOneMenu>
-                        <br />
-                        <p:outputLabel for="email" value="Email:" />&nbsp;
-                        <p:inputText id="email" value="#{userRegisterManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="64">
-                            <f:validateLength minimum="4" />
-                        </p:inputText>
-                        <br />
-                        <p:outputLabel for="password" value="Password:" />&nbsp;
-                        <p:password id="password" value="#{userRegisterManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
-                            <f:validateLength minimum="8" />
-                        </p:password>
-                        <br />
-                        
-                        <p:outputLabel for="birth_date" value="Birth Date:" >&nbsp;
-                           <p:calendar id="birth_date" value="#{userRegisterManagedBean.birth_date}" showOn="button" pattern="yyyy-MM-dd"/>
-                        </p:outputLabel>
-                        <br />
-                    
-                        <p:outputLabel for="faculty" value="Faculty:" />&nbsp;
-                        <p:selectOneMenu id="faculty" value="#{userRegisterManagedBean.facultyInt}" required="true" requiredMessage="Faculty is required">
-                            <f:selectItem itemLabel="ART" itemValue="0"/>
-                            <f:selectItem itemLabel="BUSINESS" itemValue="1"/>
-                            <f:selectItem itemLabel="COMPUTING" itemValue="2"/>
-                            <f:selectItem itemLabel="DENTISTRY" itemValue="3"/>
-                        </p:selectOneMenu>
-                        <br />
-                        <p:outputLabel for="major" value="Major:" />&nbsp;
-                        <p:inputText id="major" value="#{userRegisterManagedBean.major}" size="16" required="true" requiredMessage="Major is required" maxlength="32">
-                        </p:inputText>
-                        <br />
-                        <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
-                        <p:commandButton type="submit" value="Register" actionListener="#{userRegisterManagedBean.register}" icon="pi pi-sign-in" />
-                       
-                        <p:growl>
-                            <p:autoUpdate />
-                        </p:growl>
+                     contentStyleClass ="p-align-basline">
+            <h:form id="registerForm">
 
-                    </h:form>
-                </h:panelGroup>
-            </ui:define>
+                <p:outputLabel for="firstName" value="First Name:" />&nbsp;
+                <p:inputText id="firstName" value="#{userRegisterManagedBean.first_name}" size="16" required="true" requiredMessage="First Name is required" maxlength="32">
+                </p:inputText>
+                <br />
+                <p:outputLabel for="lastName" value="Last Name:" />&nbsp;
+                <p:inputText id="lastName" value="#{userRegisterManagedBean.last_name}" size="16" required="true" requiredMessage="Last Name is required" maxlength="32">
+                </p:inputText>
+                <br />
+                <p:outputLabel for="gender" value="Gender:" />&nbsp;
+                <p:selectOneMenu id="gender" value="#{userRegisterManagedBean.genderInt}" required="true" requiredMessage="Gender is required">
+                    <f:selectItem itemLabel="Male" itemValue="0"/>
+                    <f:selectItem itemLabel="Female" itemValue="1"/>
+                    <f:selectItem itemLabel="Others" itemValue="2"/>
+                </p:selectOneMenu>
+                <br />
+                <p:outputLabel for="email" value="Email:" />&nbsp;
+                <p:inputText id="email" value="#{userRegisterManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="64">
+                    <f:validateLength minimum="4" />
+                </p:inputText>
+                <br />
+                <p:outputLabel for="password" value="Password:" />&nbsp;
+                <p:password id="password" value="#{userRegisterManagedBean.password}" size="16" required="true" requiredMessage="Password is required" maxlength="32">
+                    <f:validateLength minimum="8" />
+                </p:password>
+                <br />
+
+                <p:outputLabel for="birth_date" value="Birth Date:" >&nbsp;
+                    <p:calendar id="birth_date" value="#{userRegisterManagedBean.birth_date}" showOn="button" pattern="yyyy-MM-dd"/>
+                </p:outputLabel>
+                <br />
+
+                <p:outputLabel for="faculty" value="Faculty:" />&nbsp;
+                <p:selectOneMenu id="faculty" value="#{userRegisterManagedBean.facultyInt}" required="true" requiredMessage="Faculty is required">
+                    <f:selectItem itemLabel="ART" itemValue="0"/>
+                    <f:selectItem itemLabel="BUSINESS" itemValue="1"/>
+                    <f:selectItem itemLabel="COMPUTING" itemValue="2"/>
+                    <f:selectItem itemLabel="DENTISTRY" itemValue="3"/>
+                </p:selectOneMenu>
+                <br />
+                <p:outputLabel for="major" value="Major:" />&nbsp;
+                <p:inputText id="major" value="#{userRegisterManagedBean.major}" size="16" required="true" requiredMessage="Major is required" maxlength="32">
+                </p:inputText>
+                <br />
+                <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
+                <p:commandButton type="submit" value="Register" actionListener="#{userRegisterManagedBean.register}" icon="pi pi-sign-in" />
+
+                <p:growl>
+                    <p:autoUpdate />
+                </p:growl>
+
+            </h:form>
+        </p:panelGrid>
+    </ui:define>
 
 </ui:composition>

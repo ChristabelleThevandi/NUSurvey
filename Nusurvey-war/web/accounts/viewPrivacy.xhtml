@@ -7,27 +7,24 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <h:form id="registerForm">
+        <h1> Change Password </h1>
 
-            <p:outputLabel for="password" value="Old Password:" />&nbsp;
-            <p:inputText id="password" value="#{privacyManagedBean.password}" size="16" required="true" requiredMessage="Old password does not match" maxlength="32">
-            </p:inputText>
+        <h:form id="registerForm">
+            &nbsp;<p:outputLabel for="password" value="Old Password:" />&nbsp;
+            &nbsp;<p:password id="password" value="#{privacyManagedBean.password}" size="16" required="true" requiredMessage="Old password does not match" maxlength="32"/>
             <br> </br>
-            <p:outputLabel for="newpassword" value="New password:" />&nbsp;
-            <p:inputText id="newpassword" value="#{privacyManagedBean.newPassword}" size="16" required="true" requiredMessage="New passoword is required" maxlength="32">
-            </p:inputText>
+            &nbsp;<p:outputLabel for="newpassword" value="New password:" />&nbsp;
+            &nbsp;<p:password id="newpassword" value="#{privacyManagedBean.newPassword}" size="16" required="true" requiredMessage="New passoword is required" maxlength="32"/>
             <br> </br>
-            <p:outputLabel value="Confirm Your New password:" />&nbsp;
-            <p:inputText id="confirmPassword" value="#{privacyManagedBean.confirmPassword}" size="16" required="true" requiredMessage="New password does not match" maxlength="32">
-            </p:inputText>
-           <br> </br>
-            <p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
-            <p:commandButton type="submit" value="Change Password" actionListener="#{privacyManagedBean.doChangePassword()}" icon="pi pi-sign-in" />
+            &nbsp;<p:outputLabel value="Confirm Your New password:" />&nbsp;
+            &nbsp;<p:password id="confirmPassword" value="#{privacyManagedBean.confirmPassword}" size="16" required="true" requiredMessage="New password does not match" maxlength="32"/>
+            <br> </br>
+            &nbsp;<p:commandButton type="reset" value="Clear" icon="pi pi-undo" />&nbsp;
+            &nbsp;<p:commandButton type="submit" value="Change Password" actionListener="#{privacyManagedBean.doChangePassword()}" icon="pi pi-sign-in" />
 
             <p:growl>
                 <p:autoUpdate />
             </p:growl>
-
         </h:form>
 
     </ui:define>

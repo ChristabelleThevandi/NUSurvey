@@ -82,7 +82,7 @@ public class UserRegisterManagedBean {
             userSessionBeanLocal.login(getEmail(), getPassword());
             FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentUser", user);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", user);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
         }
         catch(EmailExistException | InvalidLoginCredentialException | UnknownPersistenceException | InputDataValidationException ex)
