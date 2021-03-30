@@ -5,12 +5,16 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.TagSessionBeanLocal;
 import entity.Tag;
 import enumeration.FacultyType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 
@@ -21,6 +25,9 @@ import javax.faces.view.ViewScoped;
 @Named(value = "createSurveyManagedBean")
 @ViewScoped
 public class createSurveyManagedBean implements Serializable {
+
+    @EJB
+    private TagSessionBeanLocal tagSessionBeanLocal;
 
     private String surveyTitle;
     private String surveyDescription;
@@ -41,13 +48,15 @@ public class createSurveyManagedBean implements Serializable {
             FacultyType.INTEGRATIVE, FacultyType.LAW, FacultyType.LIFELONG,
             FacultyType.MEDICINE, FacultyType.POLICY,
             FacultyType.SCIENCE, FacultyType.USP, FacultyType.YALE, FacultyType.YST};
-        
-        tags = new ArrayList<>();
-        
-        
+
         this.selectedTags = new ArrayList<>();
 
         this.selectedFaculties = new ArrayList<FacultyType>();
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        tags = tagSessionBeanLocal.retrieveAllTags();
     }
 
     public List<Tag> getSelectedTags() {
@@ -56,6 +65,12 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setSelectedTags(List<Tag> selectedTags) {
         this.selectedTags = selectedTags;
+    }
+
+    public List<Tag> completeTags(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<Tag> countries = tagSessionBeanLocal.retrieveAllTags();
+        return countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
     }
 
     public void onSelectAllFaculties() {
@@ -74,8 +89,6 @@ public class createSurveyManagedBean implements Serializable {
     public void setSelectAllFaculties(Boolean selectAllFaculties) {
         this.selectAllFaculties = selectAllFaculties;
     }
-    
-    
 
     public List<FacultyType> getSelectedFaculties() {
         return selectedFaculties;
