@@ -20,7 +20,7 @@ public interface CreditCardSessionBeanLocal {
 
     public CreditCard createCreditCard(CreditCard creditCard);
 
-    public void removeCreditCard(User user) throws UserNotFoundException;
+    public User removeCreditCard(User user) throws UserNotFoundException;
     public CreditCard retrieveCreditCardByCardId(Long cardId) throws CreditCardErrorException;
     
 }

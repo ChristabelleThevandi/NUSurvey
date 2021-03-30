@@ -12,6 +12,7 @@ import entity.User;
 import enumeration.GenderType;
 import exception.CreditCardErrorException;
 import exception.UserNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -93,30 +94,30 @@ public class ProfileManagementManagedBean implements Serializable {
         System.out.println("Selected this button");
     }
     
-     public void addCreditCard(ActionEvent event) {
+     public void addCreditCard(ActionEvent event) throws IOException {
         creditCard = new CreditCard(getNameOnCard(), getCardNumber(), getCvv(), getExpiryDate());
         try {
-            userSessionBeanLocal.addCreditCard(getSelectedUserToUpdate(), getCreditCard());
+            selectedUserToUpdate = userSessionBeanLocal.addCreditCard(getSelectedUserToUpdate(), getCreditCard());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card added successfully", null));
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", selectedUserToUpdate);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
         }catch (UserNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
         }catch (CreditCardErrorException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credit Card exception has occured: " + ex.getMessage(), null));
         }
      }
-     public void doUpdateCreditCard(ActionEvent event) {
-        System.out.println("Selected this button");
-    }
-    public void updateCreditCard(ActionEvent event) {
-        creditCard = selectedUserToUpdate.getCreditCard();
-        try {
-            
-            userSessionBeanLocal.updateCreditCard(getSelectedUserToUpdate(), getCreditCard());
-        }catch (UserNotFoundException ex) {
+     public void doDeleteCreditCard(ActionEvent event) throws IOException {
+        try 
+        {
+            selectedUserToUpdate = creditCardSessionBeanLocal.removeCreditCard(selectedUserToUpdate);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card deleted successfully", null));
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", selectedUserToUpdate);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
+        } catch(UserNotFoundException ex)
+        {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
-        }catch (CreditCardErrorException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credit Card exception has occured: " + ex.getMessage(), null));
         }
-    
     }
 
     public GenderType getGender() {

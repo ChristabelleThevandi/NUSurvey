@@ -27,11 +27,3 @@ a:link:hover, a:visited:hover  {
   font-weight : bold;
   text-decoration : underline;
 }
-
-#loginForm form {
-    text-align : right;
-}
-
-.loginForm {
-    text-align: right;
-}

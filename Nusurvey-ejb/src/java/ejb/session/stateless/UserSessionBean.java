@@ -205,7 +205,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
     }
     
     @Override
-    public void addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException
+    public User addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException
     {
         try 
         {
@@ -216,6 +216,8 @@ public class UserSessionBean implements UserSessionBeanLocal {
                 newCreditCard = creditCardSessionBean.createCreditCard(creditCard);
                 currentUser.setCreditCard(newCreditCard);
             }
+            
+            return currentUser;
         }
         catch (UserNotFoundException exc)
         {

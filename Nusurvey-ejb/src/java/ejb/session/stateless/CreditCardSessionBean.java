@@ -57,7 +57,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
     }
     
     @Override
-    public void removeCreditCard(User user) throws UserNotFoundException
+    public User removeCreditCard(User user) throws UserNotFoundException
     {
         try 
         {
@@ -65,7 +65,9 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
             CreditCard creditCard = currentUser.getCreditCard();
             creditCard.setUser(null);
             currentUser.setCreditCard(null);
-            em.remove(creditCard);        
+            em.remove(creditCard);   
+            
+            return currentUser;
         }
         catch (UserNotFoundException exc)
         {

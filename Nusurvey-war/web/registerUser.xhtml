@@ -4,7 +4,8 @@
                 template="./template/defaultTemplate.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jstl/core">
 
         <ui:define name="content">
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
@@ -35,9 +36,12 @@
                             <f:validateLength minimum="8" />
                         </p:password>
                         <br />
-                        <p:outputLabel for="birth_date" value="Birth Date:" />&nbsp;
-                        <p:inputText id="birth_date" value="#{userRegisterManagedBean.birth_date}"/>
+                        
+                        <p:outputLabel for="birth_date" value="Birth Date:" >&nbsp;
+                           <p:calendar id="birth_date" value="#{userRegisterManagedBean.birth_date}" showOn="button" pattern="yyyy-MM-dd"/>
+                        </p:outputLabel>
                         <br />
+                    
                         <p:outputLabel for="faculty" value="Faculty:" />&nbsp;
                         <p:selectOneMenu id="faculty" value="#{userRegisterManagedBean.facultyInt}" required="true" requiredMessage="Faculty is required">
                             <f:selectItem itemLabel="ART" itemValue="0"/>

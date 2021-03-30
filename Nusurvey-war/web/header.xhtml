@@ -6,8 +6,6 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <header>
-
-        <h:outputStylesheet library="css" name="default.css"/>
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <h:panelGroup style = "text-align: left;">
                 <h2> NUSURVEY </h2>
@@ -29,7 +27,7 @@
                 <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
 
                 <h:form id="openRegisterForm">
-                    <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon="pi pi-sign-in" />
+                    <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon ="pi pi-sign-in"/>
                 </h:form>
 
                 <p:growl>

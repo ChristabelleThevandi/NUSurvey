@@ -87,8 +87,9 @@ public class DefaultFilter implements Filter {
     {
         //Jangan lupa access right error page
         if(path.equals("/index.xhtml") ||
-            path.startsWith("/javax.faces.resource") ||
-                path.equals("/registerUser.xhtml")
+           path.equals("/registerUser.xhtml") ||
+            path.startsWith("/javax.faces.resource") 
+                
             )
         {
             return true;
