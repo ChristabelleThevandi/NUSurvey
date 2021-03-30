@@ -57,20 +57,22 @@
                     <p:outputLabel for="tags" value="Tags:"/>&nbsp;
                     <br /><br />
                     <p:autoComplete id="tags" multiple="true" value="#{createSurveyManagedBean.selectedTags}"
-                                    completeMethod="#{createSurveyManagedBean.tags}"
+                                    completeMethod="#{createSurveyManagedBean.completeTags}"
                                     var="tag" itemLabel="#{tag.tag_name}" itemValue="#{tag}"
                                     forceSelection="true" scrollHeight="250">
                         <p:column>
-                            <!--<span class="flag flag-{tags.code}" style="width: 30px; height: 20px" />-->
                             <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag.tag_name}"/>
                         </p:column>
                     </p:autoComplete>
                 </h:panelGroup>
 
+                <h:panelGroup>
+                
+                </h:panelGroup>
+
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-
             </h:form>
         </h:panelGroup>
     </ui:define>
