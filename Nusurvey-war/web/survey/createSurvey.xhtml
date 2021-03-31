@@ -109,54 +109,55 @@
 
             <h:form id="questionsForm">
                 <ui:repeat value="#{createSurveyManagedBean.questions}" var="question" id="questionsRepeat">
-                    <p:inputText id="questionTitle" value="#{question.title}" placeholder="Type Your Question Here" size="120" required="true" requiredMessage="Question Title is required" maxlength="250">
-                    </p:inputText>
-                    &nbsp;
-                    <p:selectOneMenu id="option" value="#{question.typeStr}">
-                        <f:selectItem itemLabel="Multiple Choice" itemValue="Mcq"/>
-                        <f:selectItem itemLabel="Checkbox" itemValue="Checkbox"/>
-                        <f:selectItem itemLabel="Slider" itemValue="Slider"/>
-                        <f:selectItem itemLabel="Short Answer" itemValue="ShortAnswer"/>
-                        <p:ajax update="mcqOption,checkboxOption,sliderOption,shortanswerOption" />
-                    </p:selectOneMenu>
-                    <br/>
-                    <p:panel id="mcqOption" visible="#{question.mcq}" toggleable="true">
-                        <h:outputText value="Options:" />
-                        <ui:repeat value="#{question.options}" var="option" id="optionsRepeat">
-                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
-                                <!--<h:outputText value="{option.content}" />&nbsp;-->
-                                asdfasdfasdf
-                            </p:panelGrid>
-                            <br/>
-                        </ui:repeat>
-                        <p:commandButton value="Add Option" update="formAddOption" oncomplete="PF('dialogAddOption').show()" icon="ui-icon-plus" title="Add Option" />
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid cardQuestion">
+                        <p:inputText id="questionTitle" value="#{question.title}" placeholder="Type Your Question Here" size="120" required="true" requiredMessage="Question Title is required" maxlength="250">
+                        </p:inputText>
+                        &nbsp;
+                        <p:selectOneMenu id="option" value="#{question.typeStr}">
+                            <f:selectItem itemLabel="Multiple Choice" itemValue="Mcq"/>
+                            <f:selectItem itemLabel="Checkbox" itemValue="Checkbox"/>
+                            <f:selectItem itemLabel="Slider" itemValue="Slider"/>
+                            <f:selectItem itemLabel="Short Answer" itemValue="ShortAnswer"/>
+                            <p:ajax update="mcqOption,checkboxOption,sliderOption,shortanswerOption" />
+                        </p:selectOneMenu>
+                        <br/>
+                        <p:panel id="mcqOption" visible="#{question.mcq}" toggleable="true">
+                            <h:outputText value="Options:" />
+                            <ui:repeat value="#{question.options}" var="option" id="optionsRepeat">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+                                    <!--<h:outputText value="{option.content}" />&nbsp;-->
+                                    asdfasdfasdf
+                                </p:panelGrid>
+                                <br/>
+                            </ui:repeat>
+                            <p:commandButton value="Add Option" update="formAddOption" oncomplete="PF('dialogAddOption').show()" icon="ui-icon-plus" title="Add Option" />
 
-                    </p:panel>
-                    <p:panel id="checkboxOption" visible="#{question.checkbox}" toggleable="true">
-                        test 222
-                    </p:panel>
-                    <p:panel id="sliderOption" visible="#{question.slider}" toggleable="true">
-                        <p:inputText id="minValue" value="#{question.options[0]}" placeholder="0" size="20" maxlength="5" >
-                            <h:outputText value="Minimal Value:" />&nbsp;
-                        </p:inputText>
-                        <br /><br />
-                        <p:inputText id="maxValue" value="#{createSurveyManagedBean.maxValue}" placeholder="0" size="20" maxlength="5" >
-                            <h:outputText value="Maximal Value:" />&nbsp;
-                        </p:inputText>
-                        <p:inputText id="minValuePlaceholder" value="50" readonly="true" rendered="false" /> 
-                        <br /><br />
-                        <h:outputText value="Slider example:" />
-                        <p:slider for="minValuePlaceholder" styleClass="slider-dummy" />
-                    </p:panel>
-                    <p:panel id="shortanswerOption" visible="#{question.text}" toggleable="true">
-                        <h:outputText value="Text area example:" />
-                        <br /><br />
-                        <p:inputText readonly="true" placeholder="This is sample placeholder that will appear" size="100" styleClass="placeholder-dummy" />
-                    </p:panel>
-                    
+                        </p:panel>
+                        <p:panel id="checkboxOption" visible="#{question.checkbox}" toggleable="true">
+                            test 222
+                        </p:panel>
+                        <p:panel id="sliderOption" visible="#{question.slider}" toggleable="true">
+                            <p:inputText id="minValue" value="#{question.options[0]}" placeholder="0" size="20" maxlength="5" >
+                                <h:outputText value="Minimal Value:" />&nbsp;
+                            </p:inputText>
+                            <br /><br />
+                            <p:inputText id="maxValue" value="#{createSurveyManagedBean.maxValue}" placeholder="0" size="20" maxlength="5" >
+                                <h:outputText value="Maximal Value:" />&nbsp;
+                            </p:inputText>
+                            <p:inputText id="minValuePlaceholder" value="50" readonly="true" rendered="false" /> 
+                            <br /><br />
+                            <h:outputText value="Slider example:" />
+                            <p:slider for="minValuePlaceholder" styleClass="slider-dummy" />
+                        </p:panel>
+                        <p:panel id="shortanswerOption" visible="#{question.text}" toggleable="true">
+                            <h:outputText value="Text area example:" />
+                            <br /><br />
+                            <p:inputText readonly="true" placeholder="This is sample placeholder that will appear" size="100" styleClass="placeholder-dummy" />
+                        </p:panel>
+                    </p:panelGrid>
                 </ui:repeat>
-                <p:commandButton value="Add Question==" action="#{createSurveyManagedBean.addQuestion}" update="@form questionsForm" />
-                <p:commandButton value="Add Question" update="formAddQuestion" oncomplete="PF('dialogAddQuestion').show()" icon="ui-icon-plus" title="Add Question" />
+                <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" update="@form questionsForm" />
+                <!--<p:commandButton value="Add Question" update="formAddQuestion" oncomplete="PF('dialogAddQuestion').show()" icon="ui-icon-plus" title="Add Question" />-->
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
@@ -164,6 +165,7 @@
 
             <h:form id="formAddQuestion">
                 <p:dialog id="dialogAddQuestion" widgetVar="dialogAddQuestion" header="Add Question" closable="true">
+
                     <p:inputText id="questionTitle" value="#{createSurveyManagedBean.questionTitle}" placeholder="Type Your Question Here" size="120" required="true" requiredMessage="Question Title is required" maxlength="250">
                     </p:inputText>
                     &nbsp;
