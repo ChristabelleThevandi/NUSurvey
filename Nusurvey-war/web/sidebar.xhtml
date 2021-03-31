@@ -4,7 +4,7 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-
+    
     <section id="mainmenu" class="mainmenu">
         <h3>Main Menu</h3>
         <nav>
@@ -12,6 +12,11 @@
                     
                 <p:menu style="width:200px;">
                     <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
+                    
+                     <p:submenu class="information" label="Information" rendered="#{sessionScope.isLogin == false}">
+                        <p:menuitem value="About Us" outcome="/information/aboutUs.xhtml" icon="pi pi-info-circle"/>
+                        <p:menuitem value="Contact Us" outcome="/information/contactUs.xhtml" icon="pi pi-mobile" />
+                    </p:submenu>
                     
                     <p:submenu label="Survey" rendered="#{sessionScope.isLogin == true}">
                         <p:menuitem value="Create Survey" outcome="/survey/createSurvey.xhtml" icon="pi pi-pencil" />
