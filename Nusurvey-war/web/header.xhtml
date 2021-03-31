@@ -5,14 +5,20 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
+    
     <header>
+        <style>
+            .alignRight{
+                align-items: right;
+            }
+            </style>
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <h:panelGroup style = "text-align: left;">
                 <h3> NUSURVEY </h3>  <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon ="pi pi-sign-in"/>
             </h:panelGroup>
 
             <h:form id="loginForm" style="text-align : right;" >
-                
+
                 <p:outputLabel for="email" value="Email" />&nbsp;
                 <p:inputText id="email" value="#{loginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                     <f:validateLength minimum="4" />
@@ -27,9 +33,11 @@
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
-            </h:form>
+            </h:form> 
+            <p:link outcome="registerUser" value="click here to register" styleClass="alignRight">
+        </p:link>
         </h:panelGroup>
-
+       
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <h:form id="logoutForm">
                 <h:outputText  style="text-align : left;" value="You are login as #{sessionScope.currentCustomerEntity.first_name} #{sessionScope.currentCustomerEntity.last_name}" />&nbsp;
