@@ -27,9 +27,10 @@ public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
-    private String description;
+    private String title;
     private File image;
     private QuestionType type;
+    private Long questionNumber;
 
     @ManyToOne
     private Survey survey;
@@ -42,6 +43,14 @@ public class Question implements Serializable {
 
     public Question() {
     }
+
+    public Long getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(Long questionNumber) {
+        this.questionNumber = questionNumber;
+    }
     
     
     public Long getQuestionId() {
@@ -52,12 +61,12 @@ public class Question implements Serializable {
         this.questionId = questionId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public File getImage() {
