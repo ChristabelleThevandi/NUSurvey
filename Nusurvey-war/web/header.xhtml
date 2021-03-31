@@ -8,15 +8,11 @@
     <header>
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
             <h:panelGroup style = "text-align: left;">
-                <h2> NUSURVEY </h2>
+                <h3> NUSURVEY </h3>  <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon ="pi pi-sign-in"/>
             </h:panelGroup>
 
-            <h:form id="openRegisterForm">
-                <p:commandButton value="Register" actionListener="#{loginManagedBean.register}" icon ="pi pi-sign-in"/>
-            </h:form>
-
-            <h:form id="loginForm">
-
+            <h:form id="loginForm" style="text-align : right;" >
+                
                 <p:outputLabel for="email" value="Email" />&nbsp;
                 <p:inputText id="email" value="#{loginManagedBean.email}" size="16" required="true" requiredMessage="Email is required" maxlength="32">
                     <f:validateLength minimum="4" />
@@ -27,14 +23,11 @@
                     <f:validateLength minimum="4" />
                 </p:password>
                 &nbsp;
-
                 <p:commandButton type="submit" value="Login" actionListener="#{loginManagedBean.login}" icon="pi pi-sign-in" />
-
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
             </h:form>
-
         </h:panelGroup>
 
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">

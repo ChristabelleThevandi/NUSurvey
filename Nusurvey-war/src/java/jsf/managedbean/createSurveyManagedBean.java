@@ -39,6 +39,8 @@ public class createSurveyManagedBean implements Serializable {
     private List<Tag> tags;
     private Boolean selectAllFaculties;
     private List<Tag> selectedTags;
+    private List<Tag> tempTags;
+    
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -69,7 +71,7 @@ public class createSurveyManagedBean implements Serializable {
 
     public List<Tag> completeTags(String query) {
         String queryLowerCase = query.toLowerCase();
-        List<Tag> countries = tagSessionBeanLocal.retrieveAllTags();
+        List<Tag> countries = tags;
         return countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
     }
 
