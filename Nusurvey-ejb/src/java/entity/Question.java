@@ -31,17 +31,23 @@ public class Question implements Serializable {
     private File image;
     private QuestionType type;
     private Long questionNumber;
+    private String typeStr;
+    private Boolean mcq;
+    private Boolean checkbox;
+    private Boolean slider;
+    private Boolean text;
 
     @ManyToOne
     private Survey survey;
-    
+
     @OneToMany(mappedBy = "question")
     private List<QuestionOption> options;
-    
+
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
     public Question() {
+        this.type = QuestionType.MCQ;
     }
 
     public Long getQuestionNumber() {
@@ -51,8 +57,7 @@ public class Question implements Serializable {
     public void setQuestionNumber(Long questionNumber) {
         this.questionNumber = questionNumber;
     }
-    
-    
+
     public Long getQuestionId() {
         return questionId;
     }
@@ -76,7 +81,7 @@ public class Question implements Serializable {
     public void setImage(File image) {
         this.image = image;
     }
-    
+
     public QuestionType getType() {
         return type;
     }
@@ -132,6 +137,71 @@ public class Question implements Serializable {
     @Override
     public String toString() {
         return "entity.Question[ id=" + questionId + " ]";
+    }
+
+    public String getTypeStr() {
+        return typeStr;
+    }
+
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
+        if (typeStr.equals("Mcq")) {
+            this.setType(QuestionType.MCQ);
+            this.mcq = true;
+            this.checkbox = false;
+            this.slider = false;
+            this.text = false;
+        } else if (typeStr.equals("Checkbox")) {
+            this.setType(QuestionType.CHECKBOX);
+            this.checkbox = true;
+            this.mcq = false;
+            this.slider = false;
+            this.text = false;
+        } else if (typeStr.equals("Slider")) {
+            this.setType(QuestionType.SLIDEBAR);
+            this.slider = true;
+            this.checkbox = false;
+            this.mcq = false;
+            this.text = false;
+        } else {
+            this.setType(QuestionType.TEXT);
+            this.text = true;
+            this.checkbox = false;
+            this.slider = false;
+            this.mcq = false;
+        }
+    }
+
+    public Boolean getMcq() {
+        return (this.type.equals(QuestionType.MCQ));
+    }
+
+    public void setMcq(Boolean mcq) {
+        this.mcq = mcq;
+    }
+
+    public Boolean getCheckbox() {
+        return (this.type.equals(QuestionType.CHECKBOX));
+    }
+
+    public void setCheckbox(Boolean checkbox) {
+        this.checkbox = checkbox;
+    }
+
+    public Boolean getSlider() {
+        return (this.type.equals(QuestionType.SLIDEBAR));
+    }
+
+    public void setSlider(Boolean slider) {
+        this.slider = slider;
+    }
+
+    public Boolean getText() {
+        return (this.type.equals(QuestionType.TEXT));
+    }
+
+    public void setText(Boolean text) {
+        this.text = text;
     }
 
 }

@@ -26,21 +26,31 @@ public abstract class QuestionOption implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long optionId;
 
+    private Long optionNumber;
+
     @ManyToOne
     private Question question;
 
     public QuestionOption() {
     }
-    
+
     @OneToMany(mappedBy = "option")
     private List<Answer> answers;
-    
+
     public Long getOptionId() {
         return optionId;
     }
 
     public void setOptionId(Long optionId) {
         this.optionId = optionId;
+    }
+
+    public Long getOptionNumber() {
+        return optionNumber;
+    }
+
+    public void setOptionNumber(Long optionNumber) {
+        this.optionNumber = optionNumber;
     }
 
     public Question getQuestion() {
@@ -58,7 +68,7 @@ public abstract class QuestionOption implements Serializable {
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

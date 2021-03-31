@@ -18,24 +18,24 @@ import javax.persistence.Id;
  */
 @Entity
 public class MultipleChoiceOption extends QuestionOption {
-    
-    private List<String> options;
+
+    private String content;
 
     public MultipleChoiceOption() {
         super();
     }
 
-    public MultipleChoiceOption(List<String> options) {
+    public MultipleChoiceOption(String content) {
         super();
-        this.options = options;
+        this.content = content;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public String getContent() {
+        return content;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setContent(String content) {
+        this.content = content;
     }
-    
+
 }
