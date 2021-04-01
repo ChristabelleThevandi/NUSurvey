@@ -34,9 +34,9 @@
                     <p:autoUpdate />
                 </p:growl>
             </h:form> 
-            <p:link outcome="registerUser" value="click here to register" styleClass="alignRight">
-        </p:link>
         </h:panelGroup>
+        
+        <a href="registerUser.xhtml">Click here to register!</a>
        
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <h:form id="logoutForm">

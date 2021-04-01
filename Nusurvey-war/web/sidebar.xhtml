@@ -13,9 +13,9 @@
                 <p:menu style="width:200px;">
                     <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
                     
-                     <p:submenu class="information" label="Information" rendered="#{sessionScope.isLogin == false}">
-                        <p:menuitem value="About Us" outcome="/information/aboutUs.xhtml" icon="pi pi-info-circle"/>
-                        <p:menuitem value="Contact Us" outcome="/information/contactUs.xhtml" icon="pi pi-mobile" />
+                     <p:submenu label="Information" rendered="#{sessionScope.isLogin == false}">
+                        <p:menuitem value="About Us" outcome="/aboutUs.xhtml" icon="pi pi-info-circle"/>
+                        <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" icon="pi pi-mobile" />
                     </p:submenu>
                     
                     <p:submenu label="Survey" rendered="#{sessionScope.isLogin == true}">
