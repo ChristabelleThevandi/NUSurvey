@@ -7,21 +7,28 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-        <h:panelGroup>
+        <h:panelGroup rendered="#{sessionScope.isLogin == false}">
+            <h3>Welcome To NUSurvey!</h3>
             <article>
-                <h3>Welcome To NUSurvey!</h3>
                 <p>
                     Let's start the journey of creating surveys freely and happily:)                    
                 </p>
                 <figure class="nus">
                     <p:graphicImage library="images" name="NUS.jpg" alt="nus" />
                 </figure>
+            </article>
+        </h:panelGroup>
+        
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
+            <h3>Hi #{sessionScope.currentCustomerEntity.first_name} #{sessionScope.currentCustomerEntity.last_name}, Welcome To NUSurvey!</h3>
+            <article>
                 <p>
-                    <ul>
-                        
-                        <li>image2</li>
-                    </ul>
+                    Start creating survey now!
                 </p>
+                <figure class="nus">
+                    <p:graphicImage library="images" name="NUS.jpg" alt="nus" />
+                </figure>
+                
             </article>
         </h:panelGroup>
     </ui:define>
