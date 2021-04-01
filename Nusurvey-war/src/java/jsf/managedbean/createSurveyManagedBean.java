@@ -322,6 +322,7 @@ public class createSurveyManagedBean implements Serializable {
     }
 
     public void setSurveyTitle(String title) {
+        System.out.println("SET SURVEY TITLE " + title);
         this.surveyTitle = title;
     }
 
