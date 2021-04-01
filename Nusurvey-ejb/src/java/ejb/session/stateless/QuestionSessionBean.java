@@ -5,7 +5,6 @@
  */
 package ejb.session.stateless;
 
-import entity.QuestionOption;
 import entity.Question;
 import entity.Survey;
 import entity.Tag;

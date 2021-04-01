@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -37,17 +38,14 @@ public class Question implements Serializable {
     private Boolean slider;
     private Boolean text;
 
-    @ManyToOne
-    private Survey survey;
-
-    @OneToMany(mappedBy = "question")
-    private List<QuestionOption> options;
-
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
+    @OneToOne(mappedBy = "question")
+    private QuestionWrapper questionWrapper;
 
     public Question() {
         this.type = QuestionType.MCQ;
+        this.typeStr = "Mcq";
     }
 
     public Long getQuestionNumber() {
@@ -88,22 +86,6 @@ public class Question implements Serializable {
 
     public void setType(QuestionType type) {
         this.type = type;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
-    }
-
-    public List<QuestionOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<QuestionOption> options) {
-        this.options = options;
     }
 
     public List<Answer> getAnswers() {

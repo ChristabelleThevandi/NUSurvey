@@ -5,10 +5,14 @@
  */
 package ejb.session.stateless;
 
-import entity.QuestionOption;
+import entity.CheckboxOption;
+import entity.MultipleChoiceOption;
 import entity.Question;
+import entity.QuestionWrapper;
+import entity.SliderOption;
 import entity.Survey;
 import entity.Tag;
+import entity.TextOption;
 import entity.User;
 import exception.UnsupportedDeleteSurveyException;
 import java.util.ArrayList;
@@ -136,22 +140,48 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
     
 
     public Long createSurvey(Survey newSurvey) {
+        System.out.println("title" + newSurvey.getTitle());
         User creator = newSurvey.getCreator();
         User creatorPersisted = entityManager.find(User.class, creator.getUserId());
         newSurvey.setCreator(creatorPersisted);
 
         newSurvey.getQuestions().size();
-        List<Question> questions = newSurvey.getQuestions();
-        for (Question q : questions) {
-            q.getOptions().size();
-            List<QuestionOption> options = q.getOptions();
-            for (QuestionOption o : options) {
-                entityManager.persist(o);
+        List<QuestionWrapper> questions = newSurvey.getQuestions();
+        for (QuestionWrapper q : questions) {
+            
+            if(q.getQuestion().getMcq()) {
+                q.setCheckbox(null);
+                q.setSlider(null);
+                q.setText(null);
+                for (MultipleChoiceOption o : q.getMcq()) {
+                    entityManager.persist(o);
+                }
+            } else if (q.getQuestion().getCheckbox()) {
+                q.setMcq(null);
+                q.setSlider(null);
+                q.setText(null);
+                for (CheckboxOption o : q.getCheckbox()) {
+                    entityManager.persist(o);
+                }
+            } else if (q.getQuestion().getSlider()) {
+                q.setCheckbox(null);
+                q.setMcq(null);
+                q.setText(null);
+                entityManager.persist(q.getSlider());
+            } else {
+                q.setCheckbox(null);
+                q.setSlider(null);
+                q.setMcq(null);
+                entityManager.persist(q.getText());
             }
+            
+            entityManager.persist(q.getQuestion());
             entityManager.persist(q);
         }
+        
         entityManager.persist(newSurvey);
         entityManager.flush();
+        
         return newSurvey.getSurveyId();
     }
     
@@ -162,15 +192,15 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         }
         
         survey.getQuestions().size();
-        List<Question> questions = survey.getQuestions();
-        for (Question q: questions) {
-            q.getOptions().size();
-            List<QuestionOption> options = q.getOptions();
-            for (QuestionOption o: options) {
-                entityManager.remove(o);
-            }
-            entityManager.remove(q);
-        }
+        List<QuestionWrapper> questions = survey.getQuestions();
+//        for (Question q: questions) {
+//            q.getOptions().size();
+//            List<QuestionOption> options = q.getOptions();
+//            for (QuestionOption o: options) {
+//                entityManager.remove(o);
+//            }
+//            entityManager.remove(q);
+//        }
         
         survey.getTags().size();
         List<Tag> tags = survey.getTags();

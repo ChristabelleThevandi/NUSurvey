@@ -10,18 +10,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author Chrisya
  */
 @Entity
-public class SliderOption extends QuestionOption {
+public class SliderOption implements Serializable{
+    
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long sliderOptionId;
     
     private int minRange;
     private int maxRange;
     private String minLabel;
     private String maxLabel;
+    @OneToOne(mappedBy = "slider")
+    private QuestionWrapper questionWrapper;
+    
 
     public SliderOption() {
         super();
@@ -65,6 +74,14 @@ public class SliderOption extends QuestionOption {
 
     public void setMaxLabel(String maxLabel) {
         this.maxLabel = maxLabel;
+    }
+
+    public Long getSliderOptionId() {
+        return sliderOptionId;
+    }
+
+    public void setSliderOptionId(Long sliderOptionId) {
+        this.sliderOptionId = sliderOptionId;
     }
     
 }

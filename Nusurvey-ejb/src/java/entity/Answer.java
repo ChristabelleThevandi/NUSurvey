@@ -25,9 +25,6 @@ public abstract class Answer implements Serializable {
     private Long answerId;
 
     @ManyToOne
-    private QuestionOption option;
-
-    @ManyToOne
     private Question question;
     
     @ManyToOne
@@ -42,14 +39,6 @@ public abstract class Answer implements Serializable {
 
     public void setAnswerId(Long answerId) {
         this.answerId = answerId;
-    }
-    
-    public QuestionOption getOption() {
-        return option;
-    }
-
-    public void setOption(QuestionOption option) {
-        this.option = option;
     }
 
     public Question getQuestion() {

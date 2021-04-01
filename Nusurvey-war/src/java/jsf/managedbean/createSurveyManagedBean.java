@@ -5,11 +5,14 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.TagSessionBeanLocal;
 import entity.MultipleChoiceOption;
 import entity.Question;
-import entity.QuestionOption;
+import entity.QuestionWrapper;
+import entity.Survey;
 import entity.Tag;
+import entity.User;
 import enumeration.FacultyType;
 import enumeration.QuestionType;
 import java.io.Serializable;
@@ -19,6 +22,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 
@@ -30,21 +35,24 @@ import javax.faces.view.ViewScoped;
 @ViewScoped
 public class createSurveyManagedBean implements Serializable {
 
+    @EJB(name = "SurveySessionBeanLocal")
+    private SurveySessionBeanLocal surveySessionBeanLocal;
+
     @EJB
     private TagSessionBeanLocal tagSessionBeanLocal;
 
     private String surveyTitle;
     private String surveyDescription;
-    private String maxNumberOfResponse;
+    private Integer maxNumberOfResponse;
     private Boolean giveIncentive;
-    private Double incentivePerResponse;
+    private String incentivePerResponse;
     private FacultyType[] faculties;
     private List<FacultyType> selectedFaculties;
     private List<Tag> tags;
     private Boolean selectAllFaculties;
     private List<Tag> selectedTags;
     private List<Tag> tempTags;
-    private List<Question> questions;
+    private List<QuestionWrapper> questions;
     private String questionTitle;
     private String questionType;
     private QuestionType questionTypeEnum;
@@ -52,9 +60,7 @@ public class createSurveyManagedBean implements Serializable {
     private Boolean checkbox;
     private Boolean slider;
     private Boolean text;
-    private String minValue;
-    private String maxValue;
-    private List<QuestionOption> options;
+//    private List<QuestionOption> options;
     private String optionContent;
 
     public createSurveyManagedBean() {
@@ -70,12 +76,28 @@ public class createSurveyManagedBean implements Serializable {
 
         this.selectedFaculties = new ArrayList<>();
         this.questions = new ArrayList<>();
-        this.options = new ArrayList<>();
+        this.incentivePerResponse = "0";
     }
 
     @PostConstruct
     public void postConstruct() {
         tags = tagSessionBeanLocal.retrieveAllTags();
+    }
+
+    public void createSurvey(ActionEvent event) {
+        System.out.println("start creating" + incentivePerResponse);
+        Survey newSurvey = new Survey();
+        newSurvey.setQuestions(questions);
+        newSurvey.setCreator((User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity"));
+        newSurvey.setDescription(surveyDescription);
+        newSurvey.setTitle(surveyTitle);
+        System.out.println("title2" + newSurvey.getTitle());
+        newSurvey.setMax_surveyees(maxNumberOfResponse);
+        Double temp = Double.valueOf(incentivePerResponse);
+        newSurvey.setReward(temp);
+        newSurvey.setTags(tags);
+        newSurvey.setFaculties(selectedFaculties);
+        surveySessionBeanLocal.createSurvey(newSurvey);
     }
 
     public String getOptionContent() {
@@ -84,30 +106,6 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setOptionContent(String optionContent) {
         this.optionContent = optionContent;
-    }
-
-    public List<QuestionOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<QuestionOption> options) {
-        this.options = options;
-    }
-
-    public String getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(String minValue) {
-        this.minValue = minValue;
-    }
-
-    public String getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(String maxValue) {
-        this.maxValue = maxValue;
     }
 
     public String getQuestionTitle() {
@@ -195,10 +193,11 @@ public class createSurveyManagedBean implements Serializable {
     }
 
     public void addQuestion() {
-        Question question = new Question();
-        question.setQuestionNumber((long) questions.size() + 1);
-        question.setTitle(questionTitle);
-        questions.add(question);
+        System.out.println("ADDED");
+        QuestionWrapper questionWrapper = new QuestionWrapper(new Question());
+        questionWrapper.getQuestion().setQuestionNumber((long) questions.size() + 1);
+        questionWrapper.getQuestion().setTitle(questionTitle);
+        questions.add(questionWrapper);
         this.questionTitle = null;
         this.questionType = null;
         this.questionTypeEnum = null;
@@ -208,12 +207,12 @@ public class createSurveyManagedBean implements Serializable {
         this.text = false;
     }
 
-    public void addOption() {
-        QuestionOption option = new MultipleChoiceOption(optionContent);
-        option.setOptionNumber((long) options.size() + 1);
-        options.add(option);
-        this.optionContent = null;
-    }
+//    public void addOption() {
+//        QuestionOption option = new MultipleChoiceOption(optionContent);
+//        option.setOptionNumber((long) options.size() + 1);
+//        options.add(option);
+//        this.optionContent = null;
+//    }
 
     public TagSessionBeanLocal getTagSessionBeanLocal() {
         return tagSessionBeanLocal;
@@ -231,11 +230,11 @@ public class createSurveyManagedBean implements Serializable {
         this.tempTags = tempTags;
     }
 
-    public List<Question> getQuestions() {
+    public List<QuestionWrapper> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(List<QuestionWrapper> questions) {
         this.questions = questions;
     }
 
@@ -278,11 +277,11 @@ public class createSurveyManagedBean implements Serializable {
         this.selectedFaculties = selectedFaculties;
     }
 
-    public String getMaxNumberOfResponse() {
+    public Integer getMaxNumberOfResponse() {
         return maxNumberOfResponse;
     }
 
-    public void setMaxNumberOfResponse(String maxNumberOfResponse) {
+    public void setMaxNumberOfResponse(Integer maxNumberOfResponse) {
         this.maxNumberOfResponse = maxNumberOfResponse;
     }
 
@@ -294,11 +293,11 @@ public class createSurveyManagedBean implements Serializable {
         this.giveIncentive = giveIncentive;
     }
 
-    public Double getIncentivePerResponse() {
+    public String getIncentivePerResponse() {
         return incentivePerResponse;
     }
 
-    public void setIncentivePerResponse(Double incentivePerResponse) {
+    public void setIncentivePerResponse(String incentivePerResponse) {
         this.incentivePerResponse = incentivePerResponse;
     }
 
@@ -334,4 +333,5 @@ public class createSurveyManagedBean implements Serializable {
         this.surveyDescription = description;
     }
 
+//    public Bookean checkType()
 }
