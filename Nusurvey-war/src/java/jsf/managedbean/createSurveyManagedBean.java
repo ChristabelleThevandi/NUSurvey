@@ -60,7 +60,6 @@ public class createSurveyManagedBean implements Serializable {
     private Boolean checkbox;
     private Boolean slider;
     private Boolean text;
-//    private List<QuestionOption> options;
     private String optionContent;
 
     public createSurveyManagedBean() {
@@ -207,12 +206,14 @@ public class createSurveyManagedBean implements Serializable {
         this.text = false;
     }
 
-//    public void addOption() {
+    public void addOption(QuestionWrapper questionWrapper) {
+        questionWrapper.getMcq().add(new MultipleChoiceOption());
 //        QuestionOption option = new MultipleChoiceOption(optionContent);
 //        option.setOptionNumber((long) options.size() + 1);
 //        options.add(option);
 //        this.optionContent = null;
-//    }
+        
+    }
 
     public TagSessionBeanLocal getTagSessionBeanLocal() {
         return tagSessionBeanLocal;
@@ -254,10 +255,10 @@ public class createSurveyManagedBean implements Serializable {
 
     public void onSelectAllFaculties() {
         if (this.selectAllFaculties) {
-            this.selectedFaculties = new ArrayList<FacultyType>();
+            this.selectedFaculties = new ArrayList<>();
             Collections.addAll(selectedFaculties, faculties);
         } else {
-            this.selectedFaculties = new ArrayList<FacultyType>();
+            this.selectedFaculties = new ArrayList<>();
         }
     }
 
