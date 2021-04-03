@@ -191,7 +191,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
     }
     
     @Override
-    public void uploadAvatar(User user, File avatar) throws UserNotFoundException
+    public void uploadAvatar(User user, String avatar) throws UserNotFoundException
     {
         try 
         {
@@ -203,7 +203,21 @@ public class UserSessionBean implements UserSessionBeanLocal {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }
     }
-    
+     @Override
+    public User removeAvatar(String email) throws UserNotFoundException
+    {
+        try 
+        {
+            User currentUser = retrieveUserByEmail(email);
+            currentUser.setAvatar(null);
+            
+            return currentUser;
+        }
+        catch (UserNotFoundException exc)
+        {
+            throw new UserNotFoundException("User with email " + email + " does not exist!");
+        }
+    }
     @Override
     public User addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException
     {

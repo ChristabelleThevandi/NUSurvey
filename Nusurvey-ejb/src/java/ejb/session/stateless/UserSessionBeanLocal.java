@@ -40,7 +40,7 @@ public interface UserSessionBeanLocal {
 
     public void updateProfile(User user) throws UserNotFoundException;
 
-    public void uploadAvatar(User user, File avatar) throws UserNotFoundException;
+    public void uploadAvatar(User user, String avatar) throws UserNotFoundException;
 
     public User addCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException;
     public void updateCreditCard(User user, CreditCard creditCard) throws CreditCardErrorException, UserNotFoundException;
@@ -48,5 +48,6 @@ public interface UserSessionBeanLocal {
     public void updateTag(User user, List<Tag> tags) throws UserNotFoundException;
 
     public List<Survey> getRecommendation(User user);
+    public User removeAvatar(String email) throws UserNotFoundException;
     
 }

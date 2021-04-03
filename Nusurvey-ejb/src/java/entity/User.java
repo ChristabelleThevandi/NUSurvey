@@ -41,7 +41,7 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private FacultyType faculty;
     private String major;
-    private File avatar;
+    private String avatar;
     private boolean loggedIn;
     @Enumerated(EnumType.STRING)
     private GenderType gender;
@@ -184,14 +184,14 @@ public class User implements Serializable {
     /**
      * @return the avatar
      */
-    public File getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
     /**
      * @param avatar the avatar to set
      */
-    public void setAvatar(File avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
     
