@@ -70,6 +70,7 @@
         </h:panelGroup>
 
         <h:panelGroup styleClass="align-center">
+
             <h:form id="surveyForm">
                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid card margin-custom align-center">
                     <p:inputText id="surveyTitle" value="#{createSurveyManagedBean.surveyTitle}" placeholder="Survey Title Here" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
@@ -82,11 +83,11 @@
                 <br />
                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid card margin-custom">
                     <p:inputNumber id="maxNumberOfResponse" value="#{createSurveyManagedBean.maxNumberOfResponse}" placeholder="Maximum number of Response" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
-                        <p:tooltip for="maxNumberOfResponse" value="Max Number of Resposne" showEffect="clip" position="bottom"/>
+                        <p:tooltip for="maxNumberOfResponse" value="Max Number of Response" showEffect="clip" position="bottom"/>
                     </p:inputNumber>
 
                     <p:selectBooleanCheckbox value="#{createSurveyManagedBean.giveIncentive}" itemLabel="Give Incentive">
-                        <f:ajax event="change" render="@form" />
+                        <f:ajax render="@form surveyForm:incentiveGroup" />
                     </p:selectBooleanCheckbox>
 
                     <h:panelGroup id="incentiveGroup" rendered="#{createSurveyManagedBean.giveIncentive}">
@@ -95,6 +96,13 @@
                         </p:inputText>
                     </h:panelGroup>
                     <br />
+
+                    <p:outputLabel for="expiry_date" value="Expiry Date of Form:" >&nbsp;
+                        <p:calendar id="expiry_date" value="#{createSurveyManagedBean.expiry_date}" size="20" mindate="today" showOn="button" pattern="yyyy-MM-dd"/>
+                        <p:tooltip for="expiry_date" value="Expiry Date of Survey" showEffect="clip" position="bottom"/>
+                    </p:outputLabel>
+                    <br />
+
                     <h:panelGroup>  
                         <p:outputLabel for="faculties" value="Faculties allowed to response:"/>&nbsp;
                         <br />
@@ -180,21 +188,13 @@
                 <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
                 <br />
                 <p:commandButton type="submit" value="Create Survey" actionListener="#{createSurveyManagedBean.createSurvey}" icon="pi pi-sign-in" />
+
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
+
             </h:form>
 
-            <h:form id="formAddOption">
-                <p:dialog id="dialogAddOption" widgetVar="dialogAddOption" header="Add Option" closable="true" modal="true" appendTo="@(body)">
-                    <h:outputText value="Option Content: " />
-                    <br /><br />
-                    <p:inputText id="newOption" value="${createSurveyManagedBean.optionContent}" placeholder="Enter option content here" size="80"  /> 
-                    <p:tooltip for="newOption" value="Enter a new option" showEffect="clip" position="right"/>
-                    <br /><br />
-                    <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addQuestion}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
-                </p:dialog>
-            </h:form>
         </h:panelGroup>
     </ui:define>
 

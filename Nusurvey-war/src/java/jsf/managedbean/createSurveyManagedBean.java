@@ -19,10 +19,12 @@ import enumeration.QuestionType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
@@ -62,6 +64,7 @@ public class createSurveyManagedBean implements Serializable {
     private Boolean slider;
     private Boolean text;
     private String optionContent;
+    private Date expiry_date;
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -77,6 +80,7 @@ public class createSurveyManagedBean implements Serializable {
         this.selectedFaculties = new ArrayList<>();
         this.questions = new ArrayList<>();
         this.incentivePerResponse = "0";
+        this.giveIncentive = true;
     }
 
     @PostConstruct
@@ -85,6 +89,14 @@ public class createSurveyManagedBean implements Serializable {
     }
 
     public void createSurvey(ActionEvent event) {
+        for (QuestionWrapper q : questions) {
+            if (q.getQuestion().getType() == QuestionType.SLIDEBAR) {
+                if (q.getSlider().getMinRange() >= q.getSlider().getMaxRange()) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Min range of slider question can not be more than or equals to max range", null));
+                    return;
+                }
+            }
+        }
         System.out.println("start creating" + incentivePerResponse);
         Survey newSurvey = new Survey();
         newSurvey.setQuestions(questions);
@@ -97,7 +109,122 @@ public class createSurveyManagedBean implements Serializable {
         newSurvey.setReward(temp);
         newSurvey.setTags(tags);
         newSurvey.setFaculties(selectedFaculties);
+        newSurvey.setExpiry_date(expiry_date);
         surveySessionBeanLocal.createSurvey(newSurvey);
+    }
+
+    public void setQuestionType(String questionType) {
+        QuestionType questionTypeEnum1;
+        System.out.println("Halo " + questionType);
+        if (questionType.equals("Mcq")) {
+            questionTypeEnum1 = QuestionType.MCQ;
+            this.mcq = true;
+            this.checkbox = false;
+            this.slider = false;
+            this.text = false;
+        } else if (questionType.equals("Checkbox")) {
+            questionTypeEnum1 = QuestionType.CHECKBOX;
+            this.checkbox = true;
+            this.mcq = false;
+            this.slider = false;
+            this.text = false;
+            System.out.println(this.checkbox);
+        } else if (questionType.equals("Slider")) {
+            questionTypeEnum1 = QuestionType.SLIDEBAR;
+            this.slider = true;
+            this.checkbox = false;
+            this.mcq = false;
+            this.text = false;
+        } else {
+            questionTypeEnum1 = QuestionType.TEXT;
+            this.text = true;
+            this.checkbox = false;
+            this.slider = false;
+            this.mcq = false;
+        }
+        this.questionTypeEnum = questionTypeEnum1;
+    }
+
+    public void addQuestion() {
+        System.out.println("ADDED");
+        QuestionWrapper questionWrapper = new QuestionWrapper(new Question());
+        questionWrapper.getQuestion().setQuestionNumber((long) questions.size() + 1);
+        questionWrapper.getQuestion().setTitle(questionTitle);
+        questions.add(questionWrapper);
+        this.questionTitle = null;
+        this.questionType = null;
+        this.questionTypeEnum = null;
+        this.mcq = true;
+        this.checkbox = false;
+        this.slider = false;
+        this.text = false;
+    }
+
+    public void addOption(QuestionWrapper questionWrapper) {
+        MultipleChoiceOption newOption = new MultipleChoiceOption();
+        newOption.setQuestionWrapper(questionWrapper);
+        questionWrapper.getMcq().add(newOption);
+    }
+
+    public void addOptionCheckbox(QuestionWrapper questionWrapper) {
+        CheckboxOption newOption = new CheckboxOption();
+        newOption.setQuestionWrapper(questionWrapper);
+        questionWrapper.getCheckbox().add(newOption);
+    }
+
+    public List<Tag> getSelectedTags() {
+        return selectedTags;
+    }
+
+    public void setSelectedTags(List<Tag> selectedTags) {
+        this.selectedTags = selectedTags;
+    }
+
+    public List<Tag> completeTags(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<Tag> countries = tags;
+        return countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+    }
+
+    public void onSelectAllFaculties() {
+        if (this.selectAllFaculties) {
+            this.selectedFaculties = new ArrayList<>();
+            Collections.addAll(selectedFaculties, faculties);
+        } else {
+            this.selectedFaculties = new ArrayList<>();
+        }
+    }
+
+    public Boolean getSelectAllFaculties() {
+        return selectAllFaculties;
+    }
+
+    public void setSelectAllFaculties(Boolean selectAllFaculties) {
+        this.selectAllFaculties = selectAllFaculties;
+    }
+
+    public List<FacultyType> getSelectedFaculties() {
+        return selectedFaculties;
+    }
+
+    public void setSelectedFaculties(List<FacultyType> selectedFaculties) {
+        this.selectedFaculties = selectedFaculties;
+    }
+
+    public SurveySessionBeanLocal getSurveySessionBeanLocal() {
+        return surveySessionBeanLocal;
+    }
+
+    public void setSurveySessionBeanLocal(SurveySessionBeanLocal surveySessionBeanLocal) {
+        this.surveySessionBeanLocal = surveySessionBeanLocal;
+    }
+
+    public Date getExpiry_date() {
+        return expiry_date;
+    }
+
+    public void setExpiry_date(Date expiry_date) {
+        this.expiry_date = expiry_date;
     }
 
     public String getOptionContent() {
@@ -160,65 +287,6 @@ public class createSurveyManagedBean implements Serializable {
         return questionType;
     }
 
-    public void setQuestionType(String questionType) {
-        QuestionType questionTypeEnum1;
-        System.out.println("Halo " + questionType);
-        if (questionType.equals("Mcq")) {
-            questionTypeEnum1 = QuestionType.MCQ;
-            this.mcq = true;
-            this.checkbox = false;
-            this.slider = false;
-            this.text = false;
-        } else if (questionType.equals("Checkbox")) {
-            questionTypeEnum1 = QuestionType.CHECKBOX;
-            this.checkbox = true;
-            this.mcq = false;
-            this.slider = false;
-            this.text = false;
-            System.out.println(this.checkbox);
-        } else if (questionType.equals("Slider")) {
-            questionTypeEnum1 = QuestionType.SLIDEBAR;
-            this.slider = true;
-            this.checkbox = false;
-            this.mcq = false;
-            this.text = false;
-        } else {
-            questionTypeEnum1 = QuestionType.TEXT;
-            this.text = true;
-            this.checkbox = false;
-            this.slider = false;
-            this.mcq = false;
-        }
-        this.questionTypeEnum = questionTypeEnum1;
-    }
-
-    public void addQuestion() {
-        System.out.println("ADDED");
-        QuestionWrapper questionWrapper = new QuestionWrapper(new Question());
-        questionWrapper.getQuestion().setQuestionNumber((long) questions.size() + 1);
-        questionWrapper.getQuestion().setTitle(questionTitle);
-        questions.add(questionWrapper);
-        this.questionTitle = null;
-        this.questionType = null;
-        this.questionTypeEnum = null;
-        this.mcq = true;
-        this.checkbox = false;
-        this.slider = false;
-        this.text = false;
-    }
-
-    public void addOption(QuestionWrapper questionWrapper) {
-        MultipleChoiceOption newOption = new MultipleChoiceOption();
-        newOption.setQuestionWrapper(questionWrapper);
-        questionWrapper.getMcq().add(newOption);
-    }
-
-    public void addOptionCheckbox(QuestionWrapper questionWrapper) {
-        CheckboxOption newOption = new CheckboxOption();
-        newOption.setQuestionWrapper(questionWrapper);
-        questionWrapper.getCheckbox().add(newOption);
-    }
-    
     public TagSessionBeanLocal getTagSessionBeanLocal() {
         return tagSessionBeanLocal;
     }
@@ -241,45 +309,6 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setQuestions(List<QuestionWrapper> questions) {
         this.questions = questions;
-    }
-
-    public List<Tag> getSelectedTags() {
-        return selectedTags;
-    }
-
-    public void setSelectedTags(List<Tag> selectedTags) {
-        this.selectedTags = selectedTags;
-    }
-
-    public List<Tag> completeTags(String query) {
-        String queryLowerCase = query.toLowerCase();
-        List<Tag> countries = tags;
-        return countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
-    }
-
-    public void onSelectAllFaculties() {
-        if (this.selectAllFaculties) {
-            this.selectedFaculties = new ArrayList<>();
-            Collections.addAll(selectedFaculties, faculties);
-        } else {
-            this.selectedFaculties = new ArrayList<>();
-        }
-    }
-
-    public Boolean getSelectAllFaculties() {
-        return selectAllFaculties;
-    }
-
-    public void setSelectAllFaculties(Boolean selectAllFaculties) {
-        this.selectAllFaculties = selectAllFaculties;
-    }
-
-    public List<FacultyType> getSelectedFaculties() {
-        return selectedFaculties;
-    }
-
-    public void setSelectedFaculties(List<FacultyType> selectedFaculties) {
-        this.selectedFaculties = selectedFaculties;
     }
 
     public Integer getMaxNumberOfResponse() {
@@ -339,5 +368,7 @@ public class createSurveyManagedBean implements Serializable {
         this.surveyDescription = description;
     }
 
-//    public Bookean checkType()
+    public void setGiveIncentive() {
+//        this.giveIncentive = !this.giveIncentive;
+    }
 }

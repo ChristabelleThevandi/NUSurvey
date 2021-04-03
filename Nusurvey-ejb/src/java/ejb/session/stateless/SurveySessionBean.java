@@ -7,22 +7,25 @@ package ejb.session.stateless;
 
 import entity.CheckboxOption;
 import entity.MultipleChoiceOption;
-import entity.Question;
 import entity.QuestionWrapper;
 import entity.SliderOption;
 import entity.Survey;
 import entity.Tag;
-import entity.TextOption;
 import entity.User;
 import exception.UnsupportedDeleteSurveyException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -33,8 +36,12 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager entityManager;
+    private final ValidatorFactory validatorFactory;
+    private final Validator validator;
 
     public SurveySessionBean() {
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     @Override
@@ -123,7 +130,6 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 
     @Override
     public Long createSurvey(Survey newSurvey) {
-        System.out.println("title" + newSurvey.getTitle());
         User creator = newSurvey.getCreator();
         User creatorPersisted = entityManager.find(User.class, creator.getUserId());
         newSurvey.setCreator(creatorPersisted);
@@ -203,7 +209,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 
     public void closeSurvey(Survey survey) {
         survey = entityManager.find(Survey.class, survey.getSurveyId());
-        survey.setOpen(false);
+        survey.setSurveyOpen(false);
     }
 
     public List<Survey> retrieveAllSurveys() {
@@ -228,5 +234,15 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         List<Survey> surveys = query.getResultList();
 
         return surveys;
+    }
+
+    private String prepareInputDataValidationErrorsMessage(Set<ConstraintViolation<User>> constraintViolations) {
+        String msg = "Input data validation error!:";
+
+        for (ConstraintViolation constraintViolation : constraintViolations) {
+            msg += "\n\t" + constraintViolation.getPropertyPath() + " - " + constraintViolation.getInvalidValue() + "; " + constraintViolation.getMessage();
+        }
+
+        return msg;
     }
 }

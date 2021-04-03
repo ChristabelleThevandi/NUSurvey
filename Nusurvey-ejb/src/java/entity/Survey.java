@@ -29,7 +29,7 @@ public class Survey implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
     private Date expiry_date;
-    private boolean open;
+    private boolean surveyOpen;
     private String description;
     private String title;
     private Integer max_surveyees;
@@ -54,6 +54,7 @@ public class Survey implements Serializable {
     private List<FacultyType> faculties;
 
     public Survey() {
+        this.surveyOpen = true;
     }
 
     public List<QuestionWrapper> getQuestionWrappers() {
@@ -88,12 +89,12 @@ public class Survey implements Serializable {
         this.expiry_date = expiry_date;
     }
 
-    public boolean isOpen() {
-        return open;
+    public boolean isSurveyOpen() {
+        return surveyOpen;
     }
 
-    public void setOpen(boolean open) {
-        this.open = open;
+    public void setSurveyOpen(boolean surveyOpen) {
+        this.surveyOpen = surveyOpen;
     }
 
     public String getDescription() {

@@ -11,11 +11,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Min;
+import org.hibernate.validator.constraints.ScriptAssert;
 
 /**
  *
  * @author Chrisya
  */
+//@ScriptAssert(lang = "javascript", script = "_this.minRange < _this.maxRange")
 @Entity
 public class SliderOption implements Serializable {
 
@@ -28,7 +31,8 @@ public class SliderOption implements Serializable {
     private int maxRange;
     private String minLabel;
     private String maxLabel;
-    @OneToOne(mappedBy = "slider")
+
+    @OneToOne
     private QuestionWrapper questionWrapper;
 
     public SliderOption() {

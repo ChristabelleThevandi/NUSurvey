@@ -27,19 +27,19 @@ public class QuestionWrapper implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @OneToOne
     private Question question;
-    
+
     @OneToMany(mappedBy = "questionWrapper")
     private List<MultipleChoiceOption> mcq;
-    
-    @OneToOne
+
+    @OneToOne(mappedBy = "questionWrapper")
     private TextOption text;
-    
-    @OneToOne
+
+    @OneToOne(mappedBy = "questionWrapper")
     private SliderOption slider;
-    
+
     @OneToMany(mappedBy = "questionWrapper")
     private List<CheckboxOption> checkbox;
     @ManyToOne
@@ -62,7 +62,7 @@ public class QuestionWrapper implements Serializable {
         this.text = new TextOption();
         this.text.setQuestionWrapper(this);
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -143,7 +143,5 @@ public class QuestionWrapper implements Serializable {
     public void setCheckbox(List<CheckboxOption> checkbox) {
         this.checkbox = checkbox;
     }
-    
-    
-    
+
 }

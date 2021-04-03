@@ -25,7 +25,8 @@ public class TextOption implements Serializable {
     private Long textOptionId;
 
     private String text;
-    @OneToOne(mappedBy = "text")
+
+    @OneToOne
     private QuestionWrapper questionWrapper;
 
     public TextOption() {
