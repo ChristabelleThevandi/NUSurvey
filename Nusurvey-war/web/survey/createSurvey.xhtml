@@ -147,7 +147,13 @@
 
                         </p:panel>
                         <p:panel id="checkboxOption" visible="#{questionWrapper.question.checkbox}" toggleable="true">
-                            test 222
+                            <h:outputText value="Options:" />
+                            <ui:repeat value="#{questionWrapper.checkbox}" var="mcqoption" id="optionsRepeatCheckbox">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+                                    <p:inputText id="optiontitleCheckbox" value="#{mcqoption.content}" />
+                                </p:panelGrid>
+                            </ui:repeat>
+                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOptionCheckbox(questionWrapper)}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
                         </p:panel>
                         <p:panel id="sliderOption" visible="#{questionWrapper.question.slider}" toggleable="true">
                             <p:inputNumber id="minValue" value="#{questionWrapper.slider.minRange}" placeholder="0" size="20" maxlength="5" >

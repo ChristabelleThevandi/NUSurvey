@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.TagSessionBeanLocal;
+import entity.CheckboxOption;
 import entity.MultipleChoiceOption;
 import entity.Question;
 import entity.QuestionWrapper;
@@ -208,13 +209,12 @@ public class createSurveyManagedBean implements Serializable {
 
     public void addOption(QuestionWrapper questionWrapper) {
         questionWrapper.getMcq().add(new MultipleChoiceOption());
-//        QuestionOption option = new MultipleChoiceOption(optionContent);
-//        option.setOptionNumber((long) options.size() + 1);
-//        options.add(option);
-//        this.optionContent = null;
-        
     }
 
+    public void addOptionCheckbox(QuestionWrapper questionWrapper) {
+        questionWrapper.getCheckbox().add(new CheckboxOption());
+    }
+    
     public TagSessionBeanLocal getTagSessionBeanLocal() {
         return tagSessionBeanLocal;
     }

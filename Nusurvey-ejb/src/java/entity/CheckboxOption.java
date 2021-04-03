@@ -6,7 +6,6 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +24,7 @@ public class CheckboxOption implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkboxOptionId;
     
-    private List<String> options;
+    private String content;
     @ManyToOne
     private QuestionWrapper questionWrapper;
 
@@ -33,19 +32,28 @@ public class CheckboxOption implements Serializable{
         super();
     }
 
-    public CheckboxOption(List<String> options) {
+    public CheckboxOption(String content) {
         super();
-        this.options = options;
+        this.content = content;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public String getContent() {
+        return content;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setContent(String content) {
+        this.content = content;
     }
 
+    public QuestionWrapper getQuestionWrapper() {
+        return questionWrapper;
+    }
+
+    public void setQuestionWrapper(QuestionWrapper questionWrapper) {
+        this.questionWrapper = questionWrapper;
+    }
+
+    
     public Long getCheckboxOptionId() {
         return checkboxOptionId;
     }
