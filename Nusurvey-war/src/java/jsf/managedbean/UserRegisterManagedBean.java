@@ -77,13 +77,19 @@ public class UserRegisterManagedBean {
                 setFaculty(FacultyType.DENTISTRY);
             } 
             
-            User newUser = new User(getFirst_name(), getLast_name(), getBirth_date(), getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
-            User user = userSessionBeanLocal.register(newUser);
-            userSessionBeanLocal.login(getEmail(), getPassword());
-            FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", user);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
+            boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
+            if (verify) {
+                User newUser = new User(getFirst_name(), getLast_name(), getBirth_date(), getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
+                User user = userSessionBeanLocal.register(newUser);
+                userSessionBeanLocal.login(getEmail(), getPassword());
+                FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("isLogin", true);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", user);
+                FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Email has already been taken / invalid", null));
+            }
+
         }
         catch(EmailExistException | InvalidLoginCredentialException | UnknownPersistenceException | InputDataValidationException ex)
         {

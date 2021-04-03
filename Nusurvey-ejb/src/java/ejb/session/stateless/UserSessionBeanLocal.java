@@ -49,5 +49,7 @@ public interface UserSessionBeanLocal {
 
     public List<Survey> getRecommendation(User user);
     public User removeAvatar(String email) throws UserNotFoundException;
+
+    public boolean verifyEmail(String email);
     
 }

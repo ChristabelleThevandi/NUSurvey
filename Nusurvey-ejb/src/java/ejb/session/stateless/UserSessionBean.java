@@ -107,6 +107,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
                 em.flush();
 
                 return newUser;
+                
             }
             catch(PersistenceException ex)
             {
@@ -352,5 +353,30 @@ public class UserSessionBean implements UserSessionBeanLocal {
         }
         
         return recommendationSurvey;
+    }
+    
+    @Override
+    public boolean verifyEmail(String email)
+    {
+        try 
+        {
+            User user = retrieveUserByEmail(email);
+            return false;
+        } 
+        catch (UserNotFoundException ex)
+        {
+            String[] emailSplit = email.split("@");
+            if (emailSplit.length != 2) {
+                return false;
+            }
+            
+            if (emailSplit[1].equals("u.nus.edu"))
+            {
+                 return true;
+            } else
+            {
+                return false;
+            }
+        }
     }
 }
