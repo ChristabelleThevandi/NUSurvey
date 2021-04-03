@@ -12,6 +12,10 @@
         <div>
             <h2>Profile</h2>
             <h:form id="viewProfileForm">
+                <figure class="avatar">
+                    <p:growl id="avatar" showDetail="true"/>
+                    <p:graphicImage library="images" height="120" width="200" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg"/>
+                </figure>
                 <h:outputText value="First Name: #{sessionScope.currentCustomerEntity.first_name}" />&nbsp;
                 <h:outputText value="Last Name: #{sessionScope.currentCustomerEntity.last_name}" />&nbsp;
                 <h:outputText value="Gender: #{sessionScope.currentCustomerEntity.gender}" />&nbsp;
@@ -78,7 +82,8 @@
                                 <p:autoUpdate />
                             </p:messages>
 
-                            <p:fileUpload listener="#{viewProfileManagedBean.handleFileUpload}" multiple="false" />
+                            <p:fileUpload listener="#{viewProfileManagedBean.handleFileUpload}" multiple="false" update="@form">
+                            </p:fileUpload>
 
                         </p:panel>
 
@@ -95,6 +100,7 @@
             </h:form>
 
         </div>
+        <br></br>
         <div>
             <h2>Credit Card</h2>
             <h:panelGroup rendered="#{viewProfileManagedBean.selectedUserToUpdate.creditCard == null}">

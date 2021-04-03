@@ -12,6 +12,7 @@
             </figure>
             <!--><p:commandButton value="Register" actionListener="{loginManagedBean.register}" icon ="pi pi-sign-in"/><-->
         </h:panelGroup>
+        
         <h:panelGroup rendered="#{sessionScope.isLogin == false}">
 
 
@@ -38,10 +39,13 @@
         </h:panelGroup>
         <h:panelGroup rendered="#{sessionScope.isLogin == true}">
             <h:form id="logoutForm">
-                <!--><h:outputText style="text-align : right;float:right;" value="You are login as #{sessionScope.currentCustomerEntity.first_name} #{sessionScope.currentCustomerEntity.last_name}" />&nbsp;
-                <br> </br><-->
-                <p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" style="text-align : right;float:right;" />
-            </h:form>
+               
+                <h:outputText style="text-align : right;float:right;" value="You are login as #{sessionScope.currentCustomerEntity.first_name} #{sessionScope.currentCustomerEntity.last_name}" />
+                <br /><br /><p:commandButton value="Logout" actionListener="#{loginManagedBean.logout}" icon="pi pi-sign-out" style="text-align : right; float:right;" />
+    
+                
+                
+                 </h:form>
         </h:panelGroup>
 
     </header>
