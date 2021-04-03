@@ -75,9 +75,9 @@ public class ProfileManagementManagedBean implements Serializable {
     {
         try
         {
-            /*if(!selectedUserToUpdate.getAvatar().isEmpty()) {
+            if(selectedUserToUpdate.getAvatar()!=null) {
                 userSessionBeanLocal.removeAvatar(selectedUserToUpdate.getEmail());
-            }*/
+            }
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + selectedUserToUpdate.getEmail()+".jpg";
 
             System.err.println("********** ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
@@ -107,12 +107,15 @@ public class ProfileManagementManagedBean implements Serializable {
 
             fileOutputStream.close();
             inputStream.close();
-            
+            userSessionBeanLocal.uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
+            
         }
         catch(IOException ex)
         {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "File upload error: " + ex.getMessage(), ""));
+        } catch (UserNotFoundException ex) {
+            Logger.getLogger(ProfileManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
