@@ -57,8 +57,10 @@ public class QuestionWrapper implements Serializable {
         this.question = question;
         this.mcq = new ArrayList<>();
         this.slider = new SliderOption();
+        this.slider.setQuestionWrapper(this);
         this.checkbox = new ArrayList<>();
         this.text = new TextOption();
+        this.text.setQuestionWrapper(this);
     }
     
     public Long getId() {

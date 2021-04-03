@@ -17,13 +17,13 @@ import javax.persistence.OneToOne;
  * @author Chrisya
  */
 @Entity
-public class TextOption implements Serializable{
+public class TextOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long textOptionId;
-    
+
     private String text;
     @OneToOne(mappedBy = "text")
     private QuestionWrapper questionWrapper;
@@ -35,6 +35,14 @@ public class TextOption implements Serializable{
     public TextOption(String text) {
         super();
         this.text = text;
+    }
+
+    public QuestionWrapper getQuestionWrapper() {
+        return questionWrapper;
+    }
+
+    public void setQuestionWrapper(QuestionWrapper questionWrapper) {
+        this.questionWrapper = questionWrapper;
     }
 
     public String getText() {
@@ -52,5 +60,5 @@ public class TextOption implements Serializable{
     public void setTextOptionId(Long textOptionId) {
         this.textOptionId = textOptionId;
     }
-    
+
 }

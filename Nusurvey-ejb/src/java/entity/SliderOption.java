@@ -17,20 +17,19 @@ import javax.persistence.OneToOne;
  * @author Chrisya
  */
 @Entity
-public class SliderOption implements Serializable{
-    
+public class SliderOption implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sliderOptionId;
-    
+
     private int minRange;
     private int maxRange;
     private String minLabel;
     private String maxLabel;
     @OneToOne(mappedBy = "slider")
     private QuestionWrapper questionWrapper;
-    
 
     public SliderOption() {
         super();
@@ -42,6 +41,14 @@ public class SliderOption implements Serializable{
         this.maxRange = maxRange;
         this.minLabel = minLabel;
         this.maxLabel = maxLabel;
+    }
+
+    public QuestionWrapper getQuestionWrapper() {
+        return questionWrapper;
+    }
+
+    public void setQuestionWrapper(QuestionWrapper questionWrapper) {
+        this.questionWrapper = questionWrapper;
     }
 
     public int getMinRange() {
@@ -83,5 +90,5 @@ public class SliderOption implements Serializable{
     public void setSliderOptionId(Long sliderOptionId) {
         this.sliderOptionId = sliderOptionId;
     }
-    
+
 }

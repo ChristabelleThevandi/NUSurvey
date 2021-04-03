@@ -36,109 +36,92 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 
     public SurveySessionBean() {
     }
-     @Override
-    public List<Survey> searchSurveysByTitle(String searchString)
-    {
+
+    @Override
+    public List<Survey> searchSurveysByTitle(String searchString) {
         Query query = entityManager.createQuery("SELECT s FROM entityManager s WHERE s.name LIKE :inSearchString ORDER BY s.title ASC");
         query.setParameter("inSearchString", "%" + searchString + "%");
         List<Survey> SurveyEntities = query.getResultList();
-        
-        for(Survey SurveyEntity:SurveyEntities)
-        {
+
+        for (Survey SurveyEntity : SurveyEntities) {
             SurveyEntity.getDescription();
             SurveyEntity.getPrice_per_response();
             SurveyEntity.getTags().size();
         }
-        
-        return SurveyEntities;
-    }
-    
-     @Override
-    public List<Survey> sortSurveysByPrice() 
-    {
-        List<Survey> SurveyEntities = new ArrayList<>();
-        
-        for(Survey SurveyEntity:SurveyEntities)
-        {
-            SurveyEntity.getPrice_per_response();
-            SurveyEntity.getTags().size();
-        }
-        
-        Collections.sort(SurveyEntities, new Comparator<Survey>()
-            {
-                public int compare(Survey pe1, Survey pe2) {
-                    return pe1.getPrice_per_response().compareTo(pe2.getPrice_per_response());
-                }
-            });
 
         return SurveyEntities;
     }
+
     @Override
-    public List<Survey> filterSurveysByTags(List<Long> tagIds, String condition)
-    {
+    public List<Survey> sortSurveysByPrice() {
         List<Survey> SurveyEntities = new ArrayList<>();
-        
-        if(tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR")))
-        {
-            return SurveyEntities;
+
+        for (Survey SurveyEntity : SurveyEntities) {
+            SurveyEntity.getPrice_per_response();
+            SurveyEntity.getTags().size();
         }
-        else
-        {
-            if(condition.equals("OR"))
-            {
+
+        Collections.sort(SurveyEntities, new Comparator<Survey>() {
+            public int compare(Survey pe1, Survey pe2) {
+                return pe1.getPrice_per_response().compareTo(pe2.getPrice_per_response());
+            }
+        });
+
+        return SurveyEntities;
+    }
+
+    @Override
+    public List<Survey> filterSurveysByTags(List<Long> tagIds, String condition) {
+        List<Survey> SurveyEntities = new ArrayList<>();
+
+        if (tagIds == null || tagIds.isEmpty() || (!condition.equals("AND") && !condition.equals("OR"))) {
+            return SurveyEntities;
+        } else {
+            if (condition.equals("OR")) {
                 Query query = entityManager.createQuery("SELECT DISTINCT pe FROM SurveyEntity pe, IN (pe.tags) te WHERE te.tagId IN :inTagIds ORDER BY pe.title ASC");
                 query.setParameter("inTagIds", tagIds);
-                SurveyEntities = query.getResultList();                                                          
-            }
-            else
-            {
+                SurveyEntities = query.getResultList();
+            } else {
                 String selectClause = "SELECT pe FROM SurveyEntity pe";
                 String whereClause = "";
                 Boolean firstTag = true;
                 Integer tagCount = 1;
 
-                for(Long tagId:tagIds)
-                {
+                for (Long tagId : tagIds) {
                     selectClause += ", IN (pe.tags) te" + tagCount;
 
-                    if(firstTag)
-                    {
+                    if (firstTag) {
                         whereClause = "WHERE te1.tagId = " + tagId;
                         firstTag = false;
+                    } else {
+                        whereClause += " AND te" + tagCount + ".tagId = " + tagId;
                     }
-                    else
-                    {
-                        whereClause += " AND te" + tagCount + ".tagId = " + tagId; 
-                    }
-                    
+
                     tagCount++;
                 }
-                
+
                 String jpql = selectClause + " " + whereClause + " ORDER BY pe.title ASC";
                 Query query = entityManager.createQuery(jpql);
-                SurveyEntities = query.getResultList();                                
+                SurveyEntities = query.getResultList();
             }
-            
-            for(Survey SurveyEntity:SurveyEntities)
-            {
+
+            for (Survey SurveyEntity : SurveyEntities) {
                 SurveyEntity.getDescription();
                 SurveyEntity.getPrice_per_response();
                 SurveyEntity.getTags().size();
             }
-            
-            Collections.sort(SurveyEntities, new Comparator<Survey>()
-            {
+
+            Collections.sort(SurveyEntities, new Comparator<Survey>() {
                 public int compare(Survey pe1, Survey pe2) {
                     return pe1.getTitle().compareTo(pe2.getTitle());
                 }
             });
-            
+
             return SurveyEntities;
         }
     }
-    
-    
 
+    @Override
     public Long createSurvey(Survey newSurvey) {
         System.out.println("title" + newSurvey.getTitle());
         User creator = newSurvey.getCreator();
@@ -148,8 +131,8 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         newSurvey.getQuestions().size();
         List<QuestionWrapper> questions = newSurvey.getQuestions();
         for (QuestionWrapper q : questions) {
-            
-            if(q.getQuestion().getMcq()) {
+
+            if (q.getQuestion().getMcq()) {
                 q.setCheckbox(null);
                 q.setSlider(null);
                 q.setText(null);
@@ -174,23 +157,23 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
                 q.setMcq(null);
                 entityManager.persist(q.getText());
             }
-            
+
             entityManager.persist(q.getQuestion());
             entityManager.persist(q);
         }
-        
+
         entityManager.persist(newSurvey);
         entityManager.flush();
-        
+
         return newSurvey.getSurveyId();
     }
-    
+
     public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException {
         survey = entityManager.find(Survey.class, survey.getSurveyId());
         if (!survey.getSurveyees().isEmpty()) {
             throw new UnsupportedDeleteSurveyException("Cannot delete survey that has been answered!");
         }
-        
+
         survey.getQuestions().size();
         List<QuestionWrapper> questions = survey.getQuestions();
 //        for (Question q: questions) {
@@ -201,49 +184,49 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 //            }
 //            entityManager.remove(q);
 //        }
-        
+
         survey.getTags().size();
         List<Tag> tags = survey.getTags();
-        for (Tag t: tags) {
+        for (Tag t : tags) {
             t.getSurveys().size();
             t.getSurveys().remove(survey);
         }
-        
+
         survey.getTags().size();
         tags = survey.getTags();
-        for (Tag t: tags) {
+        for (Tag t : tags) {
             survey.getTags().remove(t);
         }
-        
+
         entityManager.remove(survey);
     }
-    
+
     public void closeSurvey(Survey survey) {
         survey = entityManager.find(Survey.class, survey.getSurveyId());
         survey.setOpen(false);
     }
-    
+
     public List<Survey> retrieveAllSurveys() {
         Query query = entityManager.createQuery("SELECT s FROM Survey s");
         List<Survey> surveys = query.getResultList();
-        
+
         return surveys;
     }
-    
+
     public List<Survey> retrieveMyCreatedSurveys(User currUser) {
         currUser = entityManager.find(User.class, currUser.getUserId());
         Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE currUser IN s.surveyees");
         List<Survey> surveys = query.getResultList();
-        
+
         return surveys;
     }
-    
+
     public List<Survey> retrieveMyFilledSurveys(User currUser) {
         currUser = entityManager.find(User.class, currUser.getUserId());
         Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE s.creator := cUser");
         query.setParameter("cUser", currUser);
         List<Survey> surveys = query.getResultList();
-        
+
         return surveys;
     }
 }

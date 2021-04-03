@@ -208,11 +208,15 @@ public class createSurveyManagedBean implements Serializable {
     }
 
     public void addOption(QuestionWrapper questionWrapper) {
-        questionWrapper.getMcq().add(new MultipleChoiceOption());
+        MultipleChoiceOption newOption = new MultipleChoiceOption();
+        newOption.setQuestionWrapper(questionWrapper);
+        questionWrapper.getMcq().add(newOption);
     }
 
     public void addOptionCheckbox(QuestionWrapper questionWrapper) {
-        questionWrapper.getCheckbox().add(new CheckboxOption());
+        CheckboxOption newOption = new CheckboxOption();
+        newOption.setQuestionWrapper(questionWrapper);
+        questionWrapper.getCheckbox().add(newOption);
     }
     
     public TagSessionBeanLocal getTagSessionBeanLocal() {
