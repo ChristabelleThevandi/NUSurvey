@@ -59,7 +59,7 @@ public class ProfileManagementManagedBean implements Serializable {
     private String cardNumber;
     private String cvv;
     private Date expiryDate;
-    
+    private String path;
     public ProfileManagementManagedBean() {
     }
     
@@ -69,6 +69,7 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderName(selectedUserToUpdate.getFirst_name());
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
+        setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
     }
      
     public void handleFileUpload(FileUploadEvent event)
@@ -106,6 +107,10 @@ public class ProfileManagementManagedBean implements Serializable {
             inputStream.close();
             userSessionBeanLocal.uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
+            System.out.println("Uploaded profile picture");
+            System.out.println("Uploaded profile picture");
+            System.out.println("Uploaded profile picture");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
             }
         catch(IOException ex)
         {
@@ -302,5 +307,19 @@ public class ProfileManagementManagedBean implements Serializable {
     
     public void setGenderInt(Integer genderInt) {
         this.genderInt = genderInt;
+    }
+
+    /**
+     * @return the path
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * @param path the path to set
+     */
+    public void setPath(String path) {
+        this.path = path;
     }
 }
