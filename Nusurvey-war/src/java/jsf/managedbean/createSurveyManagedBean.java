@@ -7,6 +7,7 @@ package jsf.managedbean;
 
 import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.TagSessionBeanLocal;
+import ejb.session.stateless.TransactionSessionBeanLocal;
 import entity.CheckboxOption;
 import entity.MultipleChoiceOption;
 import entity.Question;
@@ -16,6 +17,9 @@ import entity.Tag;
 import entity.User;
 import enumeration.FacultyType;
 import enumeration.QuestionType;
+import enumeration.TransactionType;
+import exception.UserNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,6 +45,9 @@ public class createSurveyManagedBean implements Serializable {
     @EJB(name = "SurveySessionBeanLocal")
     private SurveySessionBeanLocal surveySessionBeanLocal;
 
+    @EJB(name = "TransactionSessionBeanLocal")
+    private TransactionSessionBeanLocal transactionSessionBeanLocal;
+
     @EJB
     private TagSessionBeanLocal tagSessionBeanLocal;
 
@@ -65,6 +72,11 @@ public class createSurveyManagedBean implements Serializable {
     private Boolean text;
     private String optionContent;
     private Date expiry_date;
+    private Survey survey;
+    private Double surveyAmount;
+    private Double incentiveAmount;
+    private Double totalAmount;
+    private User currUser;
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -81,6 +93,7 @@ public class createSurveyManagedBean implements Serializable {
         this.questions = new ArrayList<>();
         this.incentivePerResponse = "0";
         this.giveIncentive = true;
+        this.currUser = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
     }
 
     @PostConstruct
@@ -88,7 +101,24 @@ public class createSurveyManagedBean implements Serializable {
         tags = tagSessionBeanLocal.retrieveAllTags();
     }
 
-    public void createSurvey(ActionEvent event) {
+    public User getCurrUser() {
+        return currUser;
+    }
+
+    public void setCurrUser(User currUser) {
+        this.currUser = currUser;
+    }
+
+    public void redirectPayment(ActionEvent event) throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/survey/surveyPayment.xhtml");
+    }
+
+    public void createTransaction() {
+
+        transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), this.totalAmount, TransactionType.EXPENSE, "Survey " + this.survey.getTitle() + " creation");
+    }
+
+    public void createSurvey(ActionEvent event) throws IOException {
         for (QuestionWrapper q : questions) {
             if (q.getQuestion().getType() == QuestionType.SLIDEBAR) {
                 if (q.getSlider().getMinRange() >= q.getSlider().getMaxRange()) {
@@ -100,7 +130,7 @@ public class createSurveyManagedBean implements Serializable {
         System.out.println("start creating" + incentivePerResponse);
         Survey newSurvey = new Survey();
         newSurvey.setQuestions(questions);
-        newSurvey.setCreator((User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity"));
+        newSurvey.setCreator(this.currUser);
         newSurvey.setDescription(surveyDescription);
         newSurvey.setTitle(surveyTitle);
         System.out.println("title2" + newSurvey.getTitle());
@@ -110,7 +140,27 @@ public class createSurveyManagedBean implements Serializable {
         newSurvey.setTags(tags);
         newSurvey.setFaculties(selectedFaculties);
         newSurvey.setExpiry_date(expiry_date);
-        surveySessionBeanLocal.createSurvey(newSurvey);
+        this.survey = newSurvey;
+        this.setIncentiveAmount(temp * maxNumberOfResponse);
+        this.setSurveyAmount(this.survey.getPrice_per_response() * maxNumberOfResponse);
+        System.out.println("t" + incentiveAmount + " " + surveyAmount);
+        this.setTotalAmount(incentiveAmount + surveyAmount);
+        this.redirectPayment(event);
+    }
+    
+    public void doCreateSurvey(ActionEvent event) throws IOException {
+        currUser = surveySessionBeanLocal.createSurvey(this.survey);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Survey created successfully", null));
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currUser);
+        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "index.xhtml");
+    }
+
+    public Double getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public void setQuestionType(String questionType) {
@@ -370,5 +420,37 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setGiveIncentive() {
 //        this.giveIncentive = !this.giveIncentive;
+    }
+
+    public TransactionSessionBeanLocal getTransactionSessionBeanLocal() {
+        return transactionSessionBeanLocal;
+    }
+
+    public void setTransactionSessionBeanLocal(TransactionSessionBeanLocal transactionSessionBeanLocal) {
+        this.transactionSessionBeanLocal = transactionSessionBeanLocal;
+    }
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+
+    public Double getSurveyAmount() {
+        return surveyAmount;
+    }
+
+    public void setSurveyAmount(Double surveyAmount) {
+        this.surveyAmount = surveyAmount;
+    }
+
+    public Double getIncentiveAmount() {
+        return incentiveAmount;
+    }
+
+    public void setIncentiveAmount(Double incentiveAmount) {
+        this.incentiveAmount = incentiveAmount;
     }
 }

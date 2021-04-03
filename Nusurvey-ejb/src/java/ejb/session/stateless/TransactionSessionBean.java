@@ -31,6 +31,7 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
     
     @Override
     public void createNewTransaction(CreditCard card, Double amount, TransactionType type, String title) {
+        User user = card.getUser();
         Double initialBalance = card.getBalance();
         Double nextBalance = 0.0;
         
@@ -41,6 +42,7 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
         }
         
         Transaction transaction = new Transaction();
+        transaction.setUser(user);
         transaction.setCreditCard(card);
         card.getTransactions().add(transaction);
         transaction.setType(type);

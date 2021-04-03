@@ -65,7 +65,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
             CreditCard creditCard = currentUser.getCreditCard();
             creditCard.setUser(null);
             currentUser.setCreditCard(null);
-            em.remove(creditCard);   
+            //em.remove(creditCard);   
             
             return currentUser;
         }

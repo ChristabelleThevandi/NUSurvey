@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:panelGroup styleClass="margin-custom">
+            <article>
+                <h2 style="color: #004DB6; padding-left:20; padding-top: 20">Payment</h2>
+                <p style="padding-left:20">
+                    Please confirm the survey payment below            
+                </p>
+            </article>
+        </h:panelGroup>
+
+        <p:panelGrid columns="2">
+            <h:outputText value="User:"/>
+            <h:outputText value="#{sessionScope.currentCustomerEntity.email}"/>
+
+            <h:outputText value="Survey creation amount:"/>
+            <h:outputText value="#{createSurveyManagedBean.surveyTitle}"/>
+
+            <h:outputText value="Incentive amount given:"/>
+            <h:outputText value="#{createSurveyManagedBean.incentiveAmount}"/>
+
+            <h:outputText value="Total:"/>
+            <h:outputText value="#{createSurveyManagedBean.totalAmount}"/>
+
+            <h:outputText value="Payment with:"/>
+            <h:outputText value="#{createSurveyManagedBean.currUser.creditCard.card_number}"/>
+
+            <p:commandButton value="Confirm Payment" actionListener="#{createSurveyManagedBean.doCreateSurvey}">
+                <p:confirm header="Confirmation" message="Are you sure make this payment?" icon="ui-icon-alert" />
+            </p:commandButton> 
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </p:panelGrid>
+    </ui:define>
+
+</ui:composition>

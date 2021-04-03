@@ -215,6 +215,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
                 CreditCard newCreditCard;
                 newCreditCard = creditCardSessionBean.createCreditCard(creditCard);
                 currentUser.setCreditCard(newCreditCard);
+                newCreditCard.setUser(currentUser);
             }
             
             return currentUser;

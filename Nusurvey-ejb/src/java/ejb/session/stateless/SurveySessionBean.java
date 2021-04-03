@@ -129,7 +129,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
     }
 
     @Override
-    public Long createSurvey(Survey newSurvey) {
+    public User createSurvey(Survey newSurvey) {
         User creator = newSurvey.getCreator();
         User creatorPersisted = entityManager.find(User.class, creator.getUserId());
         newSurvey.setCreator(creatorPersisted);
@@ -171,7 +171,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         entityManager.persist(newSurvey);
         entityManager.flush();
 
-        return newSurvey.getSurveyId();
+        return creator;
     }
 
     public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException {

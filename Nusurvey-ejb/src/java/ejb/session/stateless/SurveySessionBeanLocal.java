@@ -21,7 +21,7 @@ public interface SurveySessionBeanLocal {
     public List<Survey> sortSurveysByPrice();
     public List<Survey> filterSurveysByTags(List<Long> tagIds, String condition);
 
-    public Long createSurvey(Survey newSurvey);
+    public User createSurvey(Survey newSurvey);
 
     public List<Survey> retrieveMyFilledSurveys(User currUser);
 
