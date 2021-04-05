@@ -14,7 +14,7 @@
             <h:form id="viewProfileForm">
                 <figure class="avatar">
                     <p:growl id="avatar" showDetail="true"/>
-                    <p:graphicImage library="images" height="120" width="200" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg"/>
+                    <p:graphicImage library="images" height="120" width="120" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg" cache="false"/>
                 </figure>
                 <h:outputText value="First Name: #{sessionScope.currentCustomerEntity.first_name}" />&nbsp;
                 <h:outputText value="Last Name: #{sessionScope.currentCustomerEntity.last_name}" />&nbsp;
