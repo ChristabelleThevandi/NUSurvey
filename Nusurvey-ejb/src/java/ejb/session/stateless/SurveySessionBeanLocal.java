@@ -7,6 +7,7 @@ package ejb.session.stateless;
 
 import entity.Survey;
 import entity.User;
+import exception.SurveyNotFoundException;
 import exception.UnsupportedDeleteSurveyException;
 import java.util.List;
 import javax.ejb.Local;
@@ -32,5 +33,7 @@ public interface SurveySessionBeanLocal {
     public void closeSurvey(Survey survey);
 
     public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException;
+
+    public Survey retrieveSurveyBySurveyId(Long surveyId) throws SurveyNotFoundException;
     
 }

@@ -28,17 +28,25 @@ public class Transaction implements Serializable {
     private double amount;
     private Date transaction_date;
     private TransactionType type;
-    private String title;
-    
+    @ManyToOne
+    private Survey survey;
+
     @ManyToOne
     private User user;
-    
+
     @ManyToOne
     private CreditCard creditCard;
 
     public Transaction() {
     }
-    
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
 
     public Long getTransactionId() {
         return transactionId;
@@ -48,7 +56,7 @@ public class Transaction implements Serializable {
         this.transactionId = transactionId;
     }
 
-     public Date getTransaction_date() {
+    public Date getTransaction_date() {
         return transaction_date;
     }
 
@@ -79,21 +87,13 @@ public class Transaction implements Serializable {
     public void setCreditCard(CreditCard creditCard) {
         this.creditCard = creditCard;
     }
- 
+
     public double getAmount() {
         return amount;
     }
 
     public void setAmount(double amount) {
         this.amount = amount;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     @Override

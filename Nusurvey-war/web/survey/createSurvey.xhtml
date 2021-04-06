@@ -187,7 +187,9 @@
                 </ui:repeat>
                 <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
                 <br />
-                <p:commandButton type="submit" value="Create Survey" actionListener="#{createSurveyManagedBean.createSurvey}" icon="pi pi-sign-in" />
+                <p:commandButton type="submit" value="Create Survey" actionListener="#{createSurveyManagedBean.createSurvey}" icon="pi pi-sign-in" >
+                   
+                </p:commandButton>
 
                 <p:growl>
                     <p:autoUpdate />

@@ -8,10 +8,10 @@ package ejb.session.stateless;
 import entity.CheckboxOption;
 import entity.MultipleChoiceOption;
 import entity.QuestionWrapper;
-import entity.SliderOption;
 import entity.Survey;
 import entity.Tag;
 import entity.User;
+import exception.SurveyNotFoundException;
 import exception.UnsupportedDeleteSurveyException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,6 +57,23 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         }
 
         return SurveyEntities;
+    }
+
+    @Override
+    public Survey retrieveSurveyBySurveyId(Long surveyId) throws SurveyNotFoundException {
+        Survey survey = entityManager.find(Survey.class, surveyId);
+        
+        if (survey == null) {
+            throw new SurveyNotFoundException("Survey with this ID does not exist!");
+        } else {
+            survey.getFaculties().size();
+            survey.getQuestionWrappers().size();
+            survey.getQuestions().size();
+            survey.getResponses();
+            survey.getSurveyees();
+            survey.getTags();
+            return survey;
+        }
     }
 
     @Override

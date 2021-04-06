@@ -18,7 +18,7 @@ import entity.User;
 import enumeration.FacultyType;
 import enumeration.QuestionType;
 import enumeration.TransactionType;
-import exception.UserNotFoundException;
+import exception.SurveyNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -113,9 +114,9 @@ public class createSurveyManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/survey/surveyPayment.xhtml");
     }
 
-    public void createTransaction() {
+    public void createTransaction() throws SurveyNotFoundException {
 
-        transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), this.totalAmount, TransactionType.EXPENSE, "Survey " + this.survey.getTitle() + " creation");
+        transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), this.totalAmount, TransactionType.EXPENSE, this.survey.getSurveyId());
     }
 
     public void createSurvey(ActionEvent event) throws IOException {
@@ -145,14 +146,10 @@ public class createSurveyManagedBean implements Serializable {
         this.setSurveyAmount(this.survey.getPrice_per_response() * maxNumberOfResponse);
         System.out.println("t" + incentiveAmount + " " + surveyAmount);
         this.setTotalAmount(incentiveAmount + surveyAmount);
+
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currSurvey", survey);
+
         this.redirectPayment(event);
-    }
-    
-    public void doCreateSurvey(ActionEvent event) throws IOException {
-        currUser = surveySessionBeanLocal.createSurvey(this.survey);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Survey created successfully", null));
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currUser);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "index.xhtml");
     }
 
     public Double getTotalAmount() {

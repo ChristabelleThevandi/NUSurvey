@@ -20,19 +20,25 @@
             <h:outputText value="User:"/>
             <h:outputText value="#{sessionScope.currentCustomerEntity.email}"/>
 
-            <h:outputText value="Survey creation amount:"/>
-            <h:outputText value="#{createSurveyManagedBean.surveyTitle}"/>
+            <h:outputText value="Survey title:"/>
+            <h:outputText value="#{surveyTransactionManagedBean.survey.title}"/>
+
+            <h:outputText value="Maximum number of response:"/>
+            <h:outputText value="#{surveyTransactionManagedBean.survey.max_surveyees}"/>
+
+            <h:outputText value="Survey creation fee:"/>
+            <h:outputText value="$#{surveyTransactionManagedBean.surveyCreationFee}"/>
 
             <h:outputText value="Incentive amount given:"/>
-            <h:outputText value="#{createSurveyManagedBean.incentiveAmount}"/>
+            <h:outputText value="$#{surveyTransactionManagedBean.totalReward}"/>
 
-            <h:outputText value="Total:"/>
-            <h:outputText value="#{createSurveyManagedBean.totalAmount}"/>
+            <h:outputText value="Total Amount:" style="font-weight: bold"/>
+            <h:outputText value="$#{surveyTransactionManagedBean.totalAmount}" style="font-weight: bold"/>
 
             <h:outputText value="Payment with:"/>
-            <h:outputText value="#{createSurveyManagedBean.currUser.creditCard.card_number}"/>
+            <h:outputText value="#{surveyTransactionManagedBean.currUser.creditCard.card_number}"/>
 
-            <p:commandButton value="Confirm Payment" actionListener="#{createSurveyManagedBean.doCreateSurvey}">
+            <p:commandButton value="Confirm Payment" actionListener="#{surveyTransactionManagedBean.doCreateSurvey}">
                 <p:confirm header="Confirmation" message="Are you sure make this payment?" icon="ui-icon-alert" />
             </p:commandButton> 
 

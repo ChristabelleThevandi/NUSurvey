@@ -52,6 +52,8 @@ public class Survey implements Serializable {
     private List<Response> responses;
 
     private List<FacultyType> faculties;
+    @OneToMany(mappedBy = "survey")
+    private List<Transaction> transactions;
 
     public Survey() {
         this.surveyOpen = true;
