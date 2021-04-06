@@ -6,8 +6,10 @@
 package jsf.managedbean;
 
 import ejb.session.stateless.CreditCardSessionBeanLocal;
+import ejb.session.stateless.TagSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.CreditCard;
+import entity.Tag;
 import entity.User;
 import enumeration.GenderType;
 import exception.CreditCardErrorException;
@@ -17,9 +19,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -37,11 +42,15 @@ import org.primefaces.event.FileUploadEvent;
 @ViewScoped
 public class ProfileManagementManagedBean implements Serializable {
 
+    @EJB
+    private TagSessionBeanLocal tagSessionBean;
+
     @EJB(name = "CreditCardSessionBeanLocal")
     private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
 
     @EJB(name = "UserSessionBeanLocal")
     private UserSessionBeanLocal userSessionBeanLocal;
+    
 
     //User Profile
     private String first_name;
@@ -52,6 +61,7 @@ public class ProfileManagementManagedBean implements Serializable {
     private String placeHolderLastName;
     private String placeHolderGender;
     private Integer genderInt;
+    private Boolean hasAvatar;
 
     //Credit Card
     private CreditCard creditCard;
@@ -60,7 +70,14 @@ public class ProfileManagementManagedBean implements Serializable {
     private String cvv;
     private Date expiryDate;
     private String path;
+    
+    //Tags
+    private List<Tag> tags;
+    private List<Tag> currentUserTags;
+    private List<String> currUserTagStr;
+    
     public ProfileManagementManagedBean() {
+        currentUserTags = new ArrayList<>();
     }
     
     @PostConstruct
@@ -70,6 +87,25 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
         setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
+        
+        setTags(getTagSessionBean().retrieveAllTags());
+        
+        if (!selectedUserToUpdate.getTags().isEmpty())
+        {
+            setCurrentUserTags(selectedUserToUpdate.getTags());
+            for(Tag t:currentUserTags) {
+                currUserTagStr.add(t.getTag_name());
+            }
+            
+        }
+        
+        if (selectedUserToUpdate.getAvatar() == null)
+        {
+            setHasAvatar(false);
+        } else 
+        {
+            setHasAvatar(true);
+        }
     }
      
     public void handleFileUpload(FileUploadEvent event)
@@ -105,7 +141,7 @@ public class ProfileManagementManagedBean implements Serializable {
 
             fileOutputStream.close();
             inputStream.close();
-            userSessionBeanLocal.uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
+            getUserSessionBeanLocal().uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
@@ -136,7 +172,7 @@ public class ProfileManagementManagedBean implements Serializable {
                 getSelectedUserToUpdate().setGender(GenderType.OTHERS);
             }
             
-            userSessionBeanLocal.updateProfile(getSelectedUserToUpdate());
+            getUserSessionBeanLocal().updateProfile(getSelectedUserToUpdate());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Profile updated successfully", null));
         } catch (UserNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
@@ -152,7 +188,7 @@ public class ProfileManagementManagedBean implements Serializable {
      public void addCreditCard(ActionEvent event) throws IOException {
         creditCard = new CreditCard(getNameOnCard(), getCardNumber(), getCvv(), getExpiryDate());
         try {
-            selectedUserToUpdate = userSessionBeanLocal.addCreditCard(getSelectedUserToUpdate(), getCreditCard());
+            selectedUserToUpdate = getUserSessionBeanLocal().addCreditCard(getSelectedUserToUpdate(), getCreditCard());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card added successfully", null));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", selectedUserToUpdate);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
@@ -161,11 +197,12 @@ public class ProfileManagementManagedBean implements Serializable {
         }catch (CreditCardErrorException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Credit Card exception has occured: " + ex.getMessage(), null));
         }
-     }
-     public void doDeleteCreditCard(ActionEvent event) throws IOException {
+    }
+     
+    public void doDeleteCreditCard(ActionEvent event) throws IOException {
         try 
         {
-            selectedUserToUpdate = creditCardSessionBeanLocal.removeCreditCard(selectedUserToUpdate);
+            selectedUserToUpdate = getCreditCardSessionBeanLocal().removeCreditCard(selectedUserToUpdate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card deleted successfully", null));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", selectedUserToUpdate);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
@@ -175,6 +212,30 @@ public class ProfileManagementManagedBean implements Serializable {
         }
     }
 
+    public List<Tag> completeTags(String query) {
+        String queryLowerCase = query.toLowerCase();
+        List<Tag> countries = getTags();
+        countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        
+        return countries;
+    }
+    
+    public void updateUserTags(ActionEvent event) throws IOException {
+        try 
+        {
+            currentUserTags.clear();
+            for(String s:currUserTagStr) {
+                Tag t = tagSessionBean.retrieveTagByTagName(s);
+                currentUserTags.add(t);
+            } 
+            userSessionBeanLocal.updateTag(selectedUserToUpdate, this.currentUserTags);
+           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tags updated succesfully", null));
+        } catch(UserNotFoundException ex)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
+        }
+    }
+    
     public GenderType getGender() {
         return gender;
     }
@@ -321,5 +382,61 @@ public class ProfileManagementManagedBean implements Serializable {
      */
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public TagSessionBeanLocal getTagSessionBean() {
+        return tagSessionBean;
+    }
+
+    public void setTagSessionBean(TagSessionBeanLocal tagSessionBean) {
+        this.tagSessionBean = tagSessionBean;
+    }
+
+    public CreditCardSessionBeanLocal getCreditCardSessionBeanLocal() {
+        return creditCardSessionBeanLocal;
+    }
+
+    public void setCreditCardSessionBeanLocal(CreditCardSessionBeanLocal creditCardSessionBeanLocal) {
+        this.creditCardSessionBeanLocal = creditCardSessionBeanLocal;
+    }
+
+    public UserSessionBeanLocal getUserSessionBeanLocal() {
+        return userSessionBeanLocal;
+    }
+
+    public void setUserSessionBeanLocal(UserSessionBeanLocal userSessionBeanLocal) {
+        this.userSessionBeanLocal = userSessionBeanLocal;
+    }
+
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public Boolean getHasAvatar() {
+        return hasAvatar;
+    }
+
+    public void setHasAvatar(Boolean hasAvatar) {
+        this.hasAvatar = hasAvatar;
+    }
+
+    public List<Tag> getCurrentUserTags() {
+        return currentUserTags;
+    }
+
+    public void setCurrentUserTags(List<Tag> currentUserTags) {
+        this.currentUserTags = currentUserTags;
+    }
+
+    public List<String> getCurrUserTagStr() {
+        return currUserTagStr;
+    }
+
+    public void setCurrUserTagStr(List<String> currUserTagStr) {
+        this.currUserTagStr = currUserTagStr;
     }
 }

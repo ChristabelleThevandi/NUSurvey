@@ -14,7 +14,7 @@
             <h:form id="viewProfileForm">
                 <figure class="avatar">
                     <p:growl id="avatar" showDetail="true"/>
-                    <p:graphicImage library="images" height="120" width="200" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg"/>
+                    <p:graphicImage library="images" height="120" width="200" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg" rendered ="#{viewProfileManagedBean.hasAvatar}"/>
                 </figure>
                 <h:outputText value="First Name: #{sessionScope.currentCustomerEntity.first_name}" />&nbsp;
                 <h:outputText value="Last Name: #{sessionScope.currentCustomerEntity.last_name}" />&nbsp;
@@ -199,6 +199,24 @@
             </h:form>
 
         </div>
+        
+        <h:panelGroup>  
+            <h:form id ="userTags">
+                <p:outputLabel for="tags" value="Tags:"/>&nbsp;
+                        <br /><br />
+                        <p:autoComplete id="tags" multiple="true" value="#{viewProfileManagedBean.currUserTagStr}"
+                                        completeMethod="#{viewProfileManagedBean.completeTags}"
+                                        var="tag" itemLabel="#{tag.tag_name}" itemValue="#{tag.tag_name}" size="120"
+                                        forceSelection="true" scrollHeight="250">
+                            <p:column>
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag.tag_name}"/>
+                            </p:column>
+                        </p:autoComplete>
+                        <p:commandButton value="Update Tags" actionListener="#{viewProfileManagedBean.updateUserTags}"/>
+            </h:form>
+                        
+        </h:panelGroup>
+        
     </ui:define>
 
 </ui:composition>

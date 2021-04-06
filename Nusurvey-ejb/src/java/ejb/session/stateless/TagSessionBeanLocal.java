@@ -19,5 +19,7 @@ public interface TagSessionBeanLocal {
     public Long createTag(Tag newTag);
 
     public List<Tag> retrieveAllTags();
+
+    public Tag retrieveTagByTagName(String name);
     
 }
