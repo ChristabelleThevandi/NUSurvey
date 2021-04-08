@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Min;
-import org.hibernate.validator.constraints.ScriptAssert;
+
 
 /**
  *
