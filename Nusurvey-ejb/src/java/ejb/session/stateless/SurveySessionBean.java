@@ -210,11 +210,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 
         survey.getTags().size();
         List<Tag> tags = survey.getTags();
-        for (Tag t : tags) {
-            t.getSurveys().size();
-            t.getSurveys().remove(survey);
-        }
-
+        
         survey.getTags().size();
         tags = survey.getTags();
         for (Tag t : tags) {

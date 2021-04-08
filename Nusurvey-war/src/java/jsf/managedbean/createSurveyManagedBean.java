@@ -61,8 +61,6 @@ public class createSurveyManagedBean implements Serializable {
     private List<FacultyType> selectedFaculties;
     private List<Tag> tags;
     private Boolean selectAllFaculties;
-    private List<Tag> selectedTags;
-    private List<Tag> tempTags;
     private List<QuestionWrapper> questions;
     private String questionTitle;
     private String questionType;
@@ -78,6 +76,8 @@ public class createSurveyManagedBean implements Serializable {
     private Double incentiveAmount;
     private Double totalAmount;
     private User currUser;
+    private List<Tag> currentUserTags;
+    private List<String> currUserTagStr;
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -88,13 +88,13 @@ public class createSurveyManagedBean implements Serializable {
             FacultyType.MEDICINE, FacultyType.POLICY,
             FacultyType.SCIENCE, FacultyType.USP, FacultyType.YALE, FacultyType.YST};
 
-        this.selectedTags = new ArrayList<>();
-
         this.selectedFaculties = new ArrayList<>();
         this.questions = new ArrayList<>();
         this.incentivePerResponse = "0";
         this.giveIncentive = true;
         this.currUser = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
+        this.currUserTagStr = new ArrayList<>();
+        this.currentUserTags = new ArrayList<>();
     }
 
     @PostConstruct
@@ -138,7 +138,12 @@ public class createSurveyManagedBean implements Serializable {
         newSurvey.setMax_surveyees(maxNumberOfResponse);
         Double temp = Double.valueOf(incentivePerResponse);
         newSurvey.setReward(temp);
-        newSurvey.setTags(tags);
+        for (String s : currUserTagStr) {
+            Tag t = tagSessionBeanLocal.retrieveTagByTagName(s);
+            currentUserTags.add(t);
+        }
+
+        newSurvey.setTags(currentUserTags);
         newSurvey.setFaculties(selectedFaculties);
         newSurvey.setExpiry_date(expiry_date);
         this.survey = newSurvey;
@@ -219,18 +224,30 @@ public class createSurveyManagedBean implements Serializable {
         questionWrapper.getCheckbox().add(newOption);
     }
 
-    public List<Tag> getSelectedTags() {
-        return selectedTags;
-    }
-
-    public void setSelectedTags(List<Tag> selectedTags) {
-        this.selectedTags = selectedTags;
-    }
-
     public List<Tag> completeTags(String query) {
         String queryLowerCase = query.toLowerCase();
-        List<Tag> countries = tags;
-        return countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        List<Tag> countries = getTags();
+        countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        List<Tag> toReturn = new ArrayList<>();
+        Boolean notExist = true;
+
+        for (Tag t : countries) {
+            for (String c : currUserTagStr) {
+                String temp = t.getTag_name();
+                if (temp.equals(c)) {
+                    notExist = false;
+                    break;
+                }
+            }
+
+            if (notExist) {
+                toReturn.add(t);
+            } else {
+                notExist = true;
+            }
+        }
+
+        return toReturn;
     }
 
     public void onSelectAllFaculties() {
@@ -252,6 +269,22 @@ public class createSurveyManagedBean implements Serializable {
 
     public List<FacultyType> getSelectedFaculties() {
         return selectedFaculties;
+    }
+
+    public List<Tag> getCurrentUserTags() {
+        return currentUserTags;
+    }
+
+    public void setCurrentUserTags(List<Tag> currentUserTags) {
+        this.currentUserTags = currentUserTags;
+    }
+
+    public List<String> getCurrUserTagStr() {
+        return currUserTagStr;
+    }
+
+    public void setCurrUserTagStr(List<String> currUserTagStr) {
+        this.currUserTagStr = currUserTagStr;
     }
 
     public void setSelectedFaculties(List<FacultyType> selectedFaculties) {
@@ -340,14 +373,6 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setTagSessionBeanLocal(TagSessionBeanLocal tagSessionBeanLocal) {
         this.tagSessionBeanLocal = tagSessionBeanLocal;
-    }
-
-    public List<Tag> getTempTags() {
-        return tempTags;
-    }
-
-    public void setTempTags(List<Tag> tempTags) {
-        this.tempTags = tempTags;
     }
 
     public List<QuestionWrapper> getQuestions() {

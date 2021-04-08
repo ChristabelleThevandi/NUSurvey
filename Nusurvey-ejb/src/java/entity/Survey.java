@@ -42,7 +42,7 @@ public class Survey implements Serializable {
     @ManyToOne
     private User creator;
 
-    @ManyToMany
+    @OneToMany
     private List<Tag> tags;
 
     @OneToMany(mappedBy = "survey")

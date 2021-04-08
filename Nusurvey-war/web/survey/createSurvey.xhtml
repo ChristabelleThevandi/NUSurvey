@@ -86,15 +86,15 @@
                         <p:tooltip for="maxNumberOfResponse" value="Max Number of Response" showEffect="clip" position="bottom"/>
                     </p:inputNumber>
 
-                    <p:selectBooleanCheckbox value="#{createSurveyManagedBean.giveIncentive}" itemLabel="Give Incentive">
-                        <f:ajax render="@form surveyForm:incentiveGroup" />
+                    <p:selectBooleanCheckbox value="#{createSurveyManagedBean.giveIncentive}" immediate="true" itemLabel="Give Incentive">
+                        <p:ajax update="incentiveGroup" />
                     </p:selectBooleanCheckbox>
 
-                    <h:panelGroup id="incentiveGroup" rendered="#{createSurveyManagedBean.giveIncentive}">
+                    <p:panel id="incentiveGroup" visible="#{createSurveyManagedBean.giveIncentive}">
                         <p:outputLabel for="incentivePerResponse" value="Incentives per response:" />&nbsp; $
                         <p:inputText id="incentivePerResponse" value="#{createSurveyManagedBean.incentivePerResponse}" placeholder="00.00" size="10" required="false" maxlength="5">
                         </p:inputText>
-                    </h:panelGroup>
+                    </p:panel>
                     <br />
 
                     <p:outputLabel for="expiry_date" value="Expiry Date of Form:" >&nbsp;
@@ -119,12 +119,12 @@
                     <h:panelGroup>  
                         <p:outputLabel for="tags" value="Tags:"/>&nbsp;
                         <br /><br />
-                        <p:autoComplete id="tags" multiple="true" value="#{createSurveyManagedBean.selectedTags}"
+                        <p:autoComplete id="tags" multiple="true" value="#{createSurveyManagedBean.currUserTagStr}"
                                         completeMethod="#{createSurveyManagedBean.completeTags}"
-                                        var="tag" itemLabel="#{tag.tag_name}" itemValue="#{tag}" size="120"
+                                        var="tag" itemLabel="#{tag}" itemValue="#{tag}" size="120"
                                         forceSelection="true" scrollHeight="250">
                             <p:column>
-                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag.tag_name}"/>
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag}"/>
                             </p:column>
                         </p:autoComplete>
                     </h:panelGroup>
@@ -188,7 +188,7 @@
                 <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
                 <br />
                 <p:commandButton type="submit" value="Create Survey" actionListener="#{createSurveyManagedBean.createSurvey}" icon="pi pi-sign-in" >
-                   
+
                 </p:commandButton>
 
                 <p:growl>
