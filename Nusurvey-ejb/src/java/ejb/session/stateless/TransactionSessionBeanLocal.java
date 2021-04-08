@@ -33,4 +33,6 @@ public interface TransactionSessionBeanLocal {
 
     public void createNewTransaction(CreditCard card, Double amount, TransactionType type, Long surveyId) throws SurveyNotFoundException;
 
+    public List<Transaction> retrieveAllTransaction(User user);
+
 }

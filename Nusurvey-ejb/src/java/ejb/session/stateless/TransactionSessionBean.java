@@ -85,10 +85,20 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
         return query.getResultList();
     }
 
+    @Override
     public List<Transaction> retrieveMyExpenseTransaction(User user) {
         Query query = em.createQuery("SELECT t FROM Transaction t WHERE t.user=inUser AND t.type=inType");
         query.setParameter("inUser", user);
         query.setParameter("inType,", TransactionType.EXPENSE);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Transaction> retrieveAllTransaction(User user) 
+    {
+        Query query = em.createQuery("SELECT t FROM Transaction t WHERE t.user= :inUser ORDER BY t.transaction_date DESC");
+        query.setParameter("inUser", user);
 
         return query.getResultList();
     }
