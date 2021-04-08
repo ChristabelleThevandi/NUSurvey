@@ -17,10 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-/**
- *
- * @author Chrisya
- */
 @WebFilter(filterName = "DefaultFilter", urlPatterns = {"/*"})
 public class DefaultFilter implements Filter {
     
@@ -30,7 +26,7 @@ public class DefaultFilter implements Filter {
     // configured. 
     FilterConfig filterConfig;
     
-    private static final String CONTEXT_ROOT = "/Nusurvey";
+    private static final String CONTEXT_ROOT = "/Nusurvey-war";
     
     public void init(FilterConfig filterConfig) throws ServletException
     {

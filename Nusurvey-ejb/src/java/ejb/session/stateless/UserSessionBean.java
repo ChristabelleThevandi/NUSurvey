@@ -231,43 +231,20 @@ public class UserSessionBean implements UserSessionBeanLocal {
      * @throws UserNotFoundException
      */
     @Override
-    public void updateTag(User user, List<Tag> tags) throws UserNotFoundException {
+    public void updateTag(User user, List<Tag> tags) throws UserNotFoundException 
+    {
         try {
             User currentUser = retrieveUserByEmail(user.getEmail());
-            List<Tag> toBeDeleted = new ArrayList<>();
-            List<Tag> toBeAdded = new ArrayList<>();
-            List<Tag> currentTags = currentUser.getTags();
-            System.out.println(tags.get(0).getTagId() + "tttttttttttt");
-            
-            for (Tag nt : tags)
-            {
-                if (!currentTags.contains(nt))
-                {
-                    nt = em.find(Tag.class,nt.getTagId());
-                    toBeAdded.add(nt);
-                }
-            }
-            
-            for (Tag ct : currentTags)
-            {
-                if (!tags.contains(ct)) 
-                {
-                    toBeDeleted.add(ct);
-                }
-            }
-            
-            for (Tag t : toBeAdded)
-            {
-                currentUser.getTags().add(t);
-                t.getUsers().add(currentUser);
-            }
-            
-            for (Tag t : toBeDeleted)
-            {
-                currentUser.getTags().remove(t);
-                t.getUsers().remove(currentUser);
-            }
-           
+//            List<Tag> newTags = new ArrayList<>();
+//            
+//            for (Tag t : tags)
+//            {
+//                Tag foundTag = em.find(Tag.class, t.getTagId());
+//                newTags.add(foundTag);
+//            }
+//            
+//            currentUser.setTags(newTags);
+              currentUser.setTags(tags);   
         } catch (UserNotFoundException exc) {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }
@@ -289,12 +266,14 @@ public class UserSessionBean implements UserSessionBeanLocal {
     }
 
     @Override
-    public boolean verifyEmail(String email) {
+    public boolean verifyEmail(String email) throws UserNotFoundException
+    {
         try {
             User user = retrieveUserByEmail(email);
             return false;
         } catch (UserNotFoundException ex) {
             String[] emailSplit = email.split("@");
+            
             if (emailSplit.length != 2) {
                 return false;
             }
@@ -302,7 +281,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
             if (emailSplit[1].equals("u.nus.edu")) {
                 return true;
             } else {
-                return false;
+                throw new UserNotFoundException("Please use NUS email to register");
             }
         }
     }

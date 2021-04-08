@@ -78,6 +78,7 @@ public class UserRegisterManagedBean {
             } 
             
             boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
+            
             if (verify) {
                 User newUser = new User(getFirst_name(), getLast_name(), getBirth_date(), getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
                 User user = userSessionBeanLocal.register(newUser);
@@ -93,7 +94,11 @@ public class UserRegisterManagedBean {
         }
         catch(EmailExistException | InvalidLoginCredentialException | UnknownPersistenceException | InputDataValidationException ex)
         {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid register credential: " + ex.getMessage(), null));
+        }
+        catch (UserNotFoundException ex)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid email: " + ex.getMessage(), null));
         }
     }
 

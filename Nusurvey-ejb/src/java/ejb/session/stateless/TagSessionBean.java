@@ -41,7 +41,6 @@ public class TagSessionBean implements TagSessionBeanLocal {
 
         for (Tag t : tags) {
             t.getSurveys().size();
-            t.getUsers().size();
         }
         return tags;
     }

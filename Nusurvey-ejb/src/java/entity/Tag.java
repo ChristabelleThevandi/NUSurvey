@@ -30,9 +30,6 @@ public class Tag implements Serializable {
     @ManyToMany(mappedBy = "tags")
     private List<Survey> surveys;
 
-    @ManyToMany(mappedBy = "tags")
-    private List<User> users;
-
     public Tag() {
     }
    
@@ -64,14 +61,6 @@ public class Tag implements Serializable {
         this.surveys = surveys;
     }
     
-    public List<User> getUsers() {
-        return users;
-    }
-    
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -94,7 +83,7 @@ public class Tag implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Tag[ id=" + tagId + " ]";
+        return tag_name;
     }
 
 }

@@ -78,6 +78,7 @@ public class ProfileManagementManagedBean implements Serializable {
     
     public ProfileManagementManagedBean() {
         currentUserTags = new ArrayList<>();
+        currUserTagStr = new ArrayList<>();
     }
     
     @PostConstruct
@@ -93,7 +94,7 @@ public class ProfileManagementManagedBean implements Serializable {
         if (!selectedUserToUpdate.getTags().isEmpty())
         {
             setCurrentUserTags(selectedUserToUpdate.getTags());
-            for(Tag t:currentUserTags) {
+            for(Tag t : currentUserTags) {
                 currUserTagStr.add(t.getTag_name());
             }
             
@@ -216,8 +217,30 @@ public class ProfileManagementManagedBean implements Serializable {
         String queryLowerCase = query.toLowerCase();
         List<Tag> countries = getTags();
         countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        List<Tag> toReturn = new ArrayList<>();
+        Boolean notExist = true;
         
-        return countries;
+        for (Tag t : countries)
+        {
+            for (String c : currUserTagStr)
+            {
+                String temp = t.getTag_name();
+                if (temp.equals(c))
+                {
+                    notExist = false;
+                    break;
+                }
+            }
+            
+            if (notExist)
+            {
+                toReturn.add(t);
+            } else {
+                notExist = true;
+            }
+        }
+        
+        return toReturn;
     }
     
     public void updateUserTags(ActionEvent event) throws IOException {
@@ -229,7 +252,7 @@ public class ProfileManagementManagedBean implements Serializable {
                 currentUserTags.add(t);
             } 
             userSessionBeanLocal.updateTag(selectedUserToUpdate, this.currentUserTags);
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tags updated succesfully", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Tags updated succesfully", null));
         } catch(UserNotFoundException ex)
         {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));
