@@ -28,7 +28,7 @@ public interface TransactionSessionBeanLocal {
 
     public void paySurvey(User user, Survey survey);
 
-    public void giveReward(Survey survey);
+    public void giveReward(Survey survey, User user);
 
     public void receiveIncentive(User user);
     

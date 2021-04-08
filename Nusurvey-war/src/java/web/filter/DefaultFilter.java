@@ -30,7 +30,7 @@ public class DefaultFilter implements Filter {
     // configured. 
     FilterConfig filterConfig;
     
-    private static final String CONTEXT_ROOT = "/Nusurvey";
+    private static final String CONTEXT_ROOT = "/Nusurvey-war";
     
     public void init(FilterConfig filterConfig) throws ServletException
     {
