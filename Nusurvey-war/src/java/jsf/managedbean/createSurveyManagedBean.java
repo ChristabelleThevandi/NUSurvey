@@ -78,6 +78,9 @@ public class createSurveyManagedBean implements Serializable {
     private User currUser;
     private List<Tag> currentUserTags;
     private List<String> currUserTagStr;
+    private Long qwId;
+    private Long optionId;
+    private Long checkboxOptionId;
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -95,11 +98,15 @@ public class createSurveyManagedBean implements Serializable {
         this.currUser = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
         this.currUserTagStr = new ArrayList<>();
         this.currentUserTags = new ArrayList<>();
+        qwId = 1L;
+        optionId = 1L;
+        checkboxOptionId = 1L;
     }
 
     @PostConstruct
     public void postConstruct() {
         tags = tagSessionBeanLocal.retrieveAllTags();
+
     }
 
     public User getCurrUser() {
@@ -200,6 +207,8 @@ public class createSurveyManagedBean implements Serializable {
     public void addQuestion() {
         System.out.println("ADDED");
         QuestionWrapper questionWrapper = new QuestionWrapper(new Question());
+        questionWrapper.setTempId(qwId);
+        qwId++;
         questionWrapper.getQuestion().setQuestionNumber((long) questions.size() + 1);
         questionWrapper.getQuestion().setTitle(questionTitle);
         questions.add(questionWrapper);
@@ -214,12 +223,15 @@ public class createSurveyManagedBean implements Serializable {
 
     public void addOption(QuestionWrapper questionWrapper) {
         MultipleChoiceOption newOption = new MultipleChoiceOption();
+        newOption.setTempId(optionId);
+        optionId++;
         newOption.setQuestionWrapper(questionWrapper);
         questionWrapper.getMcq().add(newOption);
     }
 
     public void addOptionCheckbox(QuestionWrapper questionWrapper) {
         CheckboxOption newOption = new CheckboxOption();
+        newOption.setTempId(qwId);
         newOption.setQuestionWrapper(questionWrapper);
         questionWrapper.getCheckbox().add(newOption);
     }
@@ -248,6 +260,51 @@ public class createSurveyManagedBean implements Serializable {
         }
 
         return toReturn;
+    }
+
+    public void deleteQuestion(String id) {
+        QuestionWrapper temp = new QuestionWrapper();
+        for (QuestionWrapper q : questions) {
+            if (q.getTempId().equals(Long.parseLong(id))) {
+                temp = q;
+                break;
+            }
+        }
+        this.questions.remove(temp);
+    }
+
+    public void deleteOption(String id) {
+        Integer tempQ = 0;
+        Integer indexFound = 0;
+        MultipleChoiceOption tempO = new MultipleChoiceOption();
+        for (QuestionWrapper q : questions) {
+            for (MultipleChoiceOption o : q.getMcq()) {
+                if (o.getTempId().equals(Long.parseLong(id))) {
+                    tempO = o;
+                    indexFound = tempQ;
+                    break;
+                }
+            }
+            tempQ++;
+        }
+        this.questions.get(indexFound).getMcq().remove(tempO);
+    }
+    
+    public void deleteCheckboxOption(String id) {
+        Integer tempQ = 0;
+        Integer indexFound = 0;
+        CheckboxOption tempO = new CheckboxOption();
+        for (QuestionWrapper q : questions) {
+            for (CheckboxOption o : q.getCheckbox()) {
+                if (o.getTempId().equals(Long.parseLong(id))) {
+                    tempO = o;
+                    indexFound = tempQ;
+                    break;
+                }
+            }
+            tempQ++;
+        }
+        this.questions.get(indexFound).getCheckbox().remove(tempO);
     }
 
     public void onSelectAllFaculties() {
@@ -309,6 +366,14 @@ public class createSurveyManagedBean implements Serializable {
 
     public String getOptionContent() {
         return optionContent;
+    }
+
+    public Long getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(Long optionId) {
+        this.optionId = optionId;
     }
 
     public void setOptionContent(String optionContent) {
@@ -423,6 +488,14 @@ public class createSurveyManagedBean implements Serializable {
         this.tags = tags;
     }
 
+    public Long getCheckboxOptionId() {
+        return checkboxOptionId;
+    }
+
+    public void setCheckboxOptionId(Long checkboxOptionId) {
+        this.checkboxOptionId = checkboxOptionId;
+    }
+
     public String getSurveyTitle() {
         return this.surveyTitle;
     }
@@ -474,5 +547,19 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setIncentiveAmount(Double incentiveAmount) {
         this.incentiveAmount = incentiveAmount;
+    }
+
+    /**
+     * @return the qwId
+     */
+    public Long getQwId() {
+        return qwId;
+    }
+
+    /**
+     * @param qwId the qwId to set
+     */
+    public void setQwId(Long qwId) {
+        this.qwId = qwId;
     }
 }
