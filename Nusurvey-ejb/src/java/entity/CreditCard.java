@@ -41,6 +41,7 @@ public class CreditCard implements Serializable {
 
     public CreditCard() {
         this.transactions=new ArrayList<>();
+        this.balance = 0.00;
     }
 
     public CreditCard(String name, String card_number, String cvv, Date expiry_date) {
@@ -49,6 +50,7 @@ public class CreditCard implements Serializable {
         this.cvv = cvv;
         this.expiry_date = expiry_date;
         this.transactions=new ArrayList<>();
+        this.balance = 0.00;
     }
 
     

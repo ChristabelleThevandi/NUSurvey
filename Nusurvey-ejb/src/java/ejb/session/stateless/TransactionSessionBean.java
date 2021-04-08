@@ -10,7 +10,12 @@ import entity.Survey;
 import entity.Transaction;
 import entity.User;
 import enumeration.TransactionType;
+import exception.CreditCardErrorException;
+import exception.SurveyNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,92 +28,124 @@ import javax.persistence.Query;
 @Stateless
 public class TransactionSessionBean implements TransactionSessionBeanLocal {
 
+    @EJB(name = "CreditCardSessionBeanLocal")
+    private CreditCardSessionBeanLocal creditCardSessionBeanLocal;
+
+    @EJB(name = "SurveySessionBeanLocal")
+    private SurveySessionBeanLocal surveySessionBeanLocal;
+
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
 
     public TransactionSessionBean() {
     }
-    
+
     @Override
-    public void createNewTransaction(CreditCard card, Double amount, TransactionType type, String title) {
-        Double initialBalance = card.getBalance();
-        Double nextBalance = 0.0;
-        
-        if(type.equals(TransactionType.EXPENSE)) {
-            nextBalance = initialBalance - amount;
-        } else {
-            nextBalance = initialBalance + amount;
+    public void createNewTransaction(CreditCard card, Double amount, TransactionType transactionType, Long surveyId) throws SurveyNotFoundException {
+        try {
+            Survey currSurvey = surveySessionBeanLocal.retrieveSurveyBySurveyId(surveyId);
+            card = creditCardSessionBeanLocal.retrieveCreditCardByCardId(card.getCreditCardId());
+            User user = card.getUser();
+            card = user.getCreditCard();
+            Double initialBalance = card.getBalance();
+            Double nextBalance = 0.0;
+
+            if (transactionType == TransactionType.EXPENSE) {
+                System.out.println("INITIAL BALANCE: " + card.getBalance());
+                System.out.println("SURVEY ID: " + currSurvey.getSurveyId());
+                nextBalance = initialBalance - amount;
+            } else {
+                nextBalance = initialBalance + amount;
+            }
+
+            Transaction transaction = new Transaction();
+            transaction.setUser(user);
+            transaction.setCreditCard(card);
+            card.getTransactions().add(transaction);
+            transaction.setType(transactionType);
+            transaction.setAmount(amount);
+            transaction.setSurvey(currSurvey);
+
+            card.setBalance(nextBalance);
+            em.persist(transaction);
+
+        } catch (SurveyNotFoundException ex) {
+            throw ex;
+        } catch (CreditCardErrorException ex) {
+            Logger.getLogger(TransactionSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        Transaction transaction = new Transaction();
-        transaction.setCreditCard(card);
-        card.getTransactions().add(transaction);
-        transaction.setType(type);
-        transaction.setAmount(amount);
-        transaction.setTitle(title);
-        
-        card.setBalance(nextBalance);
-        em.persist(transaction);
     }
 
     @Override
-    public List<Transaction> retrieveMyIncomeTransaction(User user){
+    public List<Transaction> retrieveMyIncomeTransaction(User user) {
         Query query = em.createQuery("SELECT t FROM Transaction t WHERE t.user=inUser AND t.type=inType");
         query.setParameter("inUser", user);
         query.setParameter("inType,", TransactionType.INCOME);
-        
+
         return query.getResultList();
     }
-    
-    public List<Transaction> retrieveMyExpenseTransaction(User user){
+
+    public List<Transaction> retrieveMyExpenseTransaction(User user) {
         Query query = em.createQuery("SELECT t FROM Transaction t WHERE t.user=inUser AND t.type=inType");
         query.setParameter("inUser", user);
         query.setParameter("inType,", TransactionType.EXPENSE);
-        
+
         return query.getResultList();
     }
-    
+
     @Override
-    public void paySurvey(User user, Survey survey) {
-        CreditCard card  = user.getCreditCard();
+    public void paySurvey(User user, Survey survey) throws SurveyNotFoundException {
+        CreditCard card = user.getCreditCard();
         card.getTransactions().size();
-        
+
         Double amount = survey.getPrice_per_response() * survey.getSurveyees().size();
         amount += survey.getReward() * survey.getSurveyees().size();
-        
+
         String title = "Payment for survey " + survey.getTitle();
-        
-        createNewTransaction(card, amount, TransactionType.EXPENSE, title);
+
+        try {
+            createNewTransaction(card, amount, TransactionType.EXPENSE, survey.getSurveyId());
+        } catch (SurveyNotFoundException ex) {
+            throw ex;
+        }
     }
-    
+
     @Override
-    public void giveReward(Survey survey) {
+    public void giveReward(Survey survey) throws SurveyNotFoundException {
         List<User> surveyees = survey.getSurveyees();
         surveyees.size();
         Double amount = survey.getReward();
         String title = "Reward from filling survey " + survey.getTitle();
-        
-        for(User surveyee:surveyees) {
+
+        for (User surveyee : surveyees) {
             CreditCard card = surveyee.getCreditCard();
-            createNewTransaction(card, amount, TransactionType.INCOME, title);
+            try {
+                createNewTransaction(card, amount, TransactionType.INCOME, survey.getSurveyId());
+            } catch (SurveyNotFoundException ex) {
+                throw ex;
+            }
         }
     }
-    
+
     @Override
-    public void receiveIncentive(User user) {
-        
+    public void receiveIncentive(User user) throws SurveyNotFoundException {
+
         List<Transaction> transactions = retrieveMyExpenseTransaction(user);
         Double total = 0.0;
-        
-        for(Transaction transaction:transactions) {
+
+        for (Transaction transaction : transactions) {
             total += transaction.getAmount();
         }
-        
-        if(total >= user.getMilestone()) {
-            String title = "Congratulations for reaching the milestone!";
+
+        if (total >= user.getMilestone()) {
+//            String title = "Congratulations for reaching the milestone!";
             CreditCard card = user.getCreditCard();
-            createNewTransaction(card, user.getIncentive(), TransactionType.INCOME, title);
-            
+            try {
+                createNewTransaction(card, user.getIncentive(), TransactionType.INCOME, -1L);
+            } catch (SurveyNotFoundException ex) {
+                throw ex;
+            }
+
             user.setMilestone(user.getMilestone() + 100.0);
             user.setIncentive(user.getIncentive() + 5.0);
         }

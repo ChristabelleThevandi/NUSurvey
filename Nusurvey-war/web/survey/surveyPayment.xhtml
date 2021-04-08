@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content">
+        <h:panelGroup styleClass="margin-custom">
+            <article>
+                <h2 style="color: #004DB6; padding-left:20; padding-top: 20">Payment</h2>
+                <p style="padding-left:20">
+                    Please confirm the survey payment below            
+                </p>
+            </article>
+        </h:panelGroup>
+
+        <p:panelGrid columns="2">
+            <h:outputText value="User:"/>
+            <h:outputText value="#{sessionScope.currentCustomerEntity.email}"/>
+
+            <h:outputText value="Survey title:"/>
+            <h:outputText value="#{surveyTransactionManagedBean.survey.title}"/>
+
+            <h:outputText value="Maximum number of response:"/>
+            <h:outputText value="#{surveyTransactionManagedBean.survey.max_surveyees}"/>
+
+            <h:outputText value="Survey creation fee:"/>
+            <h:outputText value="$#{surveyTransactionManagedBean.surveyCreationFee}"/>
+
+            <h:outputText value="Incentive amount given:"/>
+            <h:outputText value="$#{surveyTransactionManagedBean.totalReward}"/>
+
+            <h:outputText value="Total Amount:" style="font-weight: bold"/>
+            <h:outputText value="$#{surveyTransactionManagedBean.totalAmount}" style="font-weight: bold"/>
+
+            <h:outputText value="Payment with:"/>
+            <h:outputText value="#{surveyTransactionManagedBean.currUser.creditCard.card_number}"/>
+
+            <p:commandButton value="Confirm Payment" actionListener="#{surveyTransactionManagedBean.doCreateSurvey}">
+                <p:confirm header="Confirmation" message="Are you sure make this payment?" icon="ui-icon-alert" />
+            </p:commandButton> 
+
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+
+        </p:panelGrid>
+    </ui:define>
+
+</ui:composition>

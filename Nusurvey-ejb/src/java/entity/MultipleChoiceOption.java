@@ -11,31 +11,55 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author Chrisya
  */
 @Entity
-public class MultipleChoiceOption extends QuestionOption {
+public class MultipleChoiceOption implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long mcqOptionId;
     
-    private List<String> options;
+    private String content;
+    @ManyToOne
+    private QuestionWrapper questionWrapper;
 
     public MultipleChoiceOption() {
         super();
     }
 
-    public MultipleChoiceOption(List<String> options) {
+    public MultipleChoiceOption(String content) {
         super();
-        this.options = options;
+        this.content = content;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public String getContent() {
+        return content;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setContent(String content) {
+        this.content = content;
     }
-    
+
+    public QuestionWrapper getQuestionWrapper() {
+        return questionWrapper;
+    }
+
+    public void setQuestionWrapper(QuestionWrapper questionWrapper) {
+        this.questionWrapper = questionWrapper;
+    }
+
+    public Long getMcqOptionId() {
+        return mcqOptionId;
+    }
+
+    public void setMcqOptionId(Long mcqOptionId) {
+        this.mcqOptionId = mcqOptionId;
+    }
+
 }
