@@ -88,7 +88,7 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
         setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
-        
+        System.out.println(path);
         setTags(getTagSessionBean().retrieveAllTags());
         
         if (!selectedUserToUpdate.getTags().isEmpty())
@@ -114,7 +114,7 @@ public class ProfileManagementManagedBean implements Serializable {
         try
         {
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + selectedUserToUpdate.getEmail()+".jpg";
-
+            System.out.println("rrrrrrrrrrrrr" + newFilePath);
             System.err.println("********** ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
             System.err.println("********** ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
 
@@ -143,11 +143,11 @@ public class ProfileManagementManagedBean implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             getUserSessionBeanLocal().uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
+            setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
             }
         catch(IOException ex)
         {

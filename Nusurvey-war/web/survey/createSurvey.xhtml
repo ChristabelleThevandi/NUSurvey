@@ -76,13 +76,13 @@
                     <p:inputText id="surveyTitle" value="#{createSurveyManagedBean.surveyTitle}" placeholder="Survey Title Here" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
                         <p:tooltip for="surveyTitle" value="Survey Title" showEffect="clip" position="bottom"/>
                     </p:inputText>
-                    <p:inputText id="surveyDescription" value="#{createSurveyManagedBean.surveyDescription}" placeholder="Survey Description Here (Optional)" size="120" required="true" maxlength="500">
+                    <p:inputText id="surveyDescription" value="#{createSurveyManagedBean.surveyDescription}" placeholder="Survey Description Here (Optional)" size="120" maxlength="500">
                         <p:tooltip for="surveyDescription" value="Survey Description" showEffect="clip" position="bottom"/>
                     </p:inputText>
                 </p:panelGrid>
                 <br />
                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid card margin-custom">
-                    <p:inputNumber id="maxNumberOfResponse" value="#{createSurveyManagedBean.maxNumberOfResponse}" placeholder="Maximum number of Response" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
+                    <p:inputNumber id="maxNumberOfResponse" value="#{createSurveyManagedBean.maxNumberOfResponse}" placeholder="Maximum number of Response" size="120" required="true" requiredMessage="Maximum number of response is required" maxlength="32">
                         <p:tooltip for="maxNumberOfResponse" value="Max Number of Response" showEffect="clip" position="bottom"/>
                     </p:inputNumber>
 
@@ -151,7 +151,7 @@
                                 </p:panelGrid>
                                 <br/>
                             </ui:repeat>
-                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOption(questionWrapper)}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
+                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOption(questionWrapper)}" immediate="true" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
 
                         </p:panel>
                         <p:panel id="checkboxOption" visible="#{questionWrapper.question.checkbox}" toggleable="true">
@@ -161,7 +161,7 @@
                                     <p:inputText id="optiontitleCheckbox" value="#{mcqoption.content}" />
                                 </p:panelGrid>
                             </ui:repeat>
-                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOptionCheckbox(questionWrapper)}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
+                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOptionCheckbox(questionWrapper)}" immediate="true" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
                         </p:panel>
                         <p:panel id="sliderOption" visible="#{questionWrapper.question.slider}" toggleable="true">
                             <p:inputNumber id="minValue" value="#{questionWrapper.slider.minRange}" placeholder="0" size="20" maxlength="5" >
@@ -185,7 +185,7 @@
                         </p:panel>
                     </p:panelGrid>
                 </ui:repeat>
-                <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
+                <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" immediate="true" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" />
                 <br />
                 <p:commandButton type="submit" value="Create Survey" actionListener="#{createSurveyManagedBean.createSurvey}" icon="pi pi-sign-in" >
                    
