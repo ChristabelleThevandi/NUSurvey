@@ -135,6 +135,21 @@
                             <p:tooltip for="questionTitle" value="Question Title" showEffect="clip" position="bottom"/>
                         </p:inputText>
                         &nbsp;
+
+                        <p:messages  redisplay="false">
+                            <p:autoUpdate />
+                        </p:messages>
+
+                        <p:fileUpload listener="#{createSurveyManagedBean.handleFileUpload}" multiple="false" update="@form" >
+                            <f:attribute name="questionWrapperTempId" value="#{questionWrapper.tempId}" />
+                        </p:fileUpload>
+                        
+                        <figure class="avatar">
+                            <p:growl id="avatar" showDetail="true"/>
+                            <p:graphicImage library="images" height="120" width="200" alt="avatar" url="../uploadedFiles/#{questionWrapper.question.image}.jpg"/>
+
+                        </figure>
+
                         <p:selectOneMenu id="option" value="#{questionWrapper.question.typeStr}">
                             <f:selectItem itemLabel="Multiple Choice" itemValue="Mcq"/>
                             <f:selectItem itemLabel="Checkbox" itemValue="Checkbox"/>

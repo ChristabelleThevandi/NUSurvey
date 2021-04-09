@@ -5,6 +5,7 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.QuestionSessionBeanLocal;
 import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.TagSessionBeanLocal;
 import ejb.session.stateless.TransactionSessionBeanLocal;
@@ -18,22 +19,31 @@ import entity.User;
 import enumeration.FacultyType;
 import enumeration.QuestionType;
 import enumeration.TransactionType;
+import exception.QuestionWrapperNotFoundException;
 import exception.SurveyNotFoundException;
+import exception.UserNotFoundException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -42,6 +52,9 @@ import javax.servlet.http.HttpSession;
 @Named(value = "createSurveyManagedBean")
 @ViewScoped
 public class createSurveyManagedBean implements Serializable {
+
+    @EJB(name = "QuestionSessionBeanLocal")
+    private QuestionSessionBeanLocal questionSessionBeanLocal;
 
     @EJB(name = "SurveySessionBeanLocal")
     private SurveySessionBeanLocal surveySessionBeanLocal;
@@ -289,7 +302,7 @@ public class createSurveyManagedBean implements Serializable {
         }
         this.questions.get(indexFound).getMcq().remove(tempO);
     }
-    
+
     public void deleteCheckboxOption(String id) {
         Integer tempQ = 0;
         Integer indexFound = 0;
@@ -326,6 +339,54 @@ public class createSurveyManagedBean implements Serializable {
 
     public List<FacultyType> getSelectedFaculties() {
         return selectedFaculties;
+    }
+
+    public void handleFileUpload(FileUploadEvent event){
+        Long qwTempId = (Long) event.getComponent().getAttributes().get("questionWrapperTempId");
+        try {
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + qwTempId + ".jpg";
+
+            System.err.println("********** ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
+            System.err.println("********** ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
+
+            File file = new File(newFilePath);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+            int a;
+            int BUFFER_SIZE = 8192;
+            byte[] buffer = new byte[BUFFER_SIZE];
+
+            InputStream inputStream = event.getFile().getInputStream();
+
+            while (true) {
+                a = inputStream.read(buffer);
+
+                if (a < 0) {
+                    break;
+                }
+
+                fileOutputStream.write(buffer, 0, a);
+                fileOutputStream.flush();
+            }
+
+            fileOutputStream.close();
+            inputStream.close();
+            
+            QuestionWrapper questionWrapper = new QuestionWrapper();
+            for (QuestionWrapper qw: questions) {
+                if (qw.getTempId().equals(qwTempId)) {
+                    questionWrapper = qw;
+                }
+            }
+            
+            questionWrapper.getQuestion().setImage(Long.toString(qwTempId));
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
+            System.out.println("Uploaded question picture");
+//            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
+        }
     }
 
     public List<Tag> getCurrentUserTags() {
