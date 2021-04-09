@@ -106,11 +106,12 @@ public class ProfileManagementManagedBean implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             userSessionBeanLocal.uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
+            setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
+//            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
             }
         catch(IOException ex)
         {

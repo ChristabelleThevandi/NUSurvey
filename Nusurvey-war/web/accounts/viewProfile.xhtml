@@ -10,22 +10,50 @@
 
     <ui:define name="content">
         <div>
-            <h2>Profile</h2>
             <h:form id="viewProfileForm">
-                <figure class="avatar">
-                    <p:growl id="avatar" showDetail="true"/>
-                    <p:graphicImage library="images" height="120" width="120" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg" cache="false"/>
-                </figure>
-                <h:outputText value="First Name: #{sessionScope.currentCustomerEntity.first_name}" />&nbsp;
-                <h:outputText value="Last Name: #{sessionScope.currentCustomerEntity.last_name}" />&nbsp;
-                <h:outputText value="Gender: #{sessionScope.currentCustomerEntity.gender}" />&nbsp;
-                <h:outputText value="Faculty: #{sessionScope.currentCustomerEntity.faculty}" />&nbsp;
-                <h:outputText value="Major: #{sessionScope.currentCustomerEntity.major}" />&nbsp;
-                <h:outputText value="Birth Date: "/>
-                <h:outputText value="#{sessionScope.currentCustomerEntity.birth_date}" >
-                    <f:convertDateTime type="date" pattern ="dd-MM-yyyy"/>
-                </h:outputText>&nbsp;
-                <p:commandButton value="Edit Profile" actionListener="#{viewProfileManagedBean.doUpdateProfile}" update="formUpdateProfile" oncomplete="PF('dialogUpdateProfile').show()" icon="ui-icon-pencil" title="Update" />
+                <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+                <style type="text/css">
+                    .ui-fieldset .ui-fieldset-legend {
+                        padding: 20px 20px !important;
+                        background-color: transparent;
+                        border-color: transparent;
+                        color: black;
+                        font-size: 18px;
+                    }
+                </style>
+                <p:fieldset legend="Profile" style="">
+                    <figure class="avatar">
+                        <p:growl id="avatar" showDetail="true"/>
+                        <p:graphicImage library="images" height="120" width="120" alt="avatar" url="../uploadedFiles/#{sessionScope.currentCustomerEntity.avatar}.jpg" cache="false"/>
+                    </figure>
+                    <div class="card">
+                        <p:panelGrid columns="2" style="width: 60%" columnClasses="forty-percent top-alignment, sixty-percent top-alignment">
+
+                            <h:outputText value="First Name:"/> 
+                            <h:outputText value="#{sessionScope.currentCustomerEntity.first_name}"/>
+
+                            <h:outputText value="Last Name: "/>
+                            <h:outputText value="#{sessionScope.currentCustomerEntity.last_name}"/>
+
+                            <h:outputText value="Gender: "/>
+                            <h:outputText value="#{sessionScope.currentCustomerEntity.gender} "/>
+
+                            <h:outputText value="Faculty: "/>
+                            <h:outputText value="#{sessionScope.currentCustomerEntity.faculty}"/>
+
+                            <h:outputText value="Major: " />
+                            <h:outputText value="#{sessionScope.currentCustomerEntity.major}"/>
+
+                            <h:outputText value="Birth Date: "/>
+                            <h:outputText value="#{sessionScope.currentCustomerEntity.birth_date}" >
+                                <f:convertDateTime type="date" pattern ="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:panelGrid>
+                    </div>
+
+
+                    <p:commandButton value="Edit Profile" actionListener="#{viewProfileManagedBean.doUpdateProfile}" update="formUpdateProfile" oncomplete="PF('dialogUpdateProfile').show()" icon="ui-icon-pencil" title="Update" />
+                </p:fieldset>
             </h:form>
 
             <h:form id="formUpdateProfile">
@@ -83,7 +111,7 @@
                             </p:messages>
 
                             <p:fileUpload listener="#{viewProfileManagedBean.handleFileUpload}" multiple="false" update="@form viewProfileForm">
-                              
+
                             </p:fileUpload>
 
                         </p:panel>
@@ -103,32 +131,45 @@
         </div>
         <br></br>
         <div>
-            <h2>Credit Card</h2>
             <h:panelGroup rendered="#{viewProfileManagedBean.selectedUserToUpdate.creditCard == null}">
                 <h:form id="addCreditCard">
                     <p:commandButton value="Add Credit Card" onclick="PF('dialogAddCreditCard').show();" icon="pi pi-plus-circle"/>
                 </h:form>
             </h:panelGroup>
             <h:panelGroup rendered="#{viewProfileManagedBean.selectedUserToUpdate.creditCard != null}">
-                <h:form id="viewCreditCardForm">
+                <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+                <p:fieldset legend="Credit Card">
+                    <h:form id="viewCreditCardForm">
+                        <div class="card">
+                            <p:panelGrid columns="2" style="width: 60%" columnClasses="forty-percent top-alignment, sixty-percent top-alignment">
 
-                    <h:outputText value="Name: #{sessionScope.currentCustomerEntity.creditCard.name}" />&nbsp;
-                    <h:outputText value="Card Number: #{sessionScope.currentCustomerEntity.creditCard.card_number}" />&nbsp;
-                    <h:outputText value="CVV: #{sessionScope.currentCustomerEntity.creditCard.cvv}" />&nbsp;
-                    <h:outputText value="Expiry Date: " />
-                    <h:outputText value="#{sessionScope.currentCustomerEntity.creditCard.expiry_date}">&nbsp;
-                        <f:convertDateTime type="date" pattern ="dd-MM-yyyy"/>
-                    </h:outputText>&nbsp;
+                                <h:outputText value="Name: "/>
+                                <h:outputText value="#{sessionScope.currentCustomerEntity.creditCard.name}"/>
 
-                    <p:commandButton value="Delete Credit Card" actionListener="#{viewProfileManagedBean.doDeleteCreditCard}" update="viewCreditCardForm" oncomplete="PF('dialogDeleteCreditCard').show();"  icon="ui-icon-trash">
-                        <p:confirm header="Confirmation" message="Are you sure you want to remove this credit card?" icon="ui-icon-alert" />
-                    </p:commandButton> 
+                                <h:outputText value="Card Number: "/>
+                                <h:outputText value="#{sessionScope.currentCustomerEntity.creditCard.card_number} "/>
 
-                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                    </p:confirmDialog>
-                </h:form>
+                                <h:outputText value="CVV: "/>
+                                <h:outputText value="#{sessionScope.currentCustomerEntity.creditCard.cvv}"/>
+
+                                <h:outputText value="Expiry Date: " />
+                                <h:outputText value="#{sessionScope.currentCustomerEntity.creditCard.expiry_date}">&nbsp;
+                                    <f:convertDateTime type="date" pattern ="dd-MM-yyyy"/>
+                                </h:outputText>
+                            </p:panelGrid>
+                        </div>
+
+
+                        <p:commandButton value="Delete Credit Card" actionListener="#{viewProfileManagedBean.doDeleteCreditCard}" update="viewCreditCardForm" oncomplete="PF('dialogDeleteCreditCard').show();"  icon="ui-icon-trash">
+                            <p:confirm header="Confirmation" message="Are you sure you want to remove this credit card?" icon="ui-icon-alert" />
+                        </p:commandButton> 
+
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                        </p:confirmDialog>
+                    </h:form>
+                </p:fieldset>
             </h:panelGroup>
 
             <h:form id="formAddCreditCard">
