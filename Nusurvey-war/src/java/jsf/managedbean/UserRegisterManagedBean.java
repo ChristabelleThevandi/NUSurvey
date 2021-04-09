@@ -75,6 +75,24 @@ public class UserRegisterManagedBean {
                 setFaculty(FacultyType.COMPUTING);
             } else if (tempFaculty == 3) {
                 setFaculty(FacultyType.DENTISTRY);
+            } else if (tempFaculty == 4) {
+                setFaculty(FacultyType.ENGINEERING);
+            } else if (tempFaculty == 5) {
+                setFaculty(FacultyType.SCIENCE);
+            } else if (tempFaculty == 6) {
+                setFaculty(FacultyType.DESIGN);
+            } else if (tempFaculty == 7) {
+                setFaculty(FacultyType.LAW);
+            } else if (tempFaculty == 8) {
+                setFaculty(FacultyType.MEDICINE);
+            } else if (tempFaculty == 9) {
+                setFaculty(FacultyType.YST);
+            } else if (tempFaculty == 10) {
+                setFaculty(FacultyType.HEALTH);
+            } else if (tempFaculty == 11) {
+                setFaculty(FacultyType.POLICY);
+            } else if (tempFaculty == 12) {
+                setFaculty(FacultyType.EMPLOYEE);
             } 
             
             boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
