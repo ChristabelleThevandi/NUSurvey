@@ -191,6 +191,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         return creator;
     }
 
+    @Override
     public void deleteSurvey(Survey survey) throws UnsupportedDeleteSurveyException {
         survey = entityManager.find(Survey.class, survey.getSurveyId());
         if (!survey.getSurveyees().isEmpty()) {
@@ -220,11 +221,13 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         entityManager.remove(survey);
     }
 
+    @Override
     public void closeSurvey(Survey survey) {
         survey = entityManager.find(Survey.class, survey.getSurveyId());
         survey.setSurveyOpen(false);
     }
 
+    @Override
     public List<Survey> retrieveAllSurveys() {
         Query query = entityManager.createQuery("SELECT s FROM Survey s");
         List<Survey> surveys = query.getResultList();
@@ -232,20 +235,36 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         return surveys;
     }
 
+    @Override
     public List<Survey> retrieveMyCreatedSurveys(User currUser) {
         currUser = entityManager.find(User.class, currUser.getUserId());
-        Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE currUser IN s.surveyees");
+        Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE s.creator= :cUser");
+        query.setParameter("cUser", currUser);
         List<Survey> surveys = query.getResultList();
-
+        for (Survey s : surveys)
+        {
+            s.getResponses().size();
+            s.getSurveyees().size();
+            s.getFaculties().size();
+            s.getQuestions().size();
+            s.getTags().size();
+        }
         return surveys;
     }
 
+    @Override
     public List<Survey> retrieveMyFilledSurveys(User currUser) {
         currUser = entityManager.find(User.class, currUser.getUserId());
-        Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE s.creator := cUser");
-        query.setParameter("cUser", currUser);
+        Query query = entityManager.createQuery("SELECT s FROM Survey s WHERE currUser IN s.surveyees");
         List<Survey> surveys = query.getResultList();
-
+        for (Survey s : surveys)
+        {
+            s.getResponses().size();
+            s.getSurveyees().size();
+            s.getFaculties().size();
+            s.getQuestions().size();
+            s.getTags().size();
+        }
         return surveys;
     }
 

@@ -1,10 +1,33 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../template/defaultTemplate.xhtml">
+                template="./../template/defaultTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="content">
-        content
+    <ui:define name="content">        
+         <p:panel header="View My Transactions">
+        
+            <p:dataTable value="#{viewTransactionManagedBean.transactions}" var="transaction" styleClass="centeredColumn">
+                
+                <p:column headerText="Transaction Date" styleClass="centeredColumn">
+                    <h:outputText value="#{transaction.transaction_date}" />
+                </p:column>
+                
+                <p:column headerText="Survey" styleClass="centeredColumn">
+                    <h:outputText value="#{transaction.survey.title}" />
+                </p:column>
+                
+                <p:column headerText="Transaction Type" styleClass="centeredColumn">
+                    <h:outputText value="#{transaction.type}" />
+                </p:column>
+                
+                <p:column headerText="Amount">
+                    <h:outputText value="$ #{transaction.amount}" styleClass="centeredColumn"/>
+                </p:column>
+                
+            </p:dataTable>
+         </p:panel>
     </ui:define>
 
 </ui:composition>
