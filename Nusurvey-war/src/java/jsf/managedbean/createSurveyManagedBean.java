@@ -114,11 +114,6 @@ public class createSurveyManagedBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/survey/surveyPayment.xhtml");
     }
 
-    public void createTransaction() throws SurveyNotFoundException {
-
-        transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), this.totalAmount, TransactionType.EXPENSE, this.survey.getSurveyId());
-    }
-
     public void createSurvey(ActionEvent event) throws IOException {
         for (QuestionWrapper q : questions) {
             if (q.getQuestion().getType() == QuestionType.SLIDEBAR) {
