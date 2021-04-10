@@ -5,14 +5,14 @@
  */
 package ejb.session.stateless;
 
-import entity.Question;
-import entity.Survey;
-import entity.Tag;
-import entity.User;
-import exception.UnsupportedDeleteSurveyException;
-import java.util.List;
+import entity.QuestionWrapper;
+import exception.QuestionWrapperNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -28,5 +28,20 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
 
     public QuestionSessionBean() {
     }
-   
+
+    @Override
+    public QuestionWrapper retrieveQuestionWrapperByTempId(Long qwTempId) throws QuestionWrapperNotFoundException {
+        Query query = em.createQuery("SELECT qw FROM QuestionWrapper qw WHERE qw.tempId = :inId");
+        query.setParameter("inId", qwTempId);
+
+        try {
+            QuestionWrapper questionWrapper = (QuestionWrapper) query.getSingleResult();
+            questionWrapper.getCheckbox().size();
+            questionWrapper.getMcq().size();
+            return questionWrapper;
+        } catch (NoResultException | NonUniqueResultException ex) {
+            throw new QuestionWrapperNotFoundException("Question Wrapper with id " + qwTempId + " does not exist!");
+        }
+    }
+
 }

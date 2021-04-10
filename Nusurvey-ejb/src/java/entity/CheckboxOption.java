@@ -17,16 +17,18 @@ import javax.persistence.ManyToOne;
  * @author Chrisya
  */
 @Entity
-public class CheckboxOption implements Serializable{
-    
+public class CheckboxOption implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkboxOptionId;
-    
+
     private String content;
     @ManyToOne
     private QuestionWrapper questionWrapper;
+
+    private Long tempId;
 
     public CheckboxOption() {
         super();
@@ -53,7 +55,14 @@ public class CheckboxOption implements Serializable{
         this.questionWrapper = questionWrapper;
     }
 
-    
+    public Long getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(Long tempId) {
+        this.tempId = tempId;
+    }
+
     public Long getCheckboxOptionId() {
         return checkboxOptionId;
     }

@@ -5,6 +5,7 @@
  */
 package jsf.managedbean;
 
+import ejb.session.stateless.QuestionSessionBeanLocal;
 import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.TagSessionBeanLocal;
 import ejb.session.stateless.TransactionSessionBeanLocal;
@@ -18,22 +19,31 @@ import entity.User;
 import enumeration.FacultyType;
 import enumeration.QuestionType;
 import enumeration.TransactionType;
+import exception.QuestionWrapperNotFoundException;
 import exception.SurveyNotFoundException;
+import exception.UserNotFoundException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
@@ -42,6 +52,9 @@ import javax.servlet.http.HttpSession;
 @Named(value = "createSurveyManagedBean")
 @ViewScoped
 public class createSurveyManagedBean implements Serializable {
+
+    @EJB(name = "QuestionSessionBeanLocal")
+    private QuestionSessionBeanLocal questionSessionBeanLocal;
 
     @EJB(name = "SurveySessionBeanLocal")
     private SurveySessionBeanLocal surveySessionBeanLocal;
@@ -61,8 +74,6 @@ public class createSurveyManagedBean implements Serializable {
     private List<FacultyType> selectedFaculties;
     private List<Tag> tags;
     private Boolean selectAllFaculties;
-    private List<Tag> selectedTags;
-    private List<Tag> tempTags;
     private List<QuestionWrapper> questions;
     private String questionTitle;
     private String questionType;
@@ -78,6 +89,11 @@ public class createSurveyManagedBean implements Serializable {
     private Double incentiveAmount;
     private Double totalAmount;
     private User currUser;
+    private List<Tag> currentUserTags;
+    private List<String> currUserTagStr;
+    private Long qwId;
+    private Long optionId;
+    private Long checkboxOptionId;
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -88,18 +104,22 @@ public class createSurveyManagedBean implements Serializable {
             FacultyType.MEDICINE, FacultyType.POLICY,
             FacultyType.SCIENCE, FacultyType.USP, FacultyType.YALE, FacultyType.YST};
 
-        this.selectedTags = new ArrayList<>();
-
         this.selectedFaculties = new ArrayList<>();
         this.questions = new ArrayList<>();
         this.incentivePerResponse = "0";
         this.giveIncentive = true;
         this.currUser = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity");
+        this.currUserTagStr = new ArrayList<>();
+        this.currentUserTags = new ArrayList<>();
+        qwId = 1L;
+        optionId = 1L;
+        checkboxOptionId = 1L;
     }
 
     @PostConstruct
     public void postConstruct() {
         tags = tagSessionBeanLocal.retrieveAllTags();
+
     }
 
     public User getCurrUser() {
@@ -138,7 +158,12 @@ public class createSurveyManagedBean implements Serializable {
         newSurvey.setMax_surveyees(maxNumberOfResponse);
         Double temp = Double.valueOf(incentivePerResponse);
         newSurvey.setReward(temp);
-        newSurvey.setTags(tags);
+        for (String s : currUserTagStr) {
+            Tag t = tagSessionBeanLocal.retrieveTagByTagName(s);
+            currentUserTags.add(t);
+        }
+
+        newSurvey.setTags(currentUserTags);
         newSurvey.setFaculties(selectedFaculties);
         newSurvey.setExpiry_date(expiry_date);
         this.survey = newSurvey;
@@ -195,6 +220,8 @@ public class createSurveyManagedBean implements Serializable {
     public void addQuestion() {
         System.out.println("ADDED");
         QuestionWrapper questionWrapper = new QuestionWrapper(new Question());
+        questionWrapper.setTempId(qwId);
+        qwId++;
         questionWrapper.getQuestion().setQuestionNumber((long) questions.size() + 1);
         questionWrapper.getQuestion().setTitle(questionTitle);
         questions.add(questionWrapper);
@@ -209,28 +236,88 @@ public class createSurveyManagedBean implements Serializable {
 
     public void addOption(QuestionWrapper questionWrapper) {
         MultipleChoiceOption newOption = new MultipleChoiceOption();
+        newOption.setTempId(optionId);
+        optionId++;
         newOption.setQuestionWrapper(questionWrapper);
         questionWrapper.getMcq().add(newOption);
     }
 
     public void addOptionCheckbox(QuestionWrapper questionWrapper) {
         CheckboxOption newOption = new CheckboxOption();
+        newOption.setTempId(qwId);
         newOption.setQuestionWrapper(questionWrapper);
         questionWrapper.getCheckbox().add(newOption);
     }
 
-    public List<Tag> getSelectedTags() {
-        return selectedTags;
-    }
-
-    public void setSelectedTags(List<Tag> selectedTags) {
-        this.selectedTags = selectedTags;
-    }
-
     public List<Tag> completeTags(String query) {
         String queryLowerCase = query.toLowerCase();
-        List<Tag> countries = tags;
-        return countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        List<Tag> countries = getTags();
+        countries.stream().filter(t -> t.getTag_name().toLowerCase().contains(queryLowerCase)).collect(Collectors.toList());
+        List<Tag> toReturn = new ArrayList<>();
+        Boolean notExist = true;
+
+        for (Tag t : countries) {
+            for (String c : currUserTagStr) {
+                String temp = t.getTag_name();
+                if (temp.equals(c)) {
+                    notExist = false;
+                    break;
+                }
+            }
+
+            if (notExist) {
+                toReturn.add(t);
+            } else {
+                notExist = true;
+            }
+        }
+
+        return toReturn;
+    }
+
+    public void deleteQuestion(String id) {
+        QuestionWrapper temp = new QuestionWrapper();
+        for (QuestionWrapper q : questions) {
+            if (q.getTempId().equals(Long.parseLong(id))) {
+                temp = q;
+                break;
+            }
+        }
+        this.questions.remove(temp);
+    }
+
+    public void deleteOption(String id) {
+        Integer tempQ = 0;
+        Integer indexFound = 0;
+        MultipleChoiceOption tempO = new MultipleChoiceOption();
+        for (QuestionWrapper q : questions) {
+            for (MultipleChoiceOption o : q.getMcq()) {
+                if (o.getTempId().equals(Long.parseLong(id))) {
+                    tempO = o;
+                    indexFound = tempQ;
+                    break;
+                }
+            }
+            tempQ++;
+        }
+        this.questions.get(indexFound).getMcq().remove(tempO);
+    }
+
+    public void deleteCheckboxOption(String id) {
+        Integer tempQ = 0;
+        Integer indexFound = 0;
+        CheckboxOption tempO = new CheckboxOption();
+        for (QuestionWrapper q : questions) {
+            for (CheckboxOption o : q.getCheckbox()) {
+                if (o.getTempId().equals(Long.parseLong(id))) {
+                    tempO = o;
+                    indexFound = tempQ;
+                    break;
+                }
+            }
+            tempQ++;
+        }
+        this.questions.get(indexFound).getCheckbox().remove(tempO);
     }
 
     public void onSelectAllFaculties() {
@@ -252,6 +339,70 @@ public class createSurveyManagedBean implements Serializable {
 
     public List<FacultyType> getSelectedFaculties() {
         return selectedFaculties;
+    }
+
+    public void handleFileUpload(FileUploadEvent event){
+        Long qwTempId = (Long) event.getComponent().getAttributes().get("questionWrapperTempId");
+        try {
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + qwTempId + ".jpg";
+
+            System.err.println("********** ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
+            System.err.println("********** ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
+
+            File file = new File(newFilePath);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+            int a;
+            int BUFFER_SIZE = 8192;
+            byte[] buffer = new byte[BUFFER_SIZE];
+
+            InputStream inputStream = event.getFile().getInputStream();
+
+            while (true) {
+                a = inputStream.read(buffer);
+
+                if (a < 0) {
+                    break;
+                }
+
+                fileOutputStream.write(buffer, 0, a);
+                fileOutputStream.flush();
+            }
+
+            fileOutputStream.close();
+            inputStream.close();
+            
+            QuestionWrapper questionWrapper = new QuestionWrapper();
+            for (QuestionWrapper qw: questions) {
+                if (qw.getTempId().equals(qwTempId)) {
+                    questionWrapper = qw;
+                }
+            }
+            
+            questionWrapper.getQuestion().setImage(Long.toString(qwTempId));
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
+            System.out.println("Uploaded question picture");
+//            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
+        }
+    }
+
+    public List<Tag> getCurrentUserTags() {
+        return currentUserTags;
+    }
+
+    public void setCurrentUserTags(List<Tag> currentUserTags) {
+        this.currentUserTags = currentUserTags;
+    }
+
+    public List<String> getCurrUserTagStr() {
+        return currUserTagStr;
+    }
+
+    public void setCurrUserTagStr(List<String> currUserTagStr) {
+        this.currUserTagStr = currUserTagStr;
     }
 
     public void setSelectedFaculties(List<FacultyType> selectedFaculties) {
@@ -276,6 +427,14 @@ public class createSurveyManagedBean implements Serializable {
 
     public String getOptionContent() {
         return optionContent;
+    }
+
+    public Long getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(Long optionId) {
+        this.optionId = optionId;
     }
 
     public void setOptionContent(String optionContent) {
@@ -342,14 +501,6 @@ public class createSurveyManagedBean implements Serializable {
         this.tagSessionBeanLocal = tagSessionBeanLocal;
     }
 
-    public List<Tag> getTempTags() {
-        return tempTags;
-    }
-
-    public void setTempTags(List<Tag> tempTags) {
-        this.tempTags = tempTags;
-    }
-
     public List<QuestionWrapper> getQuestions() {
         return questions;
     }
@@ -396,6 +547,14 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Long getCheckboxOptionId() {
+        return checkboxOptionId;
+    }
+
+    public void setCheckboxOptionId(Long checkboxOptionId) {
+        this.checkboxOptionId = checkboxOptionId;
     }
 
     public String getSurveyTitle() {
@@ -449,5 +608,19 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setIncentiveAmount(Double incentiveAmount) {
         this.incentiveAmount = incentiveAmount;
+    }
+
+    /**
+     * @return the qwId
+     */
+    public Long getQwId() {
+        return qwId;
+    }
+
+    /**
+     * @param qwId the qwId to set
+     */
+    public void setQwId(Long qwId) {
+        this.qwId = qwId;
     }
 }

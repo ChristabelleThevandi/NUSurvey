@@ -18,16 +18,18 @@ import javax.persistence.ManyToOne;
  * @author Chrisya
  */
 @Entity
-public class MultipleChoiceOption implements Serializable{
+public class MultipleChoiceOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mcqOptionId;
-    
+
     private String content;
     @ManyToOne
     private QuestionWrapper questionWrapper;
+
+    private Long tempId;
 
     public MultipleChoiceOption() {
         super();
@@ -36,6 +38,14 @@ public class MultipleChoiceOption implements Serializable{
     public MultipleChoiceOption(String content) {
         super();
         this.content = content;
+    }
+
+    public Long getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(Long tempId) {
+        this.tempId = tempId;
     }
 
     public String getContent() {
