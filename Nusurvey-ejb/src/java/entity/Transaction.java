@@ -26,7 +26,7 @@ public class Transaction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
     private double amount;
-    private Date transaction_date;
+    private String transaction_date;
     private TransactionType type;
     @ManyToOne
     private Survey survey;
@@ -56,11 +56,11 @@ public class Transaction implements Serializable {
         this.transactionId = transactionId;
     }
 
-    public Date getTransaction_date() {
+    public String getTransaction_date() {
         return transaction_date;
     }
 
-    public void setTransaction_date(Date transaction_date) {
+    public void setTransaction_date(String transaction_date) {
         this.transaction_date = transaction_date;
     }
 

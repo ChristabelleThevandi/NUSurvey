@@ -86,8 +86,8 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderName(selectedUserToUpdate.getFirst_name());
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
-        setPath("../uploadedFiles/" + selectedUserToUpdate.getEmail() + ".jpg");
-
+        setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
+        System.out.println(path);
         setTags(getTagSessionBean().retrieveAllTags());
 
         if (!selectedUserToUpdate.getTags().isEmpty()) {
@@ -135,13 +135,15 @@ public class ProfileManagementManagedBean implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             getUserSessionBeanLocal().uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
+            setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
-        } catch (IOException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
+            }
+        catch(IOException ex)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "File upload error: " + ex.getMessage(), ""));
         } catch (UserNotFoundException ex) {
             Logger.getLogger(ProfileManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
