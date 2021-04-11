@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -30,6 +31,8 @@ public class MultipleChoiceOption implements Serializable {
     private QuestionWrapper questionWrapper;
 
     private Long tempId;
+    @OneToOne(mappedBy = "optionChosen")
+    private MultipleChoiceAnswer multipleChoiceAnswer;
 
     public MultipleChoiceOption() {
         super();

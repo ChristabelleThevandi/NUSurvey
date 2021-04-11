@@ -29,6 +29,8 @@ public class CheckboxOption implements Serializable {
     private QuestionWrapper questionWrapper;
 
     private Long tempId;
+    @ManyToOne
+    private CheckboxAnswer checkboxAnswer;
 
     public CheckboxOption() {
         super();
