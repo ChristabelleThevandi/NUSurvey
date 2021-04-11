@@ -19,6 +19,9 @@ import javax.persistence.OneToOne;
 @Entity
 public class TextAnswer implements Serializable {
 
+    @OneToOne(mappedBy = "textAnswer")
+    private AnswerWrapper answerWrapper;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,6 +45,16 @@ public class TextAnswer implements Serializable {
     public void setAnswerGiven(TextOption answerGiven) {
         this.answerGiven = answerGiven;
     }
+
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
+    }
+
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
+    }
+    
+    
 
     @Override
     public int hashCode() {

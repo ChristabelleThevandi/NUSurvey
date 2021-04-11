@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -20,6 +21,9 @@ import javax.persistence.OneToMany;
 @Entity
 public class CheckboxAnswer implements Serializable {
 
+    @OneToOne(mappedBy = "checkboxAnswer")
+    private AnswerWrapper answerWrapper;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,13 +31,21 @@ public class CheckboxAnswer implements Serializable {
 
     @OneToMany(mappedBy = "checkboxAnswer")
     private List<CheckboxOption> optionsGiven;
-    
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
+    }
+
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
     }
 
     @Override
@@ -63,11 +75,10 @@ public class CheckboxAnswer implements Serializable {
     public void setOptionsGiven(List<CheckboxOption> optionsGiven) {
         this.optionsGiven = optionsGiven;
     }
-    
 
     @Override
     public String toString() {
         return "entity.CheckboxAnswer[ id=" + id + " ]";
     }
-    
+
 }

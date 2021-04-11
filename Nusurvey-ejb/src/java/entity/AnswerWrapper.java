@@ -27,14 +27,19 @@ public class AnswerWrapper implements Serializable {
     @OneToOne(mappedBy = "answerWrapper")
     private QuestionWrapper questionWrapper;
 
+    @OneToOne
     private CheckboxAnswer checkboxAnswer;
 
+    @OneToOne
     private MultipleChoiceAnswer multipleChoiceAnswer;
 
+    @OneToOne
     private SliderAnswer sliderAnswer;
 
+    @OneToOne
     private TextAnswer textAnswer;
 
+    @OneToOne
     private Response response;
 
     public Long getId() {

@@ -19,6 +19,9 @@ import javax.persistence.OneToOne;
 @Entity
 public class SliderAnswer implements Serializable {
 
+    @OneToOne(mappedBy = "sliderAnswer")
+    private AnswerWrapper answerWrapper;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -41,6 +44,14 @@ public class SliderAnswer implements Serializable {
 
     public void setOptionGiven(SliderOption optionGiven) {
         this.optionGiven = optionGiven;
+    }
+
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
+    }
+
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
     }
 
     @Override

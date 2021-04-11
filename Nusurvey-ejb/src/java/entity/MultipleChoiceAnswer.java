@@ -19,6 +19,9 @@ import javax.persistence.OneToOne;
 @Entity
 public class MultipleChoiceAnswer implements Serializable {
 
+    @OneToOne(mappedBy = "multipleChoiceAnswer")
+    private AnswerWrapper answerWrapper;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,6 +36,14 @@ public class MultipleChoiceAnswer implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
+    }
+
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
     }
 
     public MultipleChoiceOption getOptionChosen() {
