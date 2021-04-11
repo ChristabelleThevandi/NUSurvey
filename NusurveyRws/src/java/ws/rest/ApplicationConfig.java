@@ -28,15 +28,7 @@ public class ApplicationConfig extends javax.ws.rs.core.Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(ws.rest.AnswerResource.class);
         resources.add(ws.rest.CorsFilter.class);
-        resources.add(ws.rest.CreditCardResource.class);
-        resources.add(ws.rest.OptionResource.class);
-        resources.add(ws.rest.QuestionResource.class);
-        resources.add(ws.rest.ResponseResource.class);
-        resources.add(ws.rest.SurveyResource.class);
-        resources.add(ws.rest.TagResource.class);
-        resources.add(ws.rest.TransactionResource.class);
         resources.add(ws.rest.UserResource.class);
     }
     

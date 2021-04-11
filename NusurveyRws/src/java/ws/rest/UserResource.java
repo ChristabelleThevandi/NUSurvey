@@ -28,10 +28,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import ws.datamodel.AddCreditCardReq;
+import ws.datamodel.ChangePasswordReq;
+import ws.datamodel.LoginReq;
 
 /**
  * REST Web Service
@@ -52,15 +57,16 @@ public class UserResource {
     public UserResource() {
     }
 
+    @Path("login")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(String email, String password) {
-        if (email != null && password != null) {
+    public Response login(LoginReq user) {
+        if (user != null) {
             try {
-                // ......
-                Long newUserId = userSessionBean.login(email, password).getUserId();
-                return Response.status(Response.Status.OK).entity(newUserId).build();
+                User currentUser = userSessionBean.login(user.getEmail(), user.getPassword());
+                currentUser.setPassword(null);
+                return Response.status(Response.Status.OK).entity(currentUser).build();
             } catch (InvalidLoginCredentialException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -69,10 +75,10 @@ public class UserResource {
         }
     }
 
-    @Path("retrieveAllRecords")
+    @Path("retrieveUserByEmail/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveUserByEmail(String email) {
+    public Response retrieveUserByEmail(@PathParam("email") String email) {
         try {
             User userEntity = userSessionBean.retrieveUserByEmail(email);
 
@@ -85,6 +91,7 @@ public class UserResource {
         }
     }
 
+    @Path("register")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -101,14 +108,15 @@ public class UserResource {
         }
     }
 
+    @Path("changePassword")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response changePassword(User user, String password) {
-        if (user != null && password != null) {
+    public Response changePassword(ChangePasswordReq req) {
+        if (req != null) {
             try {
-                userSessionBean.changePassword(user, password);
-                return Response.status(Response.Status.OK).entity(user.getUserId()).build();
+                userSessionBean.changePassword(req.getUser(), req.getPassword());
+                return Response.status(Response.Status.OK).entity(req.getUser()).build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -116,7 +124,8 @@ public class UserResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid change password request").build();
         }
     }
-
+    
+    @Path("updateProfile")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -132,7 +141,8 @@ public class UserResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid update request").build();
         }
     }
-
+    
+    @Path("uploadAvatar")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -149,14 +159,15 @@ public class UserResource {
         }
     }
 
+    @Path("addCreditCard")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addCreditCard(User user, CreditCard creditCard) {
-        if (user != null && creditCard != null) {
+    public Response addCreditCard(AddCreditCardReq req) {
+        if (req != null) {
             try {
-                User newUser = userSessionBean.addCreditCard(user, creditCard);
-                return Response.status(Response.Status.OK).entity(newUser.getUserId()).build();
+                User newUser = userSessionBean.addCreditCard(req.getUser(), req.getCard());
+                return Response.status(Response.Status.OK).entity(newUser).build();
             } catch (UserNotFoundException | CreditCardErrorException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -165,6 +176,7 @@ public class UserResource {
         }
     }
 
+    @Path("getRecommendation")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -172,7 +184,6 @@ public class UserResource {
         if (user != null) {
             try {
                 List<Survey> surveys = userSessionBean.getRecommendation(user);
-
                 return Response.status(Response.Status.OK).entity(surveys).build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
