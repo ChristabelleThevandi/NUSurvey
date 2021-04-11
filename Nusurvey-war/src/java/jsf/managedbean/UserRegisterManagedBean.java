@@ -13,12 +13,11 @@ import exception.EmailExistException;
 import exception.InputDataValidationException;
 import exception.InvalidLoginCredentialException;
 import exception.UnknownPersistenceException;
-import exception.UserNotFoundException;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -97,7 +96,9 @@ public class UserRegisterManagedBean {
             
             boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
             if (verify) {
-                User newUser = new User(getFirst_name(), getLast_name(), getBirth_date(), getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
+                DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                String strDate = format.format(birth_date);
+                User newUser = new User(getFirst_name(), getLast_name(), strDate, getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
                 User user = userSessionBeanLocal.register(newUser);
                 userSessionBeanLocal.login(getEmail(), getPassword());
                 FacesContext.getCurrentInstance().getExternalContext().getSession(true);

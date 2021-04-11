@@ -80,13 +80,13 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveUserByEmail(@PathParam("email") String email) {
         try {
+            System.out.println("tset");
             User userEntity = userSessionBean.retrieveUserByEmail(email);
-
             GenericEntity<User> genericEntity = new GenericEntity<User>(userEntity) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
-        } catch (Exception ex) {
+        } catch (UserNotFoundException ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
@@ -116,7 +116,7 @@ public class UserResource {
         if (req != null) {
             try {
                 userSessionBean.changePassword(req.getUser(), req.getPassword());
-                return Response.status(Response.Status.OK).entity(req.getUser()).build();
+                return Response.status(Response.Status.OK).entity("Success").build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -133,7 +133,7 @@ public class UserResource {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
-                return Response.status(Response.Status.OK).entity(user.getUserId()).build();
+                return Response.status(Response.Status.OK).entity("Success").build();
             } catch (UserNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -150,7 +150,7 @@ public class UserResource {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
-                return Response.status(Response.Status.OK).entity(user.getUserId()).build();
+                return Response.status(Response.Status.OK).entity("Success").build();
             } catch (UserNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -167,7 +167,7 @@ public class UserResource {
         if (req != null) {
             try {
                 User newUser = userSessionBean.addCreditCard(req.getUser(), req.getCard());
-                return Response.status(Response.Status.OK).entity(newUser).build();
+                return Response.status(Response.Status.OK).entity("Success").build();
             } catch (UserNotFoundException | CreditCardErrorException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -175,7 +175,7 @@ public class UserResource {
             return Response.status(Response.Status.BAD_REQUEST).entity("Invalid add credit card request").build();
         }
     }
-
+   
     @Path("getRecommendation")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

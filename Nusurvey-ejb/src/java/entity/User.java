@@ -22,6 +22,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -37,7 +38,7 @@ public class User implements Serializable {
     private Long userId;
     private String first_name;
     private String last_name;
-    private Date birth_date;
+    private String birth_date;
     @NotNull
     @Column(unique=true)
     private String email;
@@ -71,7 +72,7 @@ public class User implements Serializable {
     private List<Response> responses;
     
 
-    public User(String first_name, String last_name, Date birth_date, String email, String password, FacultyType faculty, String major, GenderType gender) {
+    public User(String first_name, String last_name, String birth_date, String email, String password, FacultyType faculty, String major, GenderType gender) {
         this();
         this.first_name = first_name;
         this.last_name = last_name;
@@ -132,14 +133,14 @@ public class User implements Serializable {
     /**
      * @return the birth_date
      */
-    public Date getBirth_date() {
+    public String getBirth_date() {
         return birth_date;
     }
 
     /**
      * @param birth_date the birth_date to set
      */
-    public void setBirth_date(Date birth_date) {
+    public void setBirth_date(String birth_date) {
         this.birth_date = birth_date;
     }
 
