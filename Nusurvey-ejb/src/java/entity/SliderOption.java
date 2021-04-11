@@ -34,6 +34,8 @@ public class SliderOption implements Serializable {
 
     @OneToOne
     private QuestionWrapper questionWrapper;
+    @OneToOne(mappedBy = "optionGiven")
+    private SliderAnswer sliderAnswer;
 
     public SliderOption() {
         super();

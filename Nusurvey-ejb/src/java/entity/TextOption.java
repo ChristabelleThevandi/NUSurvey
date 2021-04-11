@@ -28,6 +28,8 @@ public class TextOption implements Serializable {
 
     @OneToOne
     private QuestionWrapper questionWrapper;
+    @OneToOne(mappedBy = "answerGiven")
+    private TextAnswer textAnswer;
 
     public TextOption() {
         super();

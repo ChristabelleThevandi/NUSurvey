@@ -5,8 +5,9 @@
  */
 package ejb.session.stateless;
 
-import entity.Answer;
+import entity.AnswerWrapper;
 import entity.Question;
+import entity.QuestionWrapper;
 import entity.Response;
 import entity.Survey;
 import entity.User;
@@ -29,16 +30,16 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
     }
     
     public long createResponse(Response newResponse) {
-        newResponse.getAnswers().size();
-        List<Answer> answers = newResponse.getAnswers();
-        for (Answer a: answers) {
+        newResponse.getAnswerWrappers().size();
+        List<AnswerWrapper> answerWrappers = newResponse.getAnswerWrappers();
+        for (AnswerWrapper a: answerWrappers) {
 //            QuestionOption optionPicked = a.getOption();
 //            QuestionOption optionPickedPersisted = em.find(QuestionOption.class, optionPicked.getOptionId());
 //            a.setOption(optionPickedPersisted);
             
-            Question questionPicked = a.getQuestion();
-            Question questionPickedPersisted = em.find(Question.class, questionPicked.getQuestionId());
-            a.setQuestion(questionPickedPersisted);
+            QuestionWrapper questionWrapper = a.getQuestionWrapper();
+            QuestionWrapper questionWrapperPersisted = em.find(QuestionWrapper.class, questionWrapper.getId());
+            a.setQuestionWrapper(questionWrapperPersisted);
             em.persist(a);
         }
         

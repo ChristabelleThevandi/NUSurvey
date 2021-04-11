@@ -47,6 +47,9 @@ public class QuestionWrapper implements Serializable {
 
     private Long tempId;
 
+    @OneToOne
+    private AnswerWrapper answerWrapper;
+
     public QuestionWrapper() {
         this.question = new Question();
         this.mcq = new ArrayList<>();
@@ -79,6 +82,14 @@ public class QuestionWrapper implements Serializable {
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
+    }
+
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
     }
 
     public Long getTempId() {

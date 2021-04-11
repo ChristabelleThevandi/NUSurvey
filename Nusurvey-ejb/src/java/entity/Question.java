@@ -37,8 +37,6 @@ public class Question implements Serializable {
     private Boolean slider;
     private Boolean text;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers;
     @OneToOne(mappedBy = "question")
     private QuestionWrapper questionWrapper;
 
@@ -85,14 +83,6 @@ public class Question implements Serializable {
 
     public void setType(QuestionType type) {
         this.type = type;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
     }
 
     @Override
