@@ -35,9 +35,6 @@ public class Response implements Serializable {
 
     @ManyToOne
     private User surveyee;
-    
-    @OneToOne(mappedBy = "response")
-    private AnswerWrapper answerWrapper;
 
     public Response() {
     }
@@ -48,14 +45,6 @@ public class Response implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public AnswerWrapper getAnswerWrapper() {
-        return answerWrapper;
-    }
-
-    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
-        this.answerWrapper = answerWrapper;
     }
 
     public List<AnswerWrapper> getAnswerWrappers() {
