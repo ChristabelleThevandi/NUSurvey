@@ -8,7 +8,7 @@ package ejb.session.stateless;
 import entity.AnswerWrapper;
 import entity.Question;
 import entity.QuestionWrapper;
-import entity.Response;
+import entity.SurveyResponse;
 import entity.Survey;
 import entity.User;
 import java.util.List;
@@ -29,7 +29,8 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
     public ResponseSessionBean() {
     }
     
-    public long createResponse(Response newResponse) {
+    @Override
+    public long createResponse(SurveyResponse newResponse) {
         newResponse.getAnswerWrappers().size();
         List<AnswerWrapper> answerWrappers = newResponse.getAnswerWrappers();
         for (AnswerWrapper a: answerWrappers) {

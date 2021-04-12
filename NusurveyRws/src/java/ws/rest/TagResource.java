@@ -62,7 +62,7 @@ public class TagResource {
         }
     }
 
-    /*@Path("retrieveTagByTagName")
+    @Path("retrieveTagByTagName/{tag}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveTagByTagName(@PathParam("tag") String tag) {
@@ -77,7 +77,7 @@ public class TagResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
-*/
+
     /**
      * Retrieves representation of an instance of ws.rest.TagResource
      *

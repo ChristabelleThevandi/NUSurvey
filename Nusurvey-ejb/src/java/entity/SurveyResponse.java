@@ -20,7 +20,7 @@ import javax.persistence.OneToOne;
  * @author Chrisya
  */
 @Entity
-public class Response implements Serializable {
+public class SurveyResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,7 +36,7 @@ public class Response implements Serializable {
     @ManyToOne
     private User surveyee;
 
-    public Response() {
+    public SurveyResponse() {
     }
 
     public Long getId() {
@@ -81,10 +81,10 @@ public class Response implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Response)) {
+        if (!(object instanceof SurveyResponse)) {
             return false;
         }
-        Response other = (Response) object;
+        SurveyResponse other = (SurveyResponse) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

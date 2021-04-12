@@ -12,6 +12,7 @@ import entity.Survey;
 import entity.Transaction;
 import entity.User;
 import enumeration.TransactionType;
+import exception.SurveyNotFoundException;
 import exception.UserNotFoundException;
 import java.util.List;
 import java.util.logging.Level;
@@ -64,7 +65,7 @@ public class TransactionResource {
                 // ......
                 transactionSessionBean.createNewTransaction(req.getCard(), req.getAmount(), req.getType(), req.getSurveyId(), req.getDate());
                 return Response.status(Response.Status.OK).entity("Success").build();
-            } catch (Exception ex) {
+            } catch (SurveyNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
         } else {

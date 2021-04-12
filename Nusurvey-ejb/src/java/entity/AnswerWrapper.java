@@ -40,7 +40,7 @@ public class AnswerWrapper implements Serializable {
     private TextAnswer textAnswer;
 
     @OneToOne
-    private Response response;
+    private SurveyResponse response;
 
     public Long getId() {
         return id;
@@ -90,11 +90,11 @@ public class AnswerWrapper implements Serializable {
         this.textAnswer = textAnswer;
     }
 
-    public Response getResponse() {
+    public SurveyResponse getResponse() {
         return response;
     }
 
-    public void setResponse(Response response) {
+    public void setResponse(SurveyResponse response) {
         this.response = response;
     }
 

@@ -49,7 +49,7 @@ public class Survey implements Serializable {
     private List<QuestionWrapper> questionWrappers;
 
     @OneToMany(mappedBy = "survey")
-    private List<Response> responses;
+    private List<SurveyResponse> responses;
 
     private List<FacultyType> faculties;
     @OneToMany(mappedBy = "survey")
@@ -159,11 +159,11 @@ public class Survey implements Serializable {
         this.questionWrappers = questionWrappers;
     }
 
-    public List<Response> getResponses() {
+    public List<SurveyResponse> getResponses() {
         return responses;
     }
 
-    public void setResponses(List<Response> responses) {
+    public void setResponses(List<SurveyResponse> responses) {
         this.responses = responses;
     }
 

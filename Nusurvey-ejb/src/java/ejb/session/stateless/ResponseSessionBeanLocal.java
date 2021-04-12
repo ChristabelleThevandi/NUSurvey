@@ -5,6 +5,7 @@
  */
 package ejb.session.stateless;
 
+import entity.SurveyResponse;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +14,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface ResponseSessionBeanLocal {
-    
+    public long createResponse(SurveyResponse newResponse);
 }

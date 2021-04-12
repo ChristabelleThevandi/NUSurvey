@@ -69,7 +69,7 @@ public class User implements Serializable {
     private List<Transaction> transactions;
     
     @OneToMany(mappedBy = "surveyee")
-    private List<Response> responses;
+    private List<SurveyResponse> responses;
     
 
     public User(String first_name, String last_name, String birth_date, String email, String password, FacultyType faculty, String major, GenderType gender) {
@@ -256,11 +256,11 @@ public class User implements Serializable {
         this.transactions = transactions;
     }
 
-    public List<Response> getResponses() {
+    public List<SurveyResponse> getResponses() {
         return responses;
     }
 
-    public void setResponses(List<Response> responses) {
+    public void setResponses(List<SurveyResponse> responses) {
         this.responses = responses;
     }
    
