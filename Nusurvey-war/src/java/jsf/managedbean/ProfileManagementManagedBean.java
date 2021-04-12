@@ -19,6 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -87,7 +89,7 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
         setTags(getTagSessionBean().retrieveAllTags());
-        setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
+        setPath("../uploadedFiles/" + selectedUserToUpdate.getEmail() + ".jpg");
         System.out.println(path);
         if (!selectedUserToUpdate.getTags().isEmpty()) {
             setCurrentUserTags(selectedUserToUpdate.getTags());
@@ -133,16 +135,14 @@ public class ProfileManagementManagedBean implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             getUserSessionBeanLocal().uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
-            setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,  "File uploaded successfully", ""));
+            setPath("../uploadedFiles/" + selectedUserToUpdate.getEmail() + ".jpg");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
-            
-            }
-        catch(IOException ex)
-        {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,  "File upload error: " + ex.getMessage(), ""));
+
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
         } catch (UserNotFoundException ex) {
             Logger.getLogger(ProfileManagementManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -178,7 +178,9 @@ public class ProfileManagementManagedBean implements Serializable {
     }
 
     public void addCreditCard(ActionEvent event) throws IOException {
-        creditCard = new CreditCard(getNameOnCard(), getCardNumber(), getCvv(), getExpiryDate());
+        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        String strDate = format.format(getExpiryDate());
+        creditCard = new CreditCard(getNameOnCard(), getCardNumber(), getCvv(), strDate);
         try {
             selectedUserToUpdate = getUserSessionBeanLocal().addCreditCard(getSelectedUserToUpdate(), getCreditCard());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Credit card added successfully", null));

@@ -61,24 +61,23 @@ public class UserResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(LoginReq user) {
-        if (user != null) {
-            try {
-                User currentUser = userSessionBean.login(user.getEmail(), user.getPassword());
-                currentUser.setPassword(null);
-                return Response.status(Response.Status.OK).entity(currentUser).build();
-            } catch (InvalidLoginCredentialException ex) {
-                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
-            }
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid log in request").build();
+    public Response login(LoginReq req) {
+        LoginReq loginReq = req;
+        String email = loginReq.getEmail();
+        String password = loginReq.getPassword();
+        try {
+            User currentUser = userSessionBean.login(email, password);
+            currentUser.setPassword(null);
+            return Response.status(Response.Status.OK).entity(currentUser).build();
+        } catch (InvalidLoginCredentialException ex) {
+            return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
     }
 
-    @Path("retrieveUserByEmail/{email}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveUserByEmail(@PathParam("email") String email) {
+@Path("retrieveUserByEmail/{email}")
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response retrieveUserByEmail(@PathParam("email") String email) {
         try {
             System.out.println("tset");
             User userEntity = userSessionBean.retrieveUserByEmail(email);
@@ -92,10 +91,10 @@ public class UserResource {
     }
 
     @Path("register")
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response register(User newUser) {
+        @PUT
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response register(User newUser) {
         if (newUser != null) {
             try {
                 Long newUserId = userSessionBean.register(newUser).getUserId();
@@ -109,10 +108,10 @@ public class UserResource {
     }
 
     @Path("changePassword")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response changePassword(ChangePasswordReq req) {
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response changePassword(ChangePasswordReq req) {
         if (req != null) {
             try {
                 userSessionBean.changePassword(req.getUser(), req.getPassword());
@@ -126,10 +125,10 @@ public class UserResource {
     }
     
     @Path("updateProfile")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateProfile(User user) {
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response updateProfile(User user) {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
@@ -143,10 +142,10 @@ public class UserResource {
     }
     
     @Path("uploadAvatar")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response uploadAvatar(User user) {
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response uploadAvatar(User user) {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
@@ -160,10 +159,10 @@ public class UserResource {
     }
 
     @Path("addCreditCard")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addCreditCard(AddCreditCardReq req) {
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response addCreditCard(AddCreditCardReq req) {
         if (req != null) {
             try {
                 User newUser = userSessionBean.addCreditCard(req.getUser(), req.getCard());
@@ -177,10 +176,10 @@ public class UserResource {
     }
    
     @Path("getRecommendation")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getRecommendation(User user) {
+        @POST
+        @Consumes(MediaType.APPLICATION_JSON)
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response getRecommendation(User user) {
         if (user != null) {
             try {
                 List<Survey> surveys = userSessionBean.getRecommendation(user);

@@ -6,7 +6,6 @@
 package ws.rest;
 
 import ejb.session.stateless.QuestionSessionBeanLocal;
-import entity.Question;
 import entity.QuestionWrapper;
 import entity.User;
 import exception.QuestionWrapperNotFoundException;

@@ -92,10 +92,10 @@ public class TransactionResource {
     @Path("retrieveMyExpenseTransaction")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveMyExpenseTransaction(User user) {
+    public Response retrieveMyExpenseTransaction(@PathParam("email") String email) {
         try {
-            User userEntity = userSessionBean.retrieveUserByEmail(user.getEmail());
-            List<Transaction> trans = transactionSessionBean.retrieveMyExpenseTransaction(user);
+            User userEntity = userSessionBean.retrieveUserByEmail(email);
+            List<Transaction> trans = transactionSessionBean.retrieveMyExpenseTransaction(userEntity);
             GenericEntity<List<Transaction>> genericEntity = new GenericEntity<List<Transaction>>(trans) {
             };
 

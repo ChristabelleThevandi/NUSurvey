@@ -28,7 +28,7 @@ public class Survey implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
-    private Date expiry_date;
+    private String expiry_date;
     private boolean surveyOpen;
     private String description;
     private String title;
@@ -83,11 +83,11 @@ public class Survey implements Serializable {
         this.surveyId = surveyId;
     }
 
-    public Date getExpiry_date() {
+    public String getExpiry_date() {
         return expiry_date;
     }
 
-    public void setExpiry_date(Date expiry_date) {
+    public void setExpiry_date(String expiry_date) {
         this.expiry_date = expiry_date;
     }
 

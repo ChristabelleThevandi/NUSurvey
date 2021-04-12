@@ -27,6 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -160,7 +162,9 @@ public class createSurveyManagedBean implements Serializable {
 
         newSurvey.setTags(currentUserTags);
         newSurvey.setFaculties(selectedFaculties);
-        newSurvey.setExpiry_date(expiry_date);
+        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        String strDate = format.format(expiry_date);
+        newSurvey.setExpiry_date(strDate);
         this.survey = newSurvey;
         this.setIncentiveAmount(temp * maxNumberOfResponse);
         this.setSurveyAmount(this.survey.getPrice_per_response() * maxNumberOfResponse);
@@ -336,7 +340,7 @@ public class createSurveyManagedBean implements Serializable {
         return selectedFaculties;
     }
 
-    public void handleFileUpload(FileUploadEvent event){
+    public void handleFileUpload(FileUploadEvent event) {
         Long qwTempId = (Long) event.getComponent().getAttributes().get("questionWrapperTempId");
         try {
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + qwTempId + ".jpg";
@@ -366,16 +370,16 @@ public class createSurveyManagedBean implements Serializable {
 
             fileOutputStream.close();
             inputStream.close();
-            
+
             QuestionWrapper questionWrapper = new QuestionWrapper();
-            for (QuestionWrapper qw: questions) {
+            for (QuestionWrapper qw : questions) {
                 if (qw.getTempId().equals(qwTempId)) {
                     questionWrapper = qw;
                 }
             }
-            
+
             questionWrapper.getQuestion().setImage(Long.toString(qwTempId));
-            
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
             System.out.println("Uploaded question picture");
 //            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");

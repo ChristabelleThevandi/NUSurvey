@@ -84,10 +84,10 @@ public class SurveyResource {
     @Path("retrieveMyFilledSurveys")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveMyFilledSurveys(User user) {
+    public Response retrieveMyFilledSurveys(@PathParam("email") String email) {
         try {
             System.out.println("tset");
-            User currentUser = userSessionBean.retrieveUserByEmail(user.getEmail());
+            User currentUser = userSessionBean.retrieveUserByEmail(email);
             List<Survey> survey = currentUser.getMySurveys();
             GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(survey) {
             };
