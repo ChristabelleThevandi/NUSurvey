@@ -5,8 +5,10 @@
  */
 package ejb.session.stateless;
 
+import entity.QuestionWrapper;
 import entity.Survey;
 import entity.User;
+import exception.QuestionWrapperNotFoundException;
 import exception.UnsupportedDeleteSurveyException;
 import java.util.List;
 import javax.ejb.Local;
@@ -18,5 +20,6 @@ import javax.ejb.Local;
 @Local
 public interface QuestionSessionBeanLocal {
 
-    
+    public QuestionWrapper retrieveQuestionWrapperByTempId(Long qwTempId) throws QuestionWrapperNotFoundException;
+
 }

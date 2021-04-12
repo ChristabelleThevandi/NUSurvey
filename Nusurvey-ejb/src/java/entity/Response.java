@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -27,7 +28,7 @@ public class Response implements Serializable {
     private Long id;
 
     @OneToMany(mappedBy = "response")
-    private List<Answer> answers;
+    private List<AnswerWrapper> answerWrappers;
 
     @ManyToOne
     private Survey survey;
@@ -37,8 +38,7 @@ public class Response implements Serializable {
 
     public Response() {
     }
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -46,13 +46,13 @@ public class Response implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-  
-    public List<Answer> getAnswers() {
-        return answers;
+
+    public List<AnswerWrapper> getAnswerWrappers() {
+        return answerWrappers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setAnswerWrappers(List<AnswerWrapper> answerWrappers) {
+        this.answerWrappers = answerWrappers;
     }
 
     public Survey getSurvey() {

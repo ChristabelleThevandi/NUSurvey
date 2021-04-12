@@ -10,6 +10,7 @@ import entity.Survey;
 import entity.Transaction;
 import entity.User;
 import enumeration.TransactionType;
+import exception.SurveyNotFoundException;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -24,12 +25,14 @@ public interface TransactionSessionBeanLocal {
 
     public List<Transaction> retrieveMyExpenseTransaction(User user);
 
-    public void createNewTransaction(CreditCard card, Double amount, TransactionType type, String title);
+    public void paySurvey(User user, Survey survey) throws SurveyNotFoundException;
 
-    public void paySurvey(User user, Survey survey);
+    public void giveReward(Survey survey) throws SurveyNotFoundException;
 
-    public void giveReward(Survey survey, User user);
+    public void receiveIncentive(User user) throws SurveyNotFoundException;
 
-    public void receiveIncentive(User user);
-    
+    public void createNewTransaction(CreditCard card, Double amount, TransactionType type, Long surveyId, String date) throws SurveyNotFoundException;
+
+    public List<Transaction> retrieveAllTransaction(User user);
+
 }

@@ -6,78 +6,201 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
+
     <ui:define name="content">
-        <h:panelGroup>
+        <style>
+            .card {
+                border: #E4E4E4 solid 1px;
+                border-top: #004DB6 solid 15px;
+                width: 90%;
+                border-radius: 8px;
+                padding: 10;
+            }
+            .cardQuestion {
+                border: #E4E4E4 solid 1px;
+                border-left: #004DB6 solid 15px;
+                width: 90%;
+                border-radius: 8px;
+                padding: 10;
+                margin: 15;
+            }
+
+            modal::backdrop {
+                background-color: red;
+            }
+
+            .ui-widget-overlay {
+                background: rgba(0, 0, 0, .25);
+                opacity: 1!important;
+            }
+
+            .placeholder-dummy {
+                height: 100;
+            }
+
+            .slider-dummy {
+                width: 300;
+                background: #004DB6;
+                align-content: center;
+                margin: 20;
+            }
+
+            .margin-custom {
+                margin: 20;
+            }
+
+            .align-center {
+                align-content: center;
+                align-items: center;
+                align-self: center;
+            }
+
+            .align-right {
+                float: right;
+            }
+
+        </style>
+        <h:panelGroup styleClass="margin-custom">
             <article>
-                <h3>Create Survey</h3>
-                <p>
-                    Please create survey below            
+                <h2 style="color: #004DB6; padding-left:20; padding-top: 20">Create Survey</h2>
+                <p style="padding-left:20">
+                    Please create a survey below            
                 </p>
             </article>
         </h:panelGroup>
 
-        <h:panelGroup>
+        <h:panelGroup styleClass="align-center">
+
             <h:form id="surveyForm">
-                <p:inputText id="surveyTitle" value="#{createSurveyManagedBean.surveyTitle}" placeholder="Survey Title Here" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
-                </p:inputText>
-                <br /><br />
-                <p:inputText id="surveyDescription" value="#{createSurveyManagedBean.surveyDescription}" placeholder="Survey Description Here (Optional)" size="120" required="true" maxlength="500">
-                </p:inputText>
-                <br /><br /><br />
-                <p:inputText id="maxNumberOfResponse" value="#{createSurveyManagedBean.maxNumberOfResponse}" placeholder="Maximum number of Response" size="120" required="true" requiredMessage="Survey Title is required" maxlength="32">
-                </p:inputText>
-                <br /><br />
-
-                <p:selectBooleanCheckbox value="#{createSurveyManagedBean.giveIncentive}" itemLabel="Give Incentive">
-                    <f:ajax event="change" render="@form" />
-                </p:selectBooleanCheckbox>
-                <br />
-
-                <h:panelGroup id="incentiveGroup" rendered="#{createSurveyManagedBean.giveIncentive}">
-                    <p:outputLabel for="incentivePerResponse" value="Incentives per response:" />&nbsp; $
-                    <p:inputText id="incentivePerResponse" value="#{createSurveyManagedBean.incentivePerResponse}" placeholder="00.00" size="10" required="false" maxlength="5">
+                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid card margin-custom align-center">
+                    <p:inputText id="surveyTitle" value="#{createSurveyManagedBean.surveyTitle}" placeholder="Survey Title Here" size="120" maxlength="32" required="true" requiredMessage="Survey Title is required">
+                        <p:tooltip for="surveyTitle" value="Survey Title" showEffect="clip" position="bottom"/>
                     </p:inputText>
-                </h:panelGroup>
-                <br /><br />
+                    <p:inputText id="surveyDescription" value="#{createSurveyManagedBean.surveyDescription}" placeholder="Survey Description Here (Optional)" size="120" maxlength="500">
+                        <p:tooltip for="surveyDescription" value="Survey Description" showEffect="clip" position="bottom"/>
+                    </p:inputText>
+                </p:panelGrid>
+                <br />
+                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid card margin-custom">
+                    <p:inputNumber id="maxNumberOfResponse" value="#{createSurveyManagedBean.maxNumberOfResponse}" placeholder="Maximum number of Response" size="120" maxlength="32" required="true" requiredMessage="Maximum number of response is required">
+                        <p:tooltip for="maxNumberOfResponse" value="Max Number of Response" showEffect="clip" position="bottom"/>
+                    </p:inputNumber>
 
-                <h:panelGroup>  
-                    <p:outputLabel for="faculties" value="Faculties allowed to response:"/>&nbsp;
-                    <br /><br />
-                    <p:selectBooleanCheckbox id="selectAll" value="#{createSurveyManagedBean.selectAllFaculties}" itemLabel="SELECT ALL" >
-                        <f:ajax listener="#{createSurveyManagedBean.onSelectAllFaculties}" render="faculties" />
+                    <p:selectBooleanCheckbox value="#{createSurveyManagedBean.giveIncentive}" immediate="true" itemLabel="Give Incentive">
+                        <p:ajax update="incentiveGroup" />
                     </p:selectBooleanCheckbox>
-                    <br />
-                    <p:selectManyCheckbox id="faculties" value="#{createSurveyManagedBean.selectedFaculties}" layout="grid" columns="3" >
-                        <f:selectItems value="#{createSurveyManagedBean.faculties}" var="faculty" itemLabel="#{faculty}" itemValue="#{faculty}" />
-                    </p:selectManyCheckbox>
-                </h:panelGroup>
-                <br /><br />
 
-                <h:panelGroup>  
-                    <p:outputLabel for="tags" value="Tags:"/>&nbsp;
-                    <br /><br />
-                    <p:autoComplete id="tags" multiple="true" value="#{createSurveyManagedBean.selectedTags}"
-                                    completeMethod="#{createSurveyManagedBean.completeTags}"
-                                    var="tag" itemLabel="#{tag.tag_name}" itemValue="#{tag}"
-                                    forceSelection="true" scrollHeight="250">
-                        <p:column>
-                            <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag.tag_name}"/>
-                        </p:column>
-                    </p:autoComplete>
-                </h:panelGroup>
-                
+                    <p:panel id="incentiveGroup" visible="#{createSurveyManagedBean.giveIncentive}">
+                        <p:outputLabel for="incentivePerResponse" value="Incentives per response:" />&nbsp; $
+                        <p:inputText id="incentivePerResponse" value="#{createSurveyManagedBean.incentivePerResponse}" placeholder="00.00" size="10" maxlength="5">
+                        </p:inputText>
+                    </p:panel>
+                    <br />
+
+                    <p:outputLabel for="expiry_date" value="Expiry Date of Form:" >&nbsp;
+                        <p:calendar id="expiry_date" value="#{createSurveyManagedBean.expiry_date}" size="20" mindate="today" showOn="button" pattern="yyyy-MM-dd" required="true" requiredMessage="Expiry date is required"/>
+                        <p:tooltip for="expiry_date" value="Expiry Date of Survey" showEffect="clip" position="bottom"/>
+                    </p:outputLabel>
+                    <br />
+
+                    <h:panelGroup>  
+                        <p:outputLabel for="faculties" value="Faculties allowed to response:"/>&nbsp;
+                        <br />
+                        <p:selectBooleanCheckbox id="selectAll" value="#{createSurveyManagedBean.selectAllFaculties}" itemLabel="SELECT ALL" >
+                            <f:ajax listener="#{createSurveyManagedBean.onSelectAllFaculties}" render="faculties" />
+                        </p:selectBooleanCheckbox>
+                        <br />
+                        <p:selectManyCheckbox id="faculties" value="#{createSurveyManagedBean.selectedFaculties}" layout="grid" columns="3" required="true" requiredMessage="Faculties are required" >
+                            <f:selectItems value="#{createSurveyManagedBean.faculties}" var="faculty" itemLabel="#{faculty}" itemValue="#{faculty}" />
+                        </p:selectManyCheckbox>
+                    </h:panelGroup>
+                    <br />
+
+                    <h:panelGroup>  
+                        <p:outputLabel for="tags" value="Tags:"/>&nbsp;
+                        <br /><br />
+                        <p:autoComplete id="tags" multiple="true" value="#{createSurveyManagedBean.currUserTagStr}"
+                                        completeMethod="#{createSurveyManagedBean.completeTags}"
+                                        var="tag" itemLabel="#{tag}" itemValue="#{tag}" size="120"
+                                        forceSelection="true" scrollHeight="250">
+                            <p:column>
+                                <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag}"/>
+                            </p:column>
+                        </p:autoComplete>
+                    </h:panelGroup>
+                </p:panelGrid>
+                <ui:repeat value="#{createSurveyManagedBean.questions}" var="questionWrapper" id="questionsRepeat">
+                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid cardQuestion">
+                        <p:inputText id="questionTitle" value="#{questionWrapper.question.title}" placeholder="Type Your Question Here" size="120"  maxlength="250">
+                            <p:tooltip for="questionTitle" value="Question Title" showEffect="clip" position="bottom"/>
+                        </p:inputText>
+                        &nbsp;
+                        
+                        <p:selectOneMenu id="option" value="#{questionWrapper.question.typeStr}">
+                            <f:selectItem itemLabel="Multiple Choice" itemValue="Mcq"/>
+                            <f:selectItem itemLabel="Checkbox" itemValue="Checkbox"/>
+                            <f:selectItem itemLabel="Slider" itemValue="Slider"/>
+                            <f:selectItem itemLabel="Short Answer" itemValue="ShortAnswer"/>
+                            <p:ajax update="mcqOption,checkboxOption,sliderOption,shortanswerOption" />
+                        </p:selectOneMenu>
+                        <br/>
+                        <p:panel id="mcqOption" visible="#{questionWrapper.question.mcq}" toggleable="true">
+                            <h:outputText value="Options:" />
+                            <ui:repeat value="#{questionWrapper.mcq}" var="mcqoption" id="optionsRepeat">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+                                    <p:inputText id="optiontitle" value="#{mcqoption.content}" />
+                                    <p:commandButton value="Delete Option" action="#{createSurveyManagedBean.deleteOption(mcqoption.tempId)}" icon="ui-icon-minus" update="@form surveyForm" styleClass="margin-custom" style="width: 98%; margin-right: 30" />
+                                </p:panelGrid>
+                                <br/>
+                            </ui:repeat>
+                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOption(questionWrapper)}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" immediate ="true"/>
+
+                        </p:panel>
+                        <p:panel id="checkboxOption" visible="#{questionWrapper.question.checkbox}" toggleable="true">
+                            <h:outputText value="Options:" />
+                            <ui:repeat value="#{questionWrapper.checkbox}" var="mcqoption" id="optionsRepeatCheckbox">
+                                <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid">
+                                    <p:inputText id="optiontitleCheckbox" value="#{mcqoption.content}" />
+                                    <p:commandButton value="Delete Option" action="#{createSurveyManagedBean.deleteCheckboxOption(mcqoption.tempId)}" icon="ui-icon-minus" update="@form surveyForm" styleClass="margin-custom" style="width: 98%; margin-right: 30" />
+                                </p:panelGrid>
+                            </ui:repeat>
+                            <p:commandButton value="Add Option" action="#{createSurveyManagedBean.addOptionCheckbox(questionWrapper)}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" immediate ="true"/>
+                        </p:panel>
+                        <p:panel id="sliderOption" visible="#{questionWrapper.question.slider}" toggleable="true">
+                            <p:inputNumber id="minValue" value="#{questionWrapper.slider.minRange}" placeholder="0" size="20" maxlength="5" >
+                                <f:validateLongRange minimum="0" />
+                                <h:outputText value="Minimal Value:" />&nbsp;
+                            </p:inputNumber>
+                            <br /><br />
+                            <p:inputNumber id="maxValue" value="#{questionWrapper.slider.maxRange}" placeholder="0" size="20" maxlength="5" >
+                                <f:validateLongRange minimum="#{questionWrapper.slider.minRange}" />
+                                <h:outputText value="Maximal Value:" />&nbsp;
+                            </p:inputNumber>
+                            <p:inputText id="minValuePlaceholder" value="50" readonly="true" rendered="false" /> 
+                            <br /><br />
+                            <h:outputText value="Slider example:" />
+                            <p:slider for="minValuePlaceholder" styleClass="slider-dummy" />
+                        </p:panel>
+                        <p:panel id="shortanswerOption" visible="#{questionWrapper.question.text}" toggleable="true">
+                            <h:outputText value="Text area example:" />
+                            <br /><br />
+                            <p:inputText readonly="true" placeholder="This is sample placeholder that will appear" size="100" styleClass="placeholder-dummy" />
+                        </p:panel>
+                        <p:commandButton value="Delete Question" action="#{createSurveyManagedBean.deleteQuestion(questionWrapper.tempId)}" icon="ui-icon-minus" update="@form surveyForm" styleClass="margin-custom" style="width: 98%; margin-right: 30" />
+                    </p:panelGrid>
+                </ui:repeat>
+                <p:commandButton value="Add Question" action="#{createSurveyManagedBean.addQuestion}" icon="ui-icon-plus" update="@form surveyForm" styleClass="margin-custom" immediate ="true"/>
                 <br />
-                <br />
-                
-                <h:panelGroup>
-                    <h:outputLabel value="Questions:"/>&nbsp;
-                    
-                </h:panelGroup>
+                <p:commandButton type="submit" value="Create Survey" actionListener="#{createSurveyManagedBean.createSurvey}" icon="pi pi-sign-in" >
+
+                </p:commandButton>
 
                 <p:growl>
                     <p:autoUpdate />
                 </p:growl>
+
             </h:form>
+
         </h:panelGroup>
     </ui:define>
 

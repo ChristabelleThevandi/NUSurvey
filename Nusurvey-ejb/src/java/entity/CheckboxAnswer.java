@@ -11,31 +11,74 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
- * @author Chrisya
+ * @author miche
  */
 @Entity
-public class CheckboxAnswer extends Answer {
+public class CheckboxAnswer implements Serializable {
 
-    private List<String> answers;
+    @OneToOne(mappedBy = "checkboxAnswer")
+    private AnswerWrapper answerWrapper;
 
-    public CheckboxAnswer() {
-        super();
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToMany(mappedBy = "checkboxAnswer")
+    private List<CheckboxOption> optionsGiven;
+
+    public Long getId() {
+        return id;
     }
 
-    public CheckboxAnswer(List<String> answers) {
-        super();
-        this.answers = answers;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public List<String> getAnswers() {
-        return answers;
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
     }
 
-    public void setAnswers(List<String> answers) {
-        this.answers = answers;
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
     }
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof CheckboxAnswer)) {
+            return false;
+        }
+        CheckboxAnswer other = (CheckboxAnswer) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    public List<CheckboxOption> getOptionsGiven() {
+        return optionsGiven;
+    }
+
+    public void setOptionsGiven(List<CheckboxOption> optionsGiven) {
+        this.optionsGiven = optionsGiven;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.CheckboxAnswer[ id=" + id + " ]";
+    }
+
 }

@@ -35,7 +35,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
     
     @Override
     public CreditCard retrieveCreditCardByCardId(Long cardId) throws CreditCardErrorException{
-        Query query = em.createQuery("SELECT c FROM CreidtCard c WHERE c.creditCardId = :inNumber");
+        Query query = em.createQuery("SELECT c FROM CreditCard c WHERE c.creditCardId = :inNumber");
         query.setParameter("inNumber", cardId);
         
         try
@@ -65,7 +65,7 @@ public class CreditCardSessionBean implements CreditCardSessionBeanLocal {
             CreditCard creditCard = currentUser.getCreditCard();
             creditCard.setUser(null);
             currentUser.setCreditCard(null);
-            em.remove(creditCard);   
+            //em.remove(creditCard);   
             
             return currentUser;
         }

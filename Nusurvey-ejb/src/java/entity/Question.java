@@ -13,8 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -27,23 +27,32 @@ public class Question implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
-    private String description;
-    private File image;
+    private String title;
+    private String image;
     private QuestionType type;
+    private Long questionNumber;
+    private String typeStr;
+    private Boolean mcq;
+    private Boolean checkbox;
+    private Boolean slider;
+    private Boolean text;
 
-    @ManyToOne
-    private Survey survey;
-    
-    @OneToMany(mappedBy = "question")
-    private List<QuestionOption> options;
-    
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers;
+    @OneToOne(mappedBy = "question")
+    private QuestionWrapper questionWrapper;
 
     public Question() {
+        this.type = QuestionType.MCQ;
+        this.typeStr = "Mcq";
     }
-    
-    
+
+    public Long getQuestionNumber() {
+        return questionNumber;
+    }
+
+    public void setQuestionNumber(Long questionNumber) {
+        this.questionNumber = questionNumber;
+    }
+
     public Long getQuestionId() {
         return questionId;
     }
@@ -52,52 +61,28 @@ public class Question implements Serializable {
         this.questionId = questionId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public File getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(File image) {
+    public void setImage(String image) {
         this.image = image;
     }
-    
+
     public QuestionType getType() {
         return type;
     }
 
     public void setType(QuestionType type) {
         this.type = type;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
-    }
-
-    public List<QuestionOption> getOptions() {
-        return options;
-    }
-
-    public void setOptions(List<QuestionOption> options) {
-        this.options = options;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
     }
 
     @Override
@@ -123,6 +108,71 @@ public class Question implements Serializable {
     @Override
     public String toString() {
         return "entity.Question[ id=" + questionId + " ]";
+    }
+
+    public String getTypeStr() {
+        return typeStr;
+    }
+
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
+        if (typeStr.equals("Mcq")) {
+            this.setType(QuestionType.MCQ);
+            this.mcq = true;
+            this.checkbox = false;
+            this.slider = false;
+            this.text = false;
+        } else if (typeStr.equals("Checkbox")) {
+            this.setType(QuestionType.CHECKBOX);
+            this.checkbox = true;
+            this.mcq = false;
+            this.slider = false;
+            this.text = false;
+        } else if (typeStr.equals("Slider")) {
+            this.setType(QuestionType.SLIDEBAR);
+            this.slider = true;
+            this.checkbox = false;
+            this.mcq = false;
+            this.text = false;
+        } else {
+            this.setType(QuestionType.TEXT);
+            this.text = true;
+            this.checkbox = false;
+            this.slider = false;
+            this.mcq = false;
+        }
+    }
+
+    public Boolean getMcq() {
+        return (this.type.equals(QuestionType.MCQ));
+    }
+
+    public void setMcq(Boolean mcq) {
+        this.mcq = mcq;
+    }
+
+    public Boolean getCheckbox() {
+        return (this.type.equals(QuestionType.CHECKBOX));
+    }
+
+    public void setCheckbox(Boolean checkbox) {
+        this.checkbox = checkbox;
+    }
+
+    public Boolean getSlider() {
+        return (this.type.equals(QuestionType.SLIDEBAR));
+    }
+
+    public void setSlider(Boolean slider) {
+        this.slider = slider;
+    }
+
+    public Boolean getText() {
+        return (this.type.equals(QuestionType.TEXT));
+    }
+
+    public void setText(Boolean text) {
+        this.text = text;
     }
 
 }

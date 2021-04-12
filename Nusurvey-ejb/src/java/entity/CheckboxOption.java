@@ -6,36 +6,71 @@
 package entity;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author Chrisya
  */
 @Entity
-public class CheckboxOption extends QuestionOption {
-    
-    private List<String> options;
+public class CheckboxOption implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long checkboxOptionId;
+
+    private String content;
+    @ManyToOne
+    private QuestionWrapper questionWrapper;
+
+    private Long tempId;
+    @ManyToOne
+    private CheckboxAnswer checkboxAnswer;
 
     public CheckboxOption() {
         super();
     }
 
-    public CheckboxOption(List<String> options) {
+    public CheckboxOption(String content) {
         super();
-        this.options = options;
+        this.content = content;
     }
 
-    public List<String> getOptions() {
-        return options;
+    public String getContent() {
+        return content;
     }
 
-    public void setOptions(List<String> options) {
-        this.options = options;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public QuestionWrapper getQuestionWrapper() {
+        return questionWrapper;
+    }
+
+    public void setQuestionWrapper(QuestionWrapper questionWrapper) {
+        this.questionWrapper = questionWrapper;
+    }
+
+    public Long getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(Long tempId) {
+        this.tempId = tempId;
+    }
+
+    public Long getCheckboxOptionId() {
+        return checkboxOptionId;
+    }
+
+    public void setCheckboxOptionId(Long checkboxOptionId) {
+        this.checkboxOptionId = checkboxOptionId;
     }
 
 }

@@ -10,41 +10,73 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
- * @author Chrisya
+ * @author miche
  */
 @Entity
-public class SliderAnswer extends Answer {
+public class SliderAnswer implements Serializable {
 
-    private int answer;
-    private String answerLabel;
+    @OneToOne(mappedBy = "sliderAnswer")
+    private AnswerWrapper answerWrapper;
 
-    public SliderAnswer() {
-        super();
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @OneToOne
+        private SliderOption optionGiven;
+
+    public Long getId() {
+        return id;
     }
 
-    public SliderAnswer(int answer, String answerLabel) {
-        super();
-        this.answer = answer;
-        this.answerLabel = answerLabel;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public int getAnswer() {
-        return answer;
+    public SliderOption getOptionGiven() {
+        return optionGiven;
     }
 
-    public void setAnswer(int answer) {
-        this.answer = answer;
+    public void setOptionGiven(SliderOption optionGiven) {
+        this.optionGiven = optionGiven;
     }
 
-    public String getAnswerLabel() {
-        return answerLabel;
+    public AnswerWrapper getAnswerWrapper() {
+        return answerWrapper;
     }
 
-    public void setAnswerLabel(String answerLabel) {
-        this.answerLabel = answerLabel;
+    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
+        this.answerWrapper = answerWrapper;
     }
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof SliderAnswer)) {
+            return false;
+        }
+        SliderAnswer other = (SliderAnswer) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "entity.SliderAnswer[ id=" + id + " ]";
+    }
+
 }

@@ -16,17 +16,21 @@ public class CreateNewTransactionReq {
     private CreditCard card;
     private Double amount;
     private TransactionType type;
-    private String title;
+    private Long surveyId;
+    private String date;
 
     public CreateNewTransactionReq() {
     }
 
-    public CreateNewTransactionReq(CreditCard card, Double amount, TransactionType type, String title) {
+    public CreateNewTransactionReq(CreditCard card, Double amount, TransactionType type, Long surveyId, String date) {
         this.card = card;
         this.amount = amount;
         this.type = type;
-        this.title = title;
+        this.surveyId = surveyId;
+        this.date = date;
     }
+
+    
 
     /**
      * @return the card
@@ -70,18 +74,34 @@ public class CreateNewTransactionReq {
         this.type = type;
     }
 
+   
+
     /**
-     * @return the title
+     * @return the surveyId
      */
-    public String getTitle() {
-        return title;
+    public Long getSurveyId() {
+        return surveyId;
     }
 
     /**
-     * @param title the title to set
+     * @param surveyId the surveyId to set
      */
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSurveyId(Long surveyId) {
+        this.surveyId = surveyId;
+    }
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(String date) {
+        this.date = date;
     }
     
 }

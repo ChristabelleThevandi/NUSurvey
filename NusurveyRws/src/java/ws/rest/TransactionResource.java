@@ -8,6 +8,7 @@ package ws.rest;
 import ejb.session.stateless.TransactionSessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.CreditCard;
+import entity.Survey;
 import entity.Transaction;
 import entity.User;
 import enumeration.TransactionType;
@@ -61,7 +62,7 @@ public class TransactionResource {
         if (req != null) {
             try {
                 // ......
-                transactionSessionBean.createNewTransaction(req.getCard(), req.getAmount(), req.getType(), req.getTitle());
+                transactionSessionBean.createNewTransaction(req.getCard(), req.getAmount(), req.getType(), req.getSurveyId(), req.getDate());
                 return Response.status(Response.Status.OK).entity("Success").build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
@@ -106,10 +107,10 @@ public class TransactionResource {
     @Path("giveReward")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response giveReward(GiveRewardReq req) {
-        if (req != null) {
+    public Response giveReward(Survey sur) {
+        if (sur != null) {
             try {
-                transactionSessionBean.giveReward(req.getSurvey(),req.getUser());
+                transactionSessionBean.giveReward(sur);
                 return Response.status(Response.Status.OK).entity("Success").build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();

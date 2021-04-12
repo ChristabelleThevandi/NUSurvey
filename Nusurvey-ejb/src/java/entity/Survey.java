@@ -5,6 +5,7 @@
  */
 package entity;
 
+import enumeration.FacultyType;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -28,32 +29,51 @@ public class Survey implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
     private Date expiry_date;
-    private boolean open;
+    private boolean surveyOpen;
     private String description;
     private String title;
     private Integer max_surveyees;
     private final Double price_per_response = 0.1;
-    private double reward;
-    
+    private Double reward;
+
     @ManyToMany(mappedBy = "surveyTaken")
     private List<User> surveyees;
 
     @ManyToOne
     private User creator;
-    
-    @ManyToMany
+
+    @OneToMany
     private List<Tag> tags;
-    
+
     @OneToMany(mappedBy = "survey")
-    private List<Question> questions;
-    
+    private List<QuestionWrapper> questionWrappers;
+
     @OneToMany(mappedBy = "survey")
     private List<Response> responses;
 
+    private List<FacultyType> faculties;
+    @OneToMany(mappedBy = "survey")
+    private List<Transaction> transactions;
+
     public Survey() {
+        this.surveyOpen = true;
     }
-    
-    
+
+    public List<QuestionWrapper> getQuestionWrappers() {
+        return questionWrappers;
+    }
+
+    public void setQuestionWrappers(List<QuestionWrapper> questionWrappers) {
+        this.questionWrappers = questionWrappers;
+    }
+
+    public List<FacultyType> getFaculties() {
+        return faculties;
+    }
+
+    public void setFaculties(List<FacultyType> faculties) {
+        this.faculties = faculties;
+    }
 
     public Long getSurveyId() {
         return surveyId;
@@ -71,12 +91,12 @@ public class Survey implements Serializable {
         this.expiry_date = expiry_date;
     }
 
-    public boolean isOpen() {
-        return open;
+    public boolean isSurveyOpen() {
+        return surveyOpen;
     }
 
-    public void setOpen(boolean open) {
-        this.open = open;
+    public void setSurveyOpen(boolean surveyOpen) {
+        this.surveyOpen = surveyOpen;
     }
 
     public String getDescription() {
@@ -106,7 +126,7 @@ public class Survey implements Serializable {
     public Double getPrice_per_response() {
         return price_per_response;
     }
-    
+
     public List<User> getSurveyees() {
         return surveyees;
     }
@@ -131,12 +151,12 @@ public class Survey implements Serializable {
         this.tags = tags;
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public List<QuestionWrapper> getQuestions() {
+        return this.questionWrappers;
     }
 
-    public void setQuestions(List<Question> questions) {
-        this.questions = questions;
+    public void setQuestions(List<QuestionWrapper> questionWrappers) {
+        this.questionWrappers = questionWrappers;
     }
 
     public List<Response> getResponses() {

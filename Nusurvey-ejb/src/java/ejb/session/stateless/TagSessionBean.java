@@ -39,10 +39,13 @@ public class TagSessionBean implements TagSessionBeanLocal {
         Query query = entityManager.createQuery("SELECT t FROM Tag t");
         List<Tag> tags = query.getResultList();
 
-        for (Tag t : tags) {
-            t.getSurveys().size();
-            t.getUsers().size();
-        }
         return tags;
+    }
+    
+    public Tag retrieveTagByTagName(String name) {
+        System.out.println("name " + name);
+        Query query = entityManager.createQuery("SELECT t FROM Tag t WHERE t.tag_name= :name");
+        query.setParameter("name", name);
+        return (Tag) query.getSingleResult();
     }
 }

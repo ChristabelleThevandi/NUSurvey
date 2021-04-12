@@ -26,16 +26,10 @@ public class Tag implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
     private String tag_name;
-    
-    @ManyToMany(mappedBy = "tags")
-    private List<Survey> surveys;
-
-    @ManyToMany(mappedBy = "tags")
-    private List<User> users;
 
     public Tag() {
     }
-   
+
     public Tag(String name) {
         this.tag_name = name;
     }
@@ -47,29 +41,13 @@ public class Tag implements Serializable {
     public void setTagId(Long tagId) {
         this.tagId = tagId;
     }
-    
+
     public String getTag_name() {
         return tag_name;
     }
 
     public void setTag_name(String tag_name) {
         this.tag_name = tag_name;
-    }
-  
-    public List<Survey> getSurveys() {
-        return surveys;
-    }
-
-    public void setSurveys(List<Survey> surveys) {
-        this.surveys = surveys;
-    }
-    
-    public List<User> getUsers() {
-        return users;
-    }
-    
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     @Override
@@ -94,7 +72,7 @@ public class Tag implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Tag[ id=" + tagId + " ]";
+        return tag_name;
     }
 
 }

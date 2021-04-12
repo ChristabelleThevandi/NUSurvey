@@ -34,7 +34,7 @@ public class LoginManagedBean {
      */
     public LoginManagedBean() {
     }
-     public void login(ActionEvent event) throws IOException
+    public void login(ActionEvent event) throws IOException
     {
         try
         {

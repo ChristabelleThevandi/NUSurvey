@@ -13,6 +13,7 @@ import exception.EmailExistException;
 import exception.InputDataValidationException;
 import exception.InvalidLoginCredentialException;
 import exception.UnknownPersistenceException;
+import exception.UserNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -95,6 +96,7 @@ public class UserRegisterManagedBean {
             } 
             
             boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
+            
             if (verify) {
                 DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
                 String strDate = format.format(birth_date);
@@ -112,7 +114,11 @@ public class UserRegisterManagedBean {
         }
         catch(EmailExistException | InvalidLoginCredentialException | UnknownPersistenceException | InputDataValidationException ex)
         {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid login credential: " + ex.getMessage(), null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid register credential: " + ex.getMessage(), null));
+        }
+        catch (UserNotFoundException ex)
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid email: " + ex.getMessage(), null));
         }
     }
 
