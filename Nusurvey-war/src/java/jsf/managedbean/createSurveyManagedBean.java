@@ -239,7 +239,8 @@ public class createSurveyManagedBean implements Serializable {
 
     public void addOptionCheckbox(QuestionWrapper questionWrapper) {
         CheckboxOption newOption = new CheckboxOption();
-        newOption.setTempId(qwId);
+        newOption.setTempId(checkboxOptionId);
+        checkboxOptionId++;
         newOption.setQuestionWrapper(questionWrapper);
         questionWrapper.getCheckbox().add(newOption);
     }
@@ -336,7 +337,7 @@ public class createSurveyManagedBean implements Serializable {
         return selectedFaculties;
     }
 
-    public void handleFileUpload(FileUploadEvent event){
+    public void handleFileUpload(FileUploadEvent event) {
         Long qwTempId = (Long) event.getComponent().getAttributes().get("questionWrapperTempId");
         try {
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + qwTempId + ".jpg";
@@ -366,16 +367,16 @@ public class createSurveyManagedBean implements Serializable {
 
             fileOutputStream.close();
             inputStream.close();
-            
+
             QuestionWrapper questionWrapper = new QuestionWrapper();
-            for (QuestionWrapper qw: questions) {
+            for (QuestionWrapper qw : questions) {
                 if (qw.getTempId().equals(qwTempId)) {
                     questionWrapper = qw;
                 }
             }
-            
+
             questionWrapper.getQuestion().setImage(Long.toString(qwTempId));
-            
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
             System.out.println("Uploaded question picture");
 //            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/accounts/viewProfile.xhtml");
