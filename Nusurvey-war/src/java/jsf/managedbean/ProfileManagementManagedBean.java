@@ -86,16 +86,14 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderName(selectedUserToUpdate.getFirst_name());
         setPlaceHolderLastName(selectedUserToUpdate.getLast_name());
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
+        setTags(getTagSessionBean().retrieveAllTags());
         setPath("../uploadedFiles/"+selectedUserToUpdate.getEmail()+".jpg");
         System.out.println(path);
-        setTags(getTagSessionBean().retrieveAllTags());
-
         if (!selectedUserToUpdate.getTags().isEmpty()) {
             setCurrentUserTags(selectedUserToUpdate.getTags());
             for (Tag t : currentUserTags) {
                 currUserTagStr.add(t.getTag_name());
             }
-
         }
 
         if (selectedUserToUpdate.getAvatar() == null) {
@@ -140,6 +138,7 @@ public class ProfileManagementManagedBean implements Serializable {
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
             System.out.println("Uploaded profile picture");
+            
             }
         catch(IOException ex)
         {
