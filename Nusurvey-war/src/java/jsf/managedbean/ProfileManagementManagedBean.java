@@ -236,6 +236,13 @@ public class ProfileManagementManagedBean implements Serializable {
                 currentUserTags.add(t);
             }
             userSessionBeanLocal.updateTag(selectedUserToUpdate, this.currentUserTags);
+            currentUserTags = userSessionBeanLocal.retrieveUserTags(selectedUserToUpdate);
+            currUserTagStr.clear();
+            if (!currentUserTags.isEmpty()) {
+                for (Tag t : currentUserTags) {
+                    currUserTagStr.add(t.getTag_name());
+                }
+            }
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Tags updated succesfully", null));
         } catch (UserNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "User not found exception has occured: " + ex.getMessage(), null));

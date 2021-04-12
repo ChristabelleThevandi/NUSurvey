@@ -286,4 +286,15 @@ public class UserSessionBean implements UserSessionBeanLocal {
             }
         }
     }
+    
+    @Override
+    public List<Tag> retrieveUserTags(User user) throws UserNotFoundException {
+         try {
+            String email = user.getEmail();
+            User currUser = retrieveUserByEmail(email);
+            return currUser.getTags();
+        } catch (UserNotFoundException exc) {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
+        }
+    }
 }

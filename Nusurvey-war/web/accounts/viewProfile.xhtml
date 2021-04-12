@@ -245,6 +245,7 @@
             <h:form id ="userTags">
                 <p:outputLabel for="tags" value="Tags:"/>&nbsp;
                 <br /><br />
+                <p:messages />
                 <p:autoComplete id="tags" multiple="true" value="#{viewProfileManagedBean.currUserTagStr}"
                                 completeMethod="#{viewProfileManagedBean.completeTags}"
                                 var="tag" itemLabel="#{tag}" itemValue="#{tag}" size="120"
@@ -253,7 +254,7 @@
                         <h:outputText style="vertical-align: middle; margin-left: .5rem" value="#{tag}"/>
                     </p:column>
                 </p:autoComplete>
-                <p:commandButton value="Update Tags" actionListener="#{viewProfileManagedBean.updateUserTags}"/>
+                <p:commandButton value="Update Tags" update="@form userTags" actionListener="#{viewProfileManagedBean.updateUserTags}"/>
             </h:form>
 
         </h:panelGroup>
