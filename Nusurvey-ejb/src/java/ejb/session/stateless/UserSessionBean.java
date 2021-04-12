@@ -236,16 +236,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
     {
         try {
             User currentUser = retrieveUserByEmail(user.getEmail());
-//            List<Tag> newTags = new ArrayList<>();
-//            
-//            for (Tag t : tags)
-//            {
-//                Tag foundTag = em.find(Tag.class, t.getTagId());
-//                newTags.add(foundTag);
-//            }
-//            
-//            currentUser.setTags(newTags);
-              currentUser.setTags(tags);   
+            currentUser.setTags(tags);   
         } catch (UserNotFoundException exc) {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }
