@@ -4,37 +4,36 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    
+
     <section id="mainmenu" class="mainmenu">
-        <h3>Main Menu</h3>
+        <h3 style="margin-left:10px">Main Menu</h3>
         <nav>
             <h:form>
-                    
-                <p:menu style="width:200px;">
+                <p:menu style="width:200px; margin-left: 8px">
                     <p:menuitem value="Home" outcome="/index" icon="pi pi-home" />
-                     <p:submenu label="Information" rendered="#{sessionScope.isLogin == false}">
-                        <p:menuitem value="About Us" outcome="/aboutUs.xhtml" icon="pi pi-info-circle"/>
-                        <p:menuitem value="Contact Us" outcome="/contactUs.xhtml" icon="pi pi-mobile" />
+                    <p:submenu label="Information" rendered="#{sessionScope.isLogin == false}">
+                        <p:menuitem value="About Us" style="padding: 10px" outcome="/aboutUs.xhtml" icon="pi pi-info-circle"/>
+                        <p:menuitem value="Contact Us" style="padding: 10px" outcome="/contactUs.xhtml" icon="pi pi-mobile" />
                     </p:submenu>
-                    
+
                     <p:submenu label="Survey" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="Create Survey" outcome="/survey/createSurvey.xhtml" icon="pi pi-pencil" />
-                        <p:menuitem value="My Surveys" outcome="/survey/viewMySurvey.xhtml" icon="pi pi-list" />
+                        <p:menuitem value="Create Survey" style="padding: 10px" outcome="/survey/createSurvey.xhtml" icon="pi pi-pencil" />
+                        <p:menuitem value="My Surveys" style="padding: 10px" outcome="/survey/viewMySurvey.xhtml" icon="pi pi-list" />
                     </p:submenu>
 
                     <p:submenu label="Account" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="Profile" outcome="/accounts/viewProfile.xhtml" icon="pi pi-user-edit" />
-                        <p:menuitem value="Privacy" outcome="/accounts/viewPrivacy.xhtml" icon="pi pi-lock" />
+                        <p:menuitem value="Profile" style="padding: 10px" outcome="/accounts/viewProfile.xhtml" icon="pi pi-user-edit" />
+                        <p:menuitem value="Privacy" style="padding: 10px" outcome="/accounts/viewPrivacy.xhtml" icon="pi pi-lock" />
                     </p:submenu>  
-                    
+
                     <p:submenu label="Transaction" rendered="#{sessionScope.isLogin == true}">
-                        <p:menuitem value="Transaction History" outcome="/transaction/viewTransaction.xhtml" icon="pi pi-dollar" />
+                        <p:menuitem value="Transaction History" style="padding: 10px" outcome="/transaction/viewTransaction.xhtml" icon="pi pi-dollar" />
                     </p:submenu>  
                 </p:menu>
 
             </h:form>
         </nav>
-            
+
     </section>
 
 </ui:composition>
