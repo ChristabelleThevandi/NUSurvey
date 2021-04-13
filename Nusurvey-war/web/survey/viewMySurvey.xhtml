@@ -14,20 +14,19 @@
                     <h:outputText value="#{survey.title}" />
                 </p:column>
                 
-                <p:column headerText="Expiry Date" styleClass="centeredColumn">
-                    <h:outputText value="#{survey.expiry_date}" />
-                </p:column>
-                
                 <p:column headerText="Responses" styleClass="centeredColumn">
                     <h:outputText value="#{survey.responses.size()}" />
                 </p:column>
               
-                <p:column headerText="View Details" styleClass="centeredColumn">
-                    <p:link outcome="viewSurveyDetails" value="View Survey Details">
+                <p:column headerText="View Results (Close survey to view)" styleClass="centeredColumn">
+                    <p:link outcome="viewSurveyDetails" value="View Survey Results" disabled="#{survey.surveyOpen}">
                         <f:param name="surveyId" value="#{survey.surveyId}" />
                     </p:link>
                 </p:column>
-                
+                <p:column headerText="Close Survey" styleClass="centeredColumn">
+                    <p:commandButton value="Close" actionListener="#{viewMySurveyManagedBean.closeSurvey(survey)}" style="background-image:none;background-color:darkred; color: white" rendered="#{survey.surveyOpen}" />
+                    <p:outputLabel value="Survey is Closed" rendered="#{!survey.surveyOpen}" style="text-align: center" />
+                </p:column>
             </p:dataTable>
          </p:panel>
     </ui:define>
