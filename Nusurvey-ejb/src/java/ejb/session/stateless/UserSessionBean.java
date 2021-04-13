@@ -232,11 +232,10 @@ public class UserSessionBean implements UserSessionBeanLocal {
      * @throws UserNotFoundException
      */
     @Override
-    public void updateTag(User user, List<Tag> tags) throws UserNotFoundException 
-    {
+    public void updateTag(User user, List<Tag> tags) throws UserNotFoundException {
         try {
             User currentUser = retrieveUserByEmail(user.getEmail());
-            currentUser.setTags(tags);   
+            currentUser.setTags(tags);
         } catch (UserNotFoundException exc) {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }
@@ -252,23 +251,23 @@ public class UserSessionBean implements UserSessionBeanLocal {
         for (Tag t : userTag) {
             Query query = em.createQuery("SELECT s FROM Survey s WHERE s.surveyOpen = TRUE ORDER BY s.expiry_date DESC");
             List<Survey> temp = query.getResultList();
-            for(Survey s : temp) {
-                recommendationSurvey.add(s);
+            for (Survey s : temp) {
+                if (!s.getSurveyees().contains(user) && s.getCreator() != user) {
+                    recommendationSurvey.add(s);
+                }
             }
         }
-
         return recommendationSurvey;
     }
 
     @Override
-    public boolean verifyEmail(String email) throws UserNotFoundException
-    {
+    public boolean verifyEmail(String email) throws UserNotFoundException {
         try {
             User user = retrieveUserByEmail(email);
             return false;
         } catch (UserNotFoundException ex) {
             String[] emailSplit = email.split("@");
-            
+
             if (emailSplit.length != 2) {
                 return false;
             }
@@ -280,10 +279,10 @@ public class UserSessionBean implements UserSessionBeanLocal {
             }
         }
     }
-    
+
     @Override
     public List<Tag> retrieveUserTags(User user) throws UserNotFoundException {
-         try {
+        try {
             String email = user.getEmail();
             User currUser = retrieveUserByEmail(email);
             return currUser.getTags();
