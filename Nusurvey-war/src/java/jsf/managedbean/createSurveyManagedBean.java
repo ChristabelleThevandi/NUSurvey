@@ -243,7 +243,8 @@ public class createSurveyManagedBean implements Serializable {
 
     public void addOptionCheckbox(QuestionWrapper questionWrapper) {
         CheckboxOption newOption = new CheckboxOption();
-        newOption.setTempId(qwId);
+        newOption.setTempId(checkboxOptionId);
+        checkboxOptionId++;
         newOption.setQuestionWrapper(questionWrapper);
         questionWrapper.getCheckbox().add(newOption);
     }
