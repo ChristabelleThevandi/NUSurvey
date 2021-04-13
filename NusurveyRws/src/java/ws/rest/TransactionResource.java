@@ -62,7 +62,6 @@ public class TransactionResource {
     public Response createNewTransaction(CreateNewTransactionReq req) {
         if (req != null) {
             try {
-                // ......
                 transactionSessionBean.createNewTransaction(req.getCard(), req.getAmount(), req.getType(), req.getSurveyId(), req.getDate());
                 return Response.status(Response.Status.OK).entity("Success").build();
             } catch (SurveyNotFoundException ex) {
@@ -73,23 +72,29 @@ public class TransactionResource {
         }
     }
 
-    @Path("retrieveMyIncomeTransaction")
+    @Path("retrieveAllTransaction/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveMyIncomeTransaction(@PathParam("email") String email) {
+    public Response retrieveAllTransaction(@PathParam("email") String email) {
         try {
             User userEntity = userSessionBean.retrieveUserByEmail(email);
-            List<Transaction> trans = transactionSessionBean.retrieveMyIncomeTransaction(userEntity);
+            List<Transaction> trans = transactionSessionBean.retrieveAllTransaction(userEntity);
+            for (Transaction t : trans) {
+                t.setUser(null);
+                t.getCreditCard().getTransactions().clear();
+                t.setSurvey(null);
+                t.getCreditCard().setUser(null);
+            }
             GenericEntity<List<Transaction>> genericEntity = new GenericEntity<List<Transaction>>(trans) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
-        } catch (Exception ex) {
+        } catch (UserNotFoundException ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
 
-    @Path("retrieveMyExpenseTransaction")
+    /*@Path("retrieveMyExpenseTransaction")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveMyExpenseTransaction(@PathParam("email") String email) {
@@ -103,7 +108,7 @@ public class TransactionResource {
         } catch (Exception ex) {
             return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
-    }
+    }*/
 
     @Path("giveReward")
     @POST

@@ -39,6 +39,8 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
 
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
+    
+    private String transName = "";
 
     public TransactionSessionBean() {
     }
@@ -69,6 +71,7 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
             transaction.setAmount(amount);
             transaction.setSurvey(currSurvey);
             transaction.setTransaction_date(date);
+            transaction.setTransName(currSurvey.getTitle());
 
             card.setBalance(nextBalance);
             em.persist(transaction);

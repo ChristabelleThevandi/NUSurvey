@@ -27,6 +27,7 @@ public class Transaction implements Serializable {
     private Long transactionId;
     private double amount;
     private String transaction_date;
+    private String transName;
     private TransactionType type;
     @ManyToOne
     private Survey survey;
@@ -119,6 +120,20 @@ public class Transaction implements Serializable {
     @Override
     public String toString() {
         return "entity.Transaction[ id=" + transactionId + " ]";
+    }
+
+    /**
+     * @return the transName
+     */
+    public String getTransName() {
+        return transName;
+    }
+
+    /**
+     * @param transName the transName to set
+     */
+    public void setTransName(String transName) {
+        this.transName = transName;
     }
 
 }

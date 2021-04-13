@@ -200,7 +200,6 @@ public class UserResource {
                 for(Survey s:surveys){
                     s.setSurveyees(null);
                     s.setCreator(null);
-                    s.setFaculties(null);
                     s.setQuestionWrappers(null);
                     s.setResponses(null);
                 }
