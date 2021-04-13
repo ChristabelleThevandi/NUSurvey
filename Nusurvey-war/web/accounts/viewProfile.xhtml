@@ -46,7 +46,6 @@
 
                             <h:outputText value="Birth Date: "/>
                             <h:outputText value="#{sessionScope.currentCustomerEntity.birth_date}" >
-                                <f:convertDateTime type="date" pattern ="dd-MM-yyyy"/>
                             </h:outputText>
                         </p:panelGrid>
                     </div>
@@ -154,7 +153,6 @@
 
                                 <h:outputText value="Expiry Date: " />
                                 <h:outputText value="#{sessionScope.currentCustomerEntity.creditCard.expiry_date}">&nbsp;
-                                    <f:convertDateTime type="date" pattern ="dd-MM-yyyy"/>
                                 </h:outputText>
                             </p:panelGrid>
                         </div>

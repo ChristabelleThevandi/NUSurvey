@@ -98,7 +98,7 @@ public class UserRegisterManagedBean {
             boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
             
             if (verify) {
-                DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                 String strDate = format.format(birth_date);
                 User newUser = new User(getFirst_name(), getLast_name(), strDate, getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
                 User user = userSessionBeanLocal.register(newUser);
