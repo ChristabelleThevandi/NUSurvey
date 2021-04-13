@@ -24,7 +24,7 @@
                 <p:fieldset legend="Profile">
                     <figure class="avatar">
                         <p:growl id="avatar" showDetail="true"/>
-                        <p:graphicImage library="images" height="120" width="120" alt="avatar" url="../uploadedFiles/#{viewProfileManagedBean.path}" cache="false"/>
+                        <p:graphicImage library="images" height="120" width="120" alt="avatar" url="../uploadedFiles/#{viewProfileManagedBean.path}" cache="false" rendered ="#{viewProfileManagedBean.hasAvatar}"/>
                     </figure>
                     <div class="card">
                         <p:panelGrid columns="2" style="width: 60%" columnClasses="forty-percent top-alignment, sixty-percent top-alignment">
