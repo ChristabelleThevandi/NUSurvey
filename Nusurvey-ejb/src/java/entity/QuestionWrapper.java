@@ -46,9 +46,10 @@ public class QuestionWrapper implements Serializable {
     private Survey survey;
 
     private Long tempId;
+    
 
-    @OneToOne
-    private AnswerWrapper answerWrapper;
+    @OneToMany(mappedBy = "questionWrapper")
+    private List<AnswerWrapper> answerWrappers;
 
     public QuestionWrapper() {
         this.question = new Question();
@@ -84,13 +85,6 @@ public class QuestionWrapper implements Serializable {
         this.survey = survey;
     }
 
-    public AnswerWrapper getAnswerWrapper() {
-        return answerWrapper;
-    }
-
-    public void setAnswerWrapper(AnswerWrapper answerWrapper) {
-        this.answerWrapper = answerWrapper;
-    }
 
     public Long getTempId() {
         return tempId;
@@ -163,6 +157,14 @@ public class QuestionWrapper implements Serializable {
 
     public void setCheckbox(List<CheckboxOption> checkbox) {
         this.checkbox = checkbox;
+    }
+
+    public List<AnswerWrapper> getAnswerWrappers() {
+        return answerWrappers;
+    }
+
+    public void setAnswerWrappers(List<AnswerWrapper> answerWrappers) {
+        this.answerWrappers = answerWrappers;
     }
 
 }

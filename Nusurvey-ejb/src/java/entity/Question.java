@@ -175,4 +175,12 @@ public class Question implements Serializable {
         this.text = text;
     }
 
+    public QuestionWrapper getQuestionWrapper() {
+        return questionWrapper;
+    }
+
+    public void setQuestionWrapper(QuestionWrapper questionWrapper) {
+        this.questionWrapper = questionWrapper;
+    }
+
 }

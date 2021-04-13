@@ -7,8 +7,15 @@ package ws.rest;
 
 import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
+import entity.AnswerWrapper;
+import entity.CheckboxOption;
+import entity.MultipleChoiceOption;
+import entity.QuestionWrapper;
 import entity.Survey;
+import entity.SurveyResponse;
+import entity.Transaction;
 import entity.User;
+import enumeration.QuestionType;
 import exception.SurveyNotFoundException;
 import exception.UserNotFoundException;
 import java.util.ArrayList;
@@ -51,6 +58,7 @@ public class SurveyResource {
      */
     public SurveyResource() {
     }
+
     @Path("retrieveSurveyBySurveyId/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -58,6 +66,49 @@ public class SurveyResource {
         try {
             System.out.println("tset");
             Survey survey = surveySessionBean.retrieveSurveyBySurveyId(id);
+
+            //creator
+            survey.getCreator().getSurveyTaken().clear();
+            survey.getCreator().getMySurveys().clear();
+            survey.getCreator().setCreditCard(null);
+            survey.getCreator().getTransactions().clear();
+            survey.getCreator().getResponses().clear();
+            survey.getSurveyees().clear();
+            survey.getTransactions().clear();
+            survey.getResponses().clear();
+
+            for (QuestionWrapper q : survey.getQuestionWrappers()) {
+                if (q.getQuestion().getType().equals(QuestionType.MCQ)) {
+                    for (MultipleChoiceOption m : q.getMcq()) {
+                        m.setQuestionWrapper(null);
+                    }
+                    q.getCheckbox().clear();
+                    q.setSlider(null);
+                    q.setText(null);
+                } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
+                    for (CheckboxOption c : q.getCheckbox()) {
+                        c.setQuestionWrapper(null);
+                    }
+                    q.getMcq().clear();
+                    q.setSlider(null);
+                    q.setText(null);
+                } else if (q.getQuestion().getType().equals(QuestionType.SLIDEBAR)) {
+                    q.getSlider().setQuestionWrapper(null);
+                    q.getCheckbox().clear();
+                    q.getMcq().clear();
+                    q.setText(null);
+                } else if (q.getQuestion().getType().equals(QuestionType.TEXT)) {
+                    q.getText().setQuestionWrapper(null);
+                    q.getCheckbox().clear();
+                    q.setSlider(null);
+                    q.getMcq().clear();
+                }
+
+                q.getQuestion().setQuestionWrapper(null);
+                q.setSurvey(null);
+                q.getAnswerWrappers().clear();
+            }
+
             GenericEntity<Survey> genericEntity = new GenericEntity<Survey>(survey) {
             };
 
@@ -66,14 +117,16 @@ public class SurveyResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+
     @Path("retrieveAllSurveys")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response retrieveAllSurveys() {
         try {
             System.out.println("tset");
-            List<Survey> survey = surveySessionBean.retrieveAllSurveys();
-            GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(survey) {
+            List<Survey> surveys = surveySessionBean.retrieveAllSurveys();
+
+            GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(surveys) {
             };
 
             return Response.status(Response.Status.OK).entity(genericEntity).build();
@@ -81,6 +134,7 @@ public class SurveyResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+
     @Path("retrieveMyFilledSurveys")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -88,8 +142,51 @@ public class SurveyResource {
         try {
             System.out.println("tset");
             User currentUser = userSessionBean.retrieveUserByEmail(email);
-            List<Survey> survey = currentUser.getMySurveys();
-            GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(survey) {
+            List<Survey> surveys = currentUser.getMySurveys();
+            for (Survey survey : surveys) {
+
+                survey.getCreator().getSurveyTaken().clear();
+                survey.getCreator().getMySurveys().clear();
+                survey.getCreator().setCreditCard(null);
+                survey.getCreator().getTransactions().clear();
+                survey.getCreator().getResponses().clear();
+                survey.getSurveyees().clear();
+                survey.getTransactions().clear();
+                survey.getResponses().clear();
+
+                for (QuestionWrapper q : survey.getQuestionWrappers()) {
+                    if (q.getQuestion().getType().equals(QuestionType.MCQ)) {
+                        for (MultipleChoiceOption m : q.getMcq()) {
+                            m.setQuestionWrapper(null);
+                        }
+                        q.getCheckbox().clear();
+                        q.setSlider(null);
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
+                        for (CheckboxOption c : q.getCheckbox()) {
+                            c.setQuestionWrapper(null);
+                        }
+                        q.getMcq().clear();
+                        q.setSlider(null);
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.SLIDEBAR)) {
+                        q.getSlider().setQuestionWrapper(null);
+                        q.getCheckbox().clear();
+                        q.getMcq().clear();
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.TEXT)) {
+                        q.getText().setQuestionWrapper(null);
+                        q.getCheckbox().clear();
+                        q.setSlider(null);
+                        q.getMcq().clear();
+                    }
+
+                    q.getQuestion().setQuestionWrapper(null);
+                    q.setSurvey(null);
+                    q.getAnswerWrappers().clear();
+                }
+            }
+            GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(surveys) {
             };
 
             return Response.status(Response.Status.OK).entity(genericEntity).build();
@@ -97,18 +194,62 @@ public class SurveyResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+
     @Path("searchSurveysByTitle")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response searchSurveysByTitle(@QueryParam("title") String title,@QueryParam("email") String email ) {
+    public Response searchSurveysByTitle(@QueryParam("title") String title, @QueryParam("email") String email) {
         try {
             System.out.println("tset");
             User user = userSessionBean.retrieveUserByEmail(email);
             List<Survey> survey = surveySessionBean.searchSurveysByTitle(title);
             List<Survey> toSend = new ArrayList<>();
-            for(Survey s:survey) {
+            for (Survey s : survey) {
                 if (!s.getSurveyees().contains(user)) {
                     toSend.add(s);
+                }
+            }
+            for (Survey s : toSend) {
+
+                s.getCreator().getSurveyTaken().clear();
+                s.getCreator().getMySurveys().clear();
+                s.getCreator().setCreditCard(null);
+                s.getCreator().getTransactions().clear();
+                s.getCreator().getResponses().clear();
+                s.getSurveyees().clear();
+                s.getTransactions().clear();
+                s.getResponses().clear();
+
+                for (QuestionWrapper q : s.getQuestionWrappers()) {
+                    if (q.getQuestion().getType().equals(QuestionType.MCQ)) {
+                        for (MultipleChoiceOption m : q.getMcq()) {
+                            m.setQuestionWrapper(null);
+                        }
+                        q.getCheckbox().clear();
+                        q.setSlider(null);
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
+                        for (CheckboxOption c : q.getCheckbox()) {
+                            c.setQuestionWrapper(null);
+                        }
+                        q.getMcq().clear();
+                        q.setSlider(null);
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.SLIDEBAR)) {
+                        q.getSlider().setQuestionWrapper(null);
+                        q.getCheckbox().clear();
+                        q.getMcq().clear();
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.TEXT)) {
+                        q.getText().setQuestionWrapper(null);
+                        q.getCheckbox().clear();
+                        q.setSlider(null);
+                        q.getMcq().clear();
+                    }
+
+                    q.getQuestion().setQuestionWrapper(null);
+                    q.setSurvey(null);
+                    q.getAnswerWrappers().clear();
                 }
             }
             GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(toSend) {
@@ -119,15 +260,58 @@ public class SurveyResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
+
     @Path(" filterSurveysByTags")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response  filterSurveysByTags(FilterSurveysByTagsReq req) {
+    public Response filterSurveysByTags(FilterSurveysByTagsReq req) {
         try {
             System.out.println("tset");
-            List<Survey> survey = surveySessionBean.filterSurveysByTags(req.getTagIds(), req.getCondition());
-            
-            GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(survey) {
+            List<Survey> surveys = surveySessionBean.filterSurveysByTags(req.getTagIds(), req.getCondition());
+            for (Survey survey : surveys) {
+
+                survey.getCreator().getSurveyTaken().clear();
+                survey.getCreator().getMySurveys().clear();
+                survey.getCreator().setCreditCard(null);
+                survey.getCreator().getTransactions().clear();
+                survey.getCreator().getResponses().clear();
+                survey.getSurveyees().clear();
+                survey.getTransactions().clear();
+                survey.getResponses().clear();
+
+                for (QuestionWrapper q : survey.getQuestionWrappers()) {
+                    if (q.getQuestion().getType().equals(QuestionType.MCQ)) {
+                        for (MultipleChoiceOption m : q.getMcq()) {
+                            m.setQuestionWrapper(null);
+                        }
+                        q.getCheckbox().clear();
+                        q.setSlider(null);
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
+                        for (CheckboxOption c : q.getCheckbox()) {
+                            c.setQuestionWrapper(null);
+                        }
+                        q.getMcq().clear();
+                        q.setSlider(null);
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.SLIDEBAR)) {
+                        q.getSlider().setQuestionWrapper(null);
+                        q.getCheckbox().clear();
+                        q.getMcq().clear();
+                        q.setText(null);
+                    } else if (q.getQuestion().getType().equals(QuestionType.TEXT)) {
+                        q.getText().setQuestionWrapper(null);
+                        q.getCheckbox().clear();
+                        q.setSlider(null);
+                        q.getMcq().clear();
+                    }
+
+                    q.getQuestion().setQuestionWrapper(null);
+                    q.setSurvey(null);
+                    q.getAnswerWrappers().clear();
+                }
+            }
+            GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(surveys) {
             };
 
             return Response.status(Response.Status.OK).entity(genericEntity).build();
@@ -135,10 +319,10 @@ public class SurveyResource {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
         }
     }
- 
-  
+
     /**
      * Retrieves representation of an instance of ws.rest.SurveyResource
+     *
      * @return an instance of java.lang.String
      */
     @GET
@@ -150,6 +334,7 @@ public class SurveyResource {
 
     /**
      * PUT method for updating or creating an instance of SurveyResource
+     *
      * @param content representation for the resource
      */
     @PUT
