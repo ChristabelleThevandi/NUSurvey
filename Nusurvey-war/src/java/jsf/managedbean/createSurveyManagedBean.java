@@ -27,11 +27,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,7 +82,6 @@ public class createSurveyManagedBean implements Serializable {
     private Boolean slider;
     private Boolean text;
     private String optionContent;
-    private Date expiry_date;
     private Survey survey;
     private Double surveyAmount;
     private Double incentiveAmount;
@@ -162,9 +158,6 @@ public class createSurveyManagedBean implements Serializable {
 
         newSurvey.setTags(currentUserTags);
         newSurvey.setFaculties(selectedFaculties);
-        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        String strDate = format.format(expiry_date);
-        newSurvey.setExpiry_date(strDate);
         this.survey = newSurvey;
         this.setIncentiveAmount(temp * maxNumberOfResponse);
         this.setSurveyAmount(this.survey.getPrice_per_response() * maxNumberOfResponse);
@@ -415,14 +408,6 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setSurveySessionBeanLocal(SurveySessionBeanLocal surveySessionBeanLocal) {
         this.surveySessionBeanLocal = surveySessionBeanLocal;
-    }
-
-    public Date getExpiry_date() {
-        return expiry_date;
-    }
-
-    public void setExpiry_date(Date expiry_date) {
-        this.expiry_date = expiry_date;
     }
 
     public String getOptionContent() {

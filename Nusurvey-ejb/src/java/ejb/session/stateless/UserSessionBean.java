@@ -235,15 +235,6 @@ public class UserSessionBean implements UserSessionBeanLocal {
     public void updateTag(User user, List<Tag> tags) throws UserNotFoundException {
         try {
             User currentUser = retrieveUserByEmail(user.getEmail());
-//            List<Tag> newTags = new ArrayList<>();
-//            
-//            for (Tag t : tags)
-//            {
-//                Tag foundTag = em.find(Tag.class, t.getTagId());
-//                newTags.add(foundTag);
-//            }
-//            
-//            currentUser.setTags(newTags);
             currentUser.setTags(tags);
         } catch (UserNotFoundException exc) {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");

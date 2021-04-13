@@ -9,9 +9,12 @@ import ejb.session.stateless.SurveySessionBeanLocal;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.Survey;
 import entity.User;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -34,7 +37,7 @@ public class ViewMySurveyManagedBean implements Serializable {
 
     private User currentUser;
     private List<Survey> surveys;
-    
+
     /**
      * Creates a new instance of ViewMySurveyManagedBean
      */
@@ -47,7 +50,16 @@ public class ViewMySurveyManagedBean implements Serializable {
         setCurrentUser((User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("currentCustomerEntity"));
         surveys = surveySessionBean.retrieveMyCreatedSurveys(currentUser);
     }
-    
+
+    public void closeSurvey(Survey survey) throws IOException {
+        surveySessionBean.closeSurvey(survey);
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/survey/viewMySurvey.xhtml");
+        } catch (IOException ex) {
+            Logger.getLogger(ViewMySurveyManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public SurveySessionBeanLocal getSurveySessionBean() {
         return surveySessionBean;
     }
@@ -79,5 +91,5 @@ public class ViewMySurveyManagedBean implements Serializable {
     public void setSurveys(List<Survey> surveys) {
         this.surveys = surveys;
     }
-    
+
 }
