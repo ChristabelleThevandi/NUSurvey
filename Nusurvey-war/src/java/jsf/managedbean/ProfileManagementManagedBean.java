@@ -178,7 +178,7 @@ public class ProfileManagementManagedBean implements Serializable {
     }
 
     public void addCreditCard(ActionEvent event) throws IOException {
-        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         String strDate = format.format(getExpiryDate());
         creditCard = new CreditCard(getNameOnCard(), getCardNumber(), getCvv(), strDate);
         try {
