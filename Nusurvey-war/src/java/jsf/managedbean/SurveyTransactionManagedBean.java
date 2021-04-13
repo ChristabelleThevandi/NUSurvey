@@ -62,9 +62,10 @@ public class SurveyTransactionManagedBean implements Serializable {
         currUser = surveySessionBeanLocal.createSurvey(this.survey);
         try {
             transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), totalAmount, TransactionType.EXPENSE, survey.getSurveyId(), finalDate);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Survey created successfully", null));
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currUser);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/survey/viewMySurvey.xhtml");
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Survey created successfully", null));
         } catch (SurveyNotFoundException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "An error has occurred while creating the new transaction: " + ex.getMessage(), null));
         }

@@ -74,7 +74,7 @@
             }
 
         </style>
-        <h:panelGroup styleClass="margin-custom">
+        <h:panelGroup styleClass="margin-custom" rendered="#{createSurveyManagedBean.hasCreditCard}">
             <article>
                 <h2 style="color: #004DB6; padding-left:20; padding-top: 20">Create Survey</h2>
                 <p style="padding-left:20">
@@ -82,8 +82,17 @@
                 </p>
             </article>
         </h:panelGroup>
+        
+        <h:panelGroup rendered="#{!createSurveyManagedBean.hasCreditCard}">
+            <article>
+                <h2 style="color: #004DB6; padding-left:20; padding-top: 20">Sorry, you are unable to create a survey!</h2>
+                <p style="padding-left:20">
+                    Please add a credit card!           
+                </p>
+            </article>
+        </h:panelGroup>
 
-        <h:panelGroup styleClass="align-center">
+        <h:panelGroup styleClass="align-center" rendered="#{createSurveyManagedBean.hasCreditCard}">
 
             <h:form id="surveyForm">
                 <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank ui-fluid card margin-custom align-center" >
