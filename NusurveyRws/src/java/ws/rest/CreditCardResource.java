@@ -58,8 +58,9 @@ public class CreditCardResource {
     public Response createNewCreditCard(CreditCard creditCard) {
         if (creditCard != null) {
             try {
-                // ......
                 creditCardSessionBean.createCreditCard(creditCard);
+                creditCard.setTransactions(null);
+                creditCard.setUser(null);
                 return Response.status(Response.Status.OK).entity(creditCard).build();
             } catch (Exception ex) {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
