@@ -153,7 +153,8 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         newSurvey.getQuestionWrappers().size();
         List<QuestionWrapper> questions = newSurvey.getQuestionWrappers();
         for (QuestionWrapper q : questions) {
-
+            q.setSurvey(newSurvey);
+            
             if (q.getQuestion().getMcq()) {
                 q.setCheckbox(null);
                 q.setSlider(null);
