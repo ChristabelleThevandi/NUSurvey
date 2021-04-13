@@ -96,6 +96,7 @@ public class createSurveyManagedBean implements Serializable {
     private Long qwId;
     private Long optionId;
     private Long checkboxOptionId;
+    private Boolean hasCreditCard;
 
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
@@ -116,6 +117,9 @@ public class createSurveyManagedBean implements Serializable {
         qwId = 1L;
         optionId = 1L;
         checkboxOptionId = 1L;
+        if(currUser.getCreditCard() != null) {
+            this.hasCreditCard = true;
+        }
     }
 
     @PostConstruct
@@ -622,5 +626,13 @@ public class createSurveyManagedBean implements Serializable {
      */
     public void setQwId(Long qwId) {
         this.qwId = qwId;
+    }
+
+    public Boolean getHasCreditCard() {
+        return hasCreditCard;
+    }
+
+    public void setHasCreditCard(Boolean hasCreditCard) {
+        this.hasCreditCard = hasCreditCard;
     }
 }
