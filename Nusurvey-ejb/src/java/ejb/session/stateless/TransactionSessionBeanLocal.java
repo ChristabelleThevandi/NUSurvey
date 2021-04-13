@@ -31,7 +31,7 @@ public interface TransactionSessionBeanLocal {
 
     public void receiveIncentive(User user) throws SurveyNotFoundException;
 
-    public void createNewTransaction(CreditCard card, Double amount, TransactionType type, Long surveyId) throws SurveyNotFoundException;
+    public void createNewTransaction(CreditCard card, Double amount, TransactionType type, Long surveyId, String date) throws SurveyNotFoundException;
 
     public List<Transaction> retrieveAllTransaction(User user);
 

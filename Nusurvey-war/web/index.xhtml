@@ -19,10 +19,10 @@
             </article>
         </h:panelGroup>
         
-        <h:panelGroup rendered="#{sessionScope.isLogin == true}">
-            <h3>Hi #{sessionScope.currentCustomerEntity.first_name} #{sessionScope.currentCustomerEntity.last_name}, Welcome To NUSurvey!</h3>
+        <h:panelGroup rendered="#{sessionScope.isLogin == true}" >
+            <h3 style="margin-left: 40px">Hi #{sessionScope.currentCustomerEntity.first_name} #{sessionScope.currentCustomerEntity.last_name}, Welcome To NUSurvey!</h3>
             <article>
-                <p>
+                <p style="margin-left: 40px">
                     Start creating your survey now!
                 </p>
                 <figure class="nus">

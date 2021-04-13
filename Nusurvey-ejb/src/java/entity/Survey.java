@@ -24,11 +24,25 @@ import javax.persistence.OneToMany;
 @Entity
 public class Survey implements Serializable {
 
+    /**
+     * @return the transactions
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long surveyId;
-    private Date expiry_date;
+    private String expiry_date;
     private boolean surveyOpen;
     private String description;
     private String title;
@@ -42,14 +56,14 @@ public class Survey implements Serializable {
     @ManyToOne
     private User creator;
 
-    @ManyToMany
+    @OneToMany
     private List<Tag> tags;
 
     @OneToMany(mappedBy = "survey")
     private List<QuestionWrapper> questionWrappers;
 
     @OneToMany(mappedBy = "survey")
-    private List<Response> responses;
+    private List<SurveyResponse> responses;
 
     private List<FacultyType> faculties;
     @OneToMany(mappedBy = "survey")
@@ -83,11 +97,11 @@ public class Survey implements Serializable {
         this.surveyId = surveyId;
     }
 
-    public Date getExpiry_date() {
+    public String getExpiry_date() {
         return expiry_date;
     }
 
-    public void setExpiry_date(Date expiry_date) {
+    public void setExpiry_date(String expiry_date) {
         this.expiry_date = expiry_date;
     }
 
@@ -151,19 +165,11 @@ public class Survey implements Serializable {
         this.tags = tags;
     }
 
-    public List<QuestionWrapper> getQuestions() {
-        return this.questionWrappers;
-    }
-
-    public void setQuestions(List<QuestionWrapper> questionWrappers) {
-        this.questionWrappers = questionWrappers;
-    }
-
-    public List<Response> getResponses() {
+    public List<SurveyResponse> getResponses() {
         return responses;
     }
 
-    public void setResponses(List<Response> responses) {
+    public void setResponses(List<SurveyResponse> responses) {
         this.responses = responses;
     }
 

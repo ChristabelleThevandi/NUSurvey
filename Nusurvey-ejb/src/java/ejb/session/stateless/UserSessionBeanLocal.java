@@ -51,5 +51,7 @@ public interface UserSessionBeanLocal {
     public User removeAvatar(String email) throws UserNotFoundException;
 
     public boolean verifyEmail(String email) throws UserNotFoundException;
+
+    public List<Tag> retrieveUserTags(User user) throws UserNotFoundException;
     
 }

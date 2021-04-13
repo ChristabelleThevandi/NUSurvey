@@ -246,12 +246,15 @@ public class UserSessionBean implements UserSessionBeanLocal {
     public List<Survey> getRecommendation(User user) {
         Long userId = user.getUserId();
         User currentUser = em.find(User.class, userId);
-        List<Survey> recommendationSurvey = null;
+        List<Survey> recommendationSurvey = new ArrayList<>();
         List<Tag> userTag = currentUser.getTags();
 
         for (Tag t : userTag) {
-            Query query = em.createQuery("SELECT s FROM Survey s WHERE s.open= :inOpen ORDER BY s.open DESC");
-            query.setParameter("inOpen", true);
+            Query query = em.createQuery("SELECT s FROM Survey s WHERE s.surveyOpen = TRUE ORDER BY s.expiry_date DESC");
+            List<Survey> temp = query.getResultList();
+            for(Survey s : temp) {
+                recommendationSurvey.add(s);
+            }
         }
 
         return recommendationSurvey;
@@ -275,6 +278,17 @@ public class UserSessionBean implements UserSessionBeanLocal {
             } else {
                 throw new UserNotFoundException("Please use NUS email to register");
             }
+        }
+    }
+    
+    @Override
+    public List<Tag> retrieveUserTags(User user) throws UserNotFoundException {
+         try {
+            String email = user.getEmail();
+            User currUser = retrieveUserByEmail(email);
+            return currUser.getTags();
+        } catch (UserNotFoundException exc) {
+            throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }
     }
 }

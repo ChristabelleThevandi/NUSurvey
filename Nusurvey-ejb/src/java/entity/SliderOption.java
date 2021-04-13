@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Min;
-import org.hibernate.validator.constraints.ScriptAssert;
+
 
 /**
  *
@@ -34,6 +34,8 @@ public class SliderOption implements Serializable {
 
     @OneToOne
     private QuestionWrapper questionWrapper;
+    @OneToOne(mappedBy = "optionGiven")
+    private SliderAnswer sliderAnswer;
 
     public SliderOption() {
         super();

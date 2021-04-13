@@ -68,7 +68,6 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         } else {
             survey.getFaculties().size();
             survey.getQuestionWrappers().size();
-            survey.getQuestions().size();
             survey.getResponses();
             survey.getSurveyees();
             survey.getTags();
@@ -151,8 +150,8 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
         User creatorPersisted = entityManager.find(User.class, creator.getUserId());
         newSurvey.setCreator(creatorPersisted);
 
-        newSurvey.getQuestions().size();
-        List<QuestionWrapper> questions = newSurvey.getQuestions();
+        newSurvey.getQuestionWrappers().size();
+        List<QuestionWrapper> questions = newSurvey.getQuestionWrappers();
         for (QuestionWrapper q : questions) {
 
             if (q.getQuestion().getMcq()) {
@@ -198,8 +197,8 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
             throw new UnsupportedDeleteSurveyException("Cannot delete survey that has been answered!");
         }
 
-        survey.getQuestions().size();
-        List<QuestionWrapper> questions = survey.getQuestions();
+        survey.getQuestionWrappers().size();
+        List<QuestionWrapper> questions = survey.getQuestionWrappers();
 //        for (Question q: questions) {
 //            q.getOptions().size();
 //            List<QuestionOption> options = q.getOptions();
@@ -211,11 +210,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
 
         survey.getTags().size();
         List<Tag> tags = survey.getTags();
-        for (Tag t : tags) {
-            t.getSurveys().size();
-            t.getSurveys().remove(survey);
-        }
-
+        
         survey.getTags().size();
         tags = survey.getTags();
         for (Tag t : tags) {
@@ -250,7 +245,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
             s.getResponses().size();
             s.getSurveyees().size();
             s.getFaculties().size();
-            s.getQuestions().size();
+            s.getQuestionWrappers().size();
             s.getTags().size();
         }
         return surveys;
@@ -266,7 +261,7 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
             s.getResponses().size();
             s.getSurveyees().size();
             s.getFaculties().size();
-            s.getQuestions().size();
+            s.getQuestionWrappers().size();
             s.getTags().size();
         }
         return surveys;

@@ -12,6 +12,9 @@ import entity.User;
 import enumeration.TransactionType;
 import exception.CreditCardErrorException;
 import exception.SurveyNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,12 +39,14 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
 
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
+    
+    private String transName = "";
 
     public TransactionSessionBean() {
     }
 
     @Override
-    public void createNewTransaction(CreditCard card, Double amount, TransactionType transactionType, Long surveyId) throws SurveyNotFoundException {
+    public void createNewTransaction(CreditCard card, Double amount, TransactionType transactionType, Long surveyId, String date) throws SurveyNotFoundException {
         try {
             Survey currSurvey = surveySessionBeanLocal.retrieveSurveyBySurveyId(surveyId);
             card = creditCardSessionBeanLocal.retrieveCreditCardByCardId(card.getCreditCardId());
@@ -65,6 +70,8 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
             transaction.setType(transactionType);
             transaction.setAmount(amount);
             transaction.setSurvey(currSurvey);
+            transaction.setTransaction_date(date);
+            transaction.setTransName(currSurvey.getTitle());
 
             card.setBalance(nextBalance);
             em.persist(transaction);
@@ -105,6 +112,10 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
 
     @Override
     public void paySurvey(User user, Survey survey) throws SurveyNotFoundException {
+        LocalDateTime timeLocal = LocalDateTime.now();
+        DateTimeFormatter timeLocalFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String finalDate = timeLocal.format(timeLocalFormat);
+        
         CreditCard card = user.getCreditCard();
         card.getTransactions().size();
 
@@ -114,7 +125,7 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
         String title = "Payment for survey " + survey.getTitle();
 
         try {
-            createNewTransaction(card, amount, TransactionType.EXPENSE, survey.getSurveyId());
+            createNewTransaction(card, amount, TransactionType.EXPENSE, survey.getSurveyId(), finalDate);
         } catch (SurveyNotFoundException ex) {
             throw ex;
         }
@@ -122,6 +133,10 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
 
     @Override
     public void giveReward(Survey survey) throws SurveyNotFoundException {
+        LocalDateTime timeLocal = LocalDateTime.now();
+        DateTimeFormatter timeLocalFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String finalDate = timeLocal.format(timeLocalFormat);
+        
         List<User> surveyees = survey.getSurveyees();
         surveyees.size();
         Double amount = survey.getReward();
@@ -130,7 +145,7 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
         for (User surveyee : surveyees) {
             CreditCard card = surveyee.getCreditCard();
             try {
-                createNewTransaction(card, amount, TransactionType.INCOME, survey.getSurveyId());
+                createNewTransaction(card, amount, TransactionType.INCOME, survey.getSurveyId(), finalDate);
             } catch (SurveyNotFoundException ex) {
                 throw ex;
             }
@@ -139,6 +154,9 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
 
     @Override
     public void receiveIncentive(User user) throws SurveyNotFoundException {
+        LocalDateTime timeLocal = LocalDateTime.now();
+        DateTimeFormatter timeLocalFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String finalDate = timeLocal.format(timeLocalFormat);
 
         List<Transaction> transactions = retrieveMyExpenseTransaction(user);
         Double total = 0.0;
@@ -151,7 +169,7 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
 //            String title = "Congratulations for reaching the milestone!";
             CreditCard card = user.getCreditCard();
             try {
-                createNewTransaction(card, user.getIncentive(), TransactionType.INCOME, -1L);
+                createNewTransaction(card, user.getIncentive(), TransactionType.INCOME, -1L, finalDate);
             } catch (SurveyNotFoundException ex) {
                 throw ex;
             }

@@ -26,13 +26,10 @@ public class Tag implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tagId;
     private String tag_name;
-    
-    @ManyToMany(mappedBy = "tags")
-    private List<Survey> surveys;
 
     public Tag() {
     }
-   
+
     public Tag(String name) {
         this.tag_name = name;
     }
@@ -44,7 +41,7 @@ public class Tag implements Serializable {
     public void setTagId(Long tagId) {
         this.tagId = tagId;
     }
-    
+
     public String getTag_name() {
         return tag_name;
     }
@@ -52,15 +49,7 @@ public class Tag implements Serializable {
     public void setTag_name(String tag_name) {
         this.tag_name = tag_name;
     }
-  
-    public List<Survey> getSurveys() {
-        return surveys;
-    }
 
-    public void setSurveys(List<Survey> surveys) {
-        this.surveys = surveys;
-    }
-    
     @Override
     public int hashCode() {
         int hash = 0;

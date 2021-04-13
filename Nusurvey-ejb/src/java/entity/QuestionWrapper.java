@@ -25,7 +25,7 @@ public class QuestionWrapper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
@@ -44,6 +44,12 @@ public class QuestionWrapper implements Serializable {
     private List<CheckboxOption> checkbox;
     @ManyToOne
     private Survey survey;
+
+    private Long tempId;
+    
+
+    @OneToMany(mappedBy = "questionWrapper")
+    private List<AnswerWrapper> answerWrappers;
 
     public QuestionWrapper() {
         this.question = new Question();
@@ -77,6 +83,15 @@ public class QuestionWrapper implements Serializable {
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+
+    public Long getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(Long tempId) {
+        this.tempId = tempId;
     }
 
     @Override
@@ -142,6 +157,14 @@ public class QuestionWrapper implements Serializable {
 
     public void setCheckbox(List<CheckboxOption> checkbox) {
         this.checkbox = checkbox;
+    }
+
+    public List<AnswerWrapper> getAnswerWrappers() {
+        return answerWrappers;
+    }
+
+    public void setAnswerWrappers(List<AnswerWrapper> answerWrappers) {
+        this.answerWrappers = answerWrappers;
     }
 
 }

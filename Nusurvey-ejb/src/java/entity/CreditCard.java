@@ -30,7 +30,7 @@ public class CreditCard implements Serializable {
     private String name;
     private String card_number;
     private String cvv;
-    private Date expiry_date;
+    private String expiry_date;
     private Double balance;
     
     @OneToOne(mappedBy = "creditCard")
@@ -44,7 +44,7 @@ public class CreditCard implements Serializable {
         this.balance = 0.00;
     }
 
-    public CreditCard(String name, String card_number, String cvv, Date expiry_date) {
+    public CreditCard(String name, String card_number, String cvv, String expiry_date) {
         this.name = name;
         this.card_number = card_number;
         this.cvv = cvv;
@@ -90,11 +90,11 @@ public class CreditCard implements Serializable {
         this.cvv = cvv;
     }
 
-    public Date getExpiry_date() {
+    public String getExpiry_date() {
         return expiry_date;
     }
 
-    public void setExpiry_date(Date expiry_date) {
+    public void setExpiry_date(String expiry_date) {
         this.expiry_date = expiry_date;
     }
     

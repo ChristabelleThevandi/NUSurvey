@@ -16,9 +16,9 @@ import exception.UnknownPersistenceException;
 import exception.UserNotFoundException;
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -75,12 +75,32 @@ public class UserRegisterManagedBean {
                 setFaculty(FacultyType.COMPUTING);
             } else if (tempFaculty == 3) {
                 setFaculty(FacultyType.DENTISTRY);
+            } else if (tempFaculty == 4) {
+                setFaculty(FacultyType.ENGINEERING);
+            } else if (tempFaculty == 5) {
+                setFaculty(FacultyType.SCIENCE);
+            } else if (tempFaculty == 6) {
+                setFaculty(FacultyType.DESIGN);
+            } else if (tempFaculty == 7) {
+                setFaculty(FacultyType.LAW);
+            } else if (tempFaculty == 8) {
+                setFaculty(FacultyType.MEDICINE);
+            } else if (tempFaculty == 9) {
+                setFaculty(FacultyType.YST);
+            } else if (tempFaculty == 10) {
+                setFaculty(FacultyType.HEALTH);
+            } else if (tempFaculty == 11) {
+                setFaculty(FacultyType.POLICY);
+            } else if (tempFaculty == 12) {
+                setFaculty(FacultyType.EMPLOYEE);
             } 
             
             boolean verify = userSessionBeanLocal.verifyEmail(getEmail());
             
             if (verify) {
-                User newUser = new User(getFirst_name(), getLast_name(), getBirth_date(), getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                String strDate = format.format(birth_date);
+                User newUser = new User(getFirst_name(), getLast_name(), strDate, getEmail(), getPassword(), getFaculty(), getMajor(), getGender());
                 User user = userSessionBeanLocal.register(newUser);
                 userSessionBeanLocal.login(getEmail(), getPassword());
                 FacesContext.getCurrentInstance().getExternalContext().getSession(true);

@@ -13,6 +13,8 @@ import enumeration.TransactionType;
 import exception.SurveyNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -54,9 +56,12 @@ public class SurveyTransactionManagedBean implements Serializable {
     }
 
     public void doCreateSurvey(ActionEvent event) throws IOException {
+        LocalDateTime timeLocal = LocalDateTime.now();
+        DateTimeFormatter timeLocalFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String finalDate = timeLocal.format(timeLocalFormat);
         currUser = surveySessionBeanLocal.createSurvey(this.survey);
         try {
-            transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), totalAmount, TransactionType.EXPENSE, survey.getSurveyId());
+            transactionSessionBeanLocal.createNewTransaction(currUser.getCreditCard(), totalAmount, TransactionType.EXPENSE, survey.getSurveyId(), finalDate);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Survey created successfully", null));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("currentCustomerEntity", currUser);
             FacesContext.getCurrentInstance().getExternalContext().redirect(FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath() + "/index.xhtml");

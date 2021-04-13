@@ -13,13 +13,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author Chrisya
  */
 @Entity
-public class Response implements Serializable {
+public class SurveyResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -27,7 +28,7 @@ public class Response implements Serializable {
     private Long id;
 
     @OneToMany(mappedBy = "response")
-    private List<Answer> answers;
+    private List<AnswerWrapper> answerWrappers;
 
     @ManyToOne
     private Survey survey;
@@ -35,10 +36,9 @@ public class Response implements Serializable {
     @ManyToOne
     private User surveyee;
 
-    public Response() {
+    public SurveyResponse() {
     }
-    
-    
+
     public Long getId() {
         return id;
     }
@@ -46,13 +46,13 @@ public class Response implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-  
-    public List<Answer> getAnswers() {
-        return answers;
+
+    public List<AnswerWrapper> getAnswerWrappers() {
+        return answerWrappers;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setAnswerWrappers(List<AnswerWrapper> answerWrappers) {
+        this.answerWrappers = answerWrappers;
     }
 
     public Survey getSurvey() {
@@ -81,10 +81,10 @@ public class Response implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Response)) {
+        if (!(object instanceof SurveyResponse)) {
             return false;
         }
-        Response other = (Response) object;
+        SurveyResponse other = (SurveyResponse) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }

@@ -12,22 +12,27 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author Chrisya
  */
 @Entity
-public class MultipleChoiceOption implements Serializable{
+public class MultipleChoiceOption implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long mcqOptionId;
-    
+
     private String content;
     @ManyToOne
     private QuestionWrapper questionWrapper;
+
+    private Long tempId;
+    @OneToOne(mappedBy = "optionChosen")
+    private MultipleChoiceAnswer multipleChoiceAnswer;
 
     public MultipleChoiceOption() {
         super();
@@ -36,6 +41,14 @@ public class MultipleChoiceOption implements Serializable{
     public MultipleChoiceOption(String content) {
         super();
         this.content = content;
+    }
+
+    public Long getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(Long tempId) {
+        this.tempId = tempId;
     }
 
     public String getContent() {
@@ -60,6 +73,14 @@ public class MultipleChoiceOption implements Serializable{
 
     public void setMcqOptionId(Long mcqOptionId) {
         this.mcqOptionId = mcqOptionId;
+    }
+
+    public MultipleChoiceAnswer getMultipleChoiceAnswer() {
+        return multipleChoiceAnswer;
+    }
+
+    public void setMultipleChoiceAnswer(MultipleChoiceAnswer multipleChoiceAnswer) {
+        this.multipleChoiceAnswer = multipleChoiceAnswer;
     }
 
 }
