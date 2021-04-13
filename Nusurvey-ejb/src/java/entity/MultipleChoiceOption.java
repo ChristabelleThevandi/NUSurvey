@@ -75,4 +75,12 @@ public class MultipleChoiceOption implements Serializable {
         this.mcqOptionId = mcqOptionId;
     }
 
+    public MultipleChoiceAnswer getMultipleChoiceAnswer() {
+        return multipleChoiceAnswer;
+    }
+
+    public void setMultipleChoiceAnswer(MultipleChoiceAnswer multipleChoiceAnswer) {
+        this.multipleChoiceAnswer = multipleChoiceAnswer;
+    }
+
 }

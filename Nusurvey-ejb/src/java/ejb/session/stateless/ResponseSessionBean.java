@@ -47,10 +47,12 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         Survey survey = newResponse.getSurvey();
         Survey surveyPersisted = em.find(Survey.class, survey.getSurveyId());
         newResponse.setSurvey(surveyPersisted);
+        surveyPersisted.getResponses().add(newResponse);
         
         User surveyee = newResponse.getSurveyee();
         User surveyeePersisted = em.find(User.class, surveyee.getUserId());
         newResponse.setSurveyee(surveyeePersisted);
+        surveyeePersisted.getResponses().add(newResponse);
         
         em.persist(newResponse);
         em.flush();

@@ -147,7 +147,7 @@ public class createSurveyManagedBean implements Serializable {
         }
         System.out.println("start creating" + incentivePerResponse);
         Survey newSurvey = new Survey();
-        newSurvey.setQuestions(questions);
+        newSurvey.setQuestionWrappers(questions);
         newSurvey.setCreator(this.currUser);
         newSurvey.setDescription(surveyDescription);
         newSurvey.setTitle(surveyTitle);

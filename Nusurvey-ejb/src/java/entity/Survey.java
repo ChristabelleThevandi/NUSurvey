@@ -24,6 +24,20 @@ import javax.persistence.OneToMany;
 @Entity
 public class Survey implements Serializable {
 
+    /**
+     * @return the transactions
+     */
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -149,14 +163,6 @@ public class Survey implements Serializable {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
-    }
-
-    public List<QuestionWrapper> getQuestions() {
-        return this.questionWrappers;
-    }
-
-    public void setQuestions(List<QuestionWrapper> questionWrappers) {
-        this.questionWrappers = questionWrappers;
     }
 
     public List<SurveyResponse> getResponses() {
