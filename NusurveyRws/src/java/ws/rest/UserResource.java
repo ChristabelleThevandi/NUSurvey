@@ -8,6 +8,7 @@ package ws.rest;
 import ejb.session.stateless.UserSessionBeanLocal;
 import entity.CreditCard;
 import entity.Survey;
+import entity.Transaction;
 import entity.User;
 import exception.CreditCardErrorException;
 import exception.EmailExistException;
@@ -68,7 +69,13 @@ public class UserResource {
         try {
             User currentUser = userSessionBean.login(email, password);
             currentUser.setPassword(null);
-            return Response.status(Response.Status.OK).entity(currentUser).build();
+            currentUser.setSurveyTaken(null);
+            currentUser.setCreditCard(null);
+            currentUser.setMySurveys(null);
+            currentUser.setSurveyTaken(null);
+            currentUser.setResponses(null);
+            currentUser.setTransactions(null);
+         return Response.status(Response.Status.OK).entity(currentUser).build();
         } catch (InvalidLoginCredentialException ex) {
             return Response.status(Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
@@ -80,8 +87,15 @@ public class UserResource {
         public Response retrieveUserByEmail(@PathParam("email") String email) {
         try {
             System.out.println("tset");
-            User userEntity = userSessionBean.retrieveUserByEmail(email);
-            GenericEntity<User> genericEntity = new GenericEntity<User>(userEntity) {
+            User currentUser = userSessionBean.retrieveUserByEmail(email);
+            currentUser.setPassword(null);
+            currentUser.setSurveyTaken(null);
+            currentUser.setCreditCard(null);
+            currentUser.setMySurveys(null);
+            currentUser.setSurveyTaken(null);
+            currentUser.setResponses(null);
+            currentUser.setTransactions(null);
+            GenericEntity<User> genericEntity = new GenericEntity<User>(currentUser) {
             };
 
             return Response.status(Status.OK).entity(genericEntity).build();
@@ -183,6 +197,13 @@ public class UserResource {
         if (user != null) {
             try {
                 List<Survey> surveys = userSessionBean.getRecommendation(user);
+                for(Survey s:surveys){
+                    s.setSurveyees(null);
+                    s.setCreator(null);
+                    s.setFaculties(null);
+                    s.setQuestionWrappers(null);
+                    s.setResponses(null);
+                }
                 return Response.status(Response.Status.OK).entity(surveys).build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
