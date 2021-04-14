@@ -249,7 +249,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
         Query query = em.createQuery("SELECT s FROM Survey s WHERE s.surveyOpen = TRUE ORDER BY s.expiry_date DESC");
         List<Survey> temp = query.getResultList();
         for (Survey s : temp) {
-            if (!s.getSurveyees().contains(user) && s.getCreator() != user) {
+            if (!s.getSurveyees().contains(currentUser) && !s.getCreator().equals(user) && s.getFaculties().contains(currentUser.getFaculty())) {
                 recommendationSurvey.add(s);
             }
         }
