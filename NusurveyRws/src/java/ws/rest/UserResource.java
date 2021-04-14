@@ -70,7 +70,9 @@ public class UserResource {
             User currentUser = userSessionBean.login(email, password);
             currentUser.setPassword(null);
             currentUser.setSurveyTaken(null);
-            currentUser.setCreditCard(null);
+            /*currentUser.setCreditCard(null);*/
+            currentUser.getCreditCard().getTransactions().clear();
+            currentUser.getCreditCard().setUser(null);
             currentUser.setMySurveys(null);
             currentUser.setSurveyTaken(null);
             currentUser.setResponses(null);
@@ -129,7 +131,7 @@ public class UserResource {
         if (req != null) {
             try {
                 userSessionBean.changePassword(req.getUser(), req.getPassword());
-                return Response.status(Response.Status.OK).entity("Success").build();
+                return Response.status(Response.Status.OK).build();
             } catch (Exception ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -146,7 +148,7 @@ public class UserResource {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
-                return Response.status(Response.Status.OK).entity("Success").build();
+                return Response.status(Response.Status.OK).build();
             } catch (UserNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -163,7 +165,7 @@ public class UserResource {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
-                return Response.status(Response.Status.OK).entity("Success").build();
+                return Response.status(Response.Status.OK).build();
             } catch (UserNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
@@ -180,7 +182,7 @@ public class UserResource {
         if (req != null) {
             try {
                 User newUser = userSessionBean.addCreditCard(req.getUser(), req.getCard());
-                return Response.status(Response.Status.OK).entity("Success").build();
+                return Response.status(Response.Status.OK).build();
             } catch (UserNotFoundException | CreditCardErrorException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
