@@ -63,7 +63,7 @@ public class TransactionResource {
         if (req != null) {
             try {
                 transactionSessionBean.createNewTransaction(req.getCard(), req.getAmount(), req.getType(), req.getSurveyId(), req.getDate());
-                return Response.status(Response.Status.OK).entity("Success").build();
+                return Response.status(Response.Status.OK).build();
             } catch (SurveyNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
