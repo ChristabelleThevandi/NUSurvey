@@ -40,6 +40,7 @@ public class ResponseResource {
     public ResponseResource() {
     }
 
+    @Path("createResponse")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
