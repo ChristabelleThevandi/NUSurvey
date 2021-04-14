@@ -47,7 +47,7 @@ public class ResponseResource {
         if (res != null) {
             try {
                 Long id = responseSessionBean.createResponse(res);
-                return Response.status(Response.Status.OK).entity("Success").build();
+                return Response.status(Response.Status.OK).build();
             } catch (Exception ex) {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
