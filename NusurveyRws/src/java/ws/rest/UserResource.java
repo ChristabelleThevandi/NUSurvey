@@ -65,12 +65,17 @@ public class UserResource {
     public Response login(LoginReq req) {
         LoginReq loginReq = req;
         String email = loginReq.getEmail();
+        System.out.println(email);
         String password = loginReq.getPassword();
+        System.out.println(password);
         try {
             User currentUser = userSessionBean.login(email, password);
             currentUser.setPassword(null);
             currentUser.setSurveyTaken(null);
-            currentUser.setCreditCard(null);
+            if (currentUser.getCreditCard() != null) {
+                currentUser.getCreditCard().getTransactions().clear();
+                currentUser.getCreditCard().setUser(null);
+            }
             currentUser.setMySurveys(null);
             currentUser.setSurveyTaken(null);
             currentUser.setResponses(null);
@@ -179,7 +184,9 @@ public class UserResource {
     public Response addCreditCard(AddCreditCardReq req) {
         if (req != null) {
             try {
-                User newUser = userSessionBean.addCreditCard(req.getUser(), req.getCard());
+                CreditCard newCard = new CreditCard(req.getCard().getName(),req.getCard().getCard_number(),req.getCard().getCvv(),req.getCard().getExpiry_date());
+                System.out.println(newCard.getCard_number());
+                User newUser = userSessionBean.addCreditCard(req.getUser(), newCard);
                 return Response.status(Response.Status.OK).build();
             } catch (UserNotFoundException | CreditCardErrorException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();

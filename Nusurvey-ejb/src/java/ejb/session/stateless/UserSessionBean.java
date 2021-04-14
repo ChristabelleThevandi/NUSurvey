@@ -194,7 +194,6 @@ public class UserSessionBean implements UserSessionBeanLocal {
                 currentUser.setCreditCard(newCreditCard);
                 newCreditCard.setUser(currentUser);
             }
-
             return currentUser;
         } catch (UserNotFoundException exc) {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
