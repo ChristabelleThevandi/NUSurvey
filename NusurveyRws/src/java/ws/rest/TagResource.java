@@ -7,8 +7,6 @@ package ws.rest;
 
 import ejb.session.stateless.TagSessionBeanLocal;
 import entity.Tag;
-import entity.User;
-import exception.UserNotFoundException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

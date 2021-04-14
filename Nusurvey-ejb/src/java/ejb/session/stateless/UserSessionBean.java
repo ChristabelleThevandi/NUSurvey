@@ -39,6 +39,9 @@ import javax.validation.ValidatorFactory;
 @Stateless
 public class UserSessionBean implements UserSessionBeanLocal {
 
+    @EJB(name = "TagSessionBeanLocal")
+    private TagSessionBeanLocal tagSessionBeanLocal;
+
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
     private final ValidatorFactory validatorFactory;
@@ -46,6 +49,7 @@ public class UserSessionBean implements UserSessionBeanLocal {
 
     @EJB
     private CreditCardSessionBeanLocal creditCardSessionBean;
+    
 
     public UserSessionBean() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
@@ -235,7 +239,11 @@ public class UserSessionBean implements UserSessionBeanLocal {
     public void updateTag(User user, List<Tag> tags) throws UserNotFoundException {
         try {
             User currentUser = retrieveUserByEmail(user.getEmail());
-            currentUser.setTags(tags);
+            List<Tag> temp = new ArrayList<>();
+            for(Tag t:tags) {
+                temp.add(tagSessionBeanLocal.retrieveTagByTagName(t.getTag_name()));
+            }
+            currentUser.setTags(temp);
         } catch (UserNotFoundException exc) {
             throw new UserNotFoundException("User with email " + user.getEmail() + " does not exist!");
         }

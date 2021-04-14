@@ -38,6 +38,7 @@ import javax.ws.rs.core.Response.Status;
 import ws.datamodel.AddCreditCardReq;
 import ws.datamodel.ChangePasswordReq;
 import ws.datamodel.LoginReq;
+import ws.datamodel.UpdateTagReq;
 
 /**
  * REST Web Service
@@ -146,6 +147,23 @@ public class UserResource {
         if (user != null) {
             try {
                 userSessionBean.updateProfile(user);
+                return Response.status(Response.Status.OK).build();
+            } catch (UserNotFoundException ex) {
+                return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
+            }
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Invalid update request").build();
+        }
+    }
+    
+    @Path("updateTag")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateTag(UpdateTagReq req) {
+        if (req != null) {
+            try {
+                userSessionBean.updateTag(req.getUser(), req.getTags());
                 return Response.status(Response.Status.OK).build();
             } catch (UserNotFoundException ex) {
                 return Response.status(Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
