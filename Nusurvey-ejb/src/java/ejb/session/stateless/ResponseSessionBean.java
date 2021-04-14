@@ -31,16 +31,38 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
     
     @Override
     public long createResponse(SurveyResponse newResponse) {
+        System.out.println("responsetest" + newResponse);
         newResponse.getAnswerWrappers().size();
         List<AnswerWrapper> answerWrappers = newResponse.getAnswerWrappers();
         for (AnswerWrapper a: answerWrappers) {
 //            QuestionOption optionPicked = a.getOption();
 //            QuestionOption optionPickedPersisted = em.find(QuestionOption.class, optionPicked.getOptionId());
 //            a.setOption(optionPickedPersisted);
+            if(a.getCheckboxAnswer() != null) {
+                em.persist(a.getCheckboxAnswer());
+                em.persist(a.getMultipleChoiceAnswer());
+                em.persist(a.getSliderAnswer());
+                em.persist(a.getTextAnswer());
+            } else if(a.getMultipleChoiceAnswer() != null) {
+       //         em.persist(a.getCheckboxAnswer());
+                em.persist(a.getMultipleChoiceAnswer());
+//                em.persist(a.getSliderAnswer());
+//                em.persist(a.getTextAnswer());
+            } else if(a.getSliderAnswer() != null) {
+                em.persist(a.getCheckboxAnswer());
+                em.persist(a.getMultipleChoiceAnswer());
+                em.persist(a.getSliderAnswer());
+                em.persist(a.getTextAnswer());
+            } else if(a.getTextAnswer() != null) {
+                em.persist(a.getCheckboxAnswer());
+                em.persist(a.getMultipleChoiceAnswer());
+                em.persist(a.getSliderAnswer());
+                em.persist(a.getTextAnswer());
+            }
             
-            QuestionWrapper questionWrapper = a.getQuestionWrapper();
-            QuestionWrapper questionWrapperPersisted = em.find(QuestionWrapper.class, questionWrapper.getId());
-            a.setQuestionWrapper(questionWrapperPersisted);
+//            QuestionWrapper questionWrapper = a.getQuestionWrapper();
+//            QuestionWrapper questionWrapperPersisted = em.find(QuestionWrapper.class, questionWrapper.getId());
+//            a.setQuestionWrapper(questionWrapperPersisted);
             em.persist(a);
         }
         

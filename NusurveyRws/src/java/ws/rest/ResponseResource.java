@@ -45,9 +45,11 @@ public class ResponseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createResponse(SurveyResponse res) {
+        System.out.println("create response called");
         if (res != null) {
             try {
                 Long id = responseSessionBean.createResponse(res);
+                System.out.println("dcdddddddd" + id);
                 return Response.status(Response.Status.OK).build();
             } catch (Exception ex) {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();

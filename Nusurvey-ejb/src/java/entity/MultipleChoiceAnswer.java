@@ -30,12 +30,22 @@ public class MultipleChoiceAnswer implements Serializable {
     @OneToOne
     private MultipleChoiceOption optionChosen;
 
+    private String optionChosenString;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getOptionChosenString() {
+        return optionChosenString;
+    }
+
+    public void setOptionChosenString(String optionChosenString) {
+        this.optionChosenString = optionChosenString;
     }
 
     public AnswerWrapper getAnswerWrapper() {
