@@ -78,7 +78,7 @@ public class CreditCardResource {
             try {
                 User newUser = userSessionBean.retrieveUserByEmail(user.getEmail());
                 creditCardSessionBean.removeCreditCard(newUser);
-                return Response.status(Response.Status.OK).entity(newUser).build();
+                return Response.status(Response.Status.OK).build();
             } catch (Exception ex) {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(ex.getMessage()).build();
             }
