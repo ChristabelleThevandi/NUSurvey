@@ -31,7 +31,7 @@ public class SliderOption implements Serializable {
     private int maxRange;
     private String minLabel;
     private String maxLabel;
-
+    
     @OneToOne
     private QuestionWrapper questionWrapper;
     @OneToOne(mappedBy = "optionGiven")

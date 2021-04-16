@@ -28,7 +28,7 @@ public class SliderAnswer implements Serializable {
     private Long id;
 
     @OneToOne
-        private SliderOption optionGiven;
+    private SliderOption optionGiven;
 
     public Long getId() {
         return id;
