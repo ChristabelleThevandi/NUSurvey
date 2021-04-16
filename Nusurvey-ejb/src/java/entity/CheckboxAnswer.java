@@ -31,6 +31,8 @@ public class CheckboxAnswer implements Serializable {
 
     @OneToMany(mappedBy = "checkboxAnswer")
     private List<CheckboxOption> optionsGiven;
+    
+    private int numChecked;
 
     public Long getId() {
         return id;
@@ -79,6 +81,14 @@ public class CheckboxAnswer implements Serializable {
     @Override
     public String toString() {
         return "entity.CheckboxAnswer[ id=" + id + " ]";
+    }
+
+    public int getNumChecked() {
+        return numChecked;
+    }
+
+    public void setNumChecked(int numChecked) {
+        this.numChecked = numChecked;
     }
 
 }

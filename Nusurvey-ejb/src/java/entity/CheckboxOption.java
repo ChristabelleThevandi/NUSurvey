@@ -29,6 +29,8 @@ public class CheckboxOption implements Serializable {
     private QuestionWrapper questionWrapper;
 
     private Long tempId;
+    private boolean isSelected;
+    
     @ManyToOne
     private CheckboxAnswer checkboxAnswer;
 
@@ -71,6 +73,22 @@ public class CheckboxOption implements Serializable {
 
     public void setCheckboxOptionId(Long checkboxOptionId) {
         this.checkboxOptionId = checkboxOptionId;
+    }
+
+    public boolean isIsSelected() {
+        return isSelected;
+    }
+
+    public void setIsSelected(boolean isSelected) {
+        this.isSelected = isSelected;
+    }
+
+    public CheckboxAnswer getCheckboxAnswer() {
+        return checkboxAnswer;
+    }
+
+    public void setCheckboxAnswer(CheckboxAnswer checkboxAnswer) {
+        this.checkboxAnswer = checkboxAnswer;
     }
 
 }
