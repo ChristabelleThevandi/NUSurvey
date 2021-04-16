@@ -47,6 +47,8 @@ public class QuestionWrapper implements Serializable {
 
     private Long tempId;
     
+    private String imgPath;
+    private boolean hasImage;
 
     @OneToMany(mappedBy = "questionWrapper")
     private List<AnswerWrapper> answerWrappers;
@@ -57,6 +59,7 @@ public class QuestionWrapper implements Serializable {
         this.slider = new SliderOption();
         this.checkbox = new ArrayList<>();
         this.text = new TextOption();
+        this.hasImage = false;
     }
 
     public QuestionWrapper(Question question) {
@@ -165,6 +168,22 @@ public class QuestionWrapper implements Serializable {
 
     public void setAnswerWrappers(List<AnswerWrapper> answerWrappers) {
         this.answerWrappers = answerWrappers;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
+
+    public boolean isHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
     }
 
 }
