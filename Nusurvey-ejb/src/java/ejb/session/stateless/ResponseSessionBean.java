@@ -28,46 +28,46 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
 
     public ResponseSessionBean() {
     }
-    
+
     @Override
     public long createResponse(SurveyResponse newResponse) {
         System.out.println("responsetest" + newResponse);
         newResponse.getAnswerWrappers().size();
         List<AnswerWrapper> answerWrappers = newResponse.getAnswerWrappers();
-        for (AnswerWrapper a: answerWrappers) {
+        for (AnswerWrapper a : answerWrappers) {
 //            QuestionOption optionPicked = a.getOption();
 //            QuestionOption optionPickedPersisted = em.find(QuestionOption.class, optionPicked.getOptionId());
 //            a.setOption(optionPickedPersisted);
-            if(a.getCheckboxAnswer() != null) {
+            if (a.getCheckboxAnswer() != null) {
                 em.persist(a.getCheckboxAnswer());
-            } else if(a.getMultipleChoiceAnswer() != null) {
+            } else if (a.getMultipleChoiceAnswer() != null) {
                 em.persist(a.getMultipleChoiceAnswer());
-            } else if(a.getSliderAnswer() != null) {
+            } else if (a.getSliderAnswer() != null) {
                 em.persist(a.getSliderAnswer());
-            } else if(a.getTextAnswer() != null) {
+            } else if (a.getTextAnswer() != null) {
                 em.persist(a.getTextAnswer());
             }
-            
-//            QuestionWrapper questionWrapper = a.getQuestionWrapper();
-//            QuestionWrapper questionWrapperPersisted = em.find(QuestionWrapper.class, questionWrapper.getId());
-//            a.setQuestionWrapper(questionWrapperPersisted);
+
+            QuestionWrapper questionWrapperPersisted = em.find(QuestionWrapper.class, a.getQuestionWrapperId());
+            a.setQuestionWrapper(questionWrapperPersisted);
             em.persist(a);
+            questionWrapperPersisted.getAnswerWrappers().add(a);
         }
-        
+
         Survey survey = newResponse.getSurvey();
         Survey surveyPersisted = em.find(Survey.class, survey.getSurveyId());
         newResponse.setSurvey(surveyPersisted);
         surveyPersisted.getResponses().add(newResponse);
-        
+
         User surveyee = newResponse.getSurveyee();
         User surveyeePersisted = em.find(User.class, surveyee.getUserId());
         newResponse.setSurveyee(surveyeePersisted);
         surveyeePersisted.getResponses().add(newResponse);
         surveyeePersisted.getSurveyTaken().add(surveyPersisted);
-        
+
         em.persist(newResponse);
         em.flush();
-        
+
         return newResponse.getId();
     }
 }

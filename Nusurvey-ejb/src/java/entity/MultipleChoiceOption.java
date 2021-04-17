@@ -82,5 +82,9 @@ public class MultipleChoiceOption implements Serializable {
     public void setMultipleChoiceAnswer(MultipleChoiceAnswer multipleChoiceAnswer) {
         this.multipleChoiceAnswer = multipleChoiceAnswer;
     }
+    
+    public boolean equals(MultipleChoiceAnswer answer) {
+        return this.equals(answer);
+    }
 
 }
