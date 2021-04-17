@@ -43,7 +43,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
-
+import java.util.UUID;
 /**
  *
  * @author miche
@@ -395,9 +395,10 @@ public class createSurveyManagedBean implements Serializable {
 
     public void handleFileUpload(FileUploadEvent event) {
         try {
-            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + event.getFile().getFileName();
+            String uuid = UUID.randomUUID().toString();
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + uuid + event.getFile().getFileName();
 
-            System.err.println("********** ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
+            System.err.println("********** ManagedBean.handleFileUpload(): File name: " + uuid + event.getFile().getFileName());
             System.err.println("********** ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
             
             File file = new File(newFilePath);
@@ -427,7 +428,7 @@ public class createSurveyManagedBean implements Serializable {
             {
                 if (qWrapper.getTempId() == this.qWrap.getTempId())
                 {
-                    qWrapper.setImgPath(event.getFile().getFileName());
+                    qWrapper.setImgPath(uuid + event.getFile().getFileName());
                     qWrapper.setHasImage(true);
                     break;
                 }
