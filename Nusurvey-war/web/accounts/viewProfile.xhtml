@@ -244,6 +244,7 @@
                 <p:outputLabel for="tags" value="Tags:"/>&nbsp;
                 <br /><br />
                 <p:messages />
+                
                 <p:autoComplete id="tags" multiple="true" value="#{viewProfileManagedBean.currUserTagStr}"
                                 completeMethod="#{viewProfileManagedBean.completeTags}"
                                 var="tag" itemLabel="#{tag}" itemValue="#{tag}" size="120"

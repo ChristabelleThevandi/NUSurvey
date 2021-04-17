@@ -90,25 +90,31 @@ public class ProfileManagementManagedBean implements Serializable {
         setPlaceHolderGender(selectedUserToUpdate.getGender().toString());
         setTags(getTagSessionBean().retrieveAllTags());
         System.out.println(path);
+        
         if (!selectedUserToUpdate.getTags().isEmpty()) {
             setCurrentUserTags(selectedUserToUpdate.getTags());
             for (Tag t : currentUserTags) {
                 currUserTagStr.add(t.getTag_name());
             }
         }
-
+        
         if (selectedUserToUpdate.getAvatar() == null) {
             setHasAvatar(false);
         } else {
             setHasAvatar(true);
         }
-        setPath("../uploadedFiles/" + selectedUserToUpdate.getEmail() + ".jpg");
+        setPath("../uploadedFiles/" + selectedUserToUpdate.getAvatar());
     }
 
     public void handleFileUpload(FileUploadEvent event) {
         try {
-            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + selectedUserToUpdate.getEmail() + ".jpg";
-
+            String[] tempEmail;
+            tempEmail = selectedUserToUpdate.getEmail().split("@");
+            String toConcat = tempEmail[0];
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + toConcat + event.getFile().getFileName();
+            
+            String concatedPath = toConcat + event.getFile().getFileName();
+            
             System.err.println("********** ManagedBean.handleFileUpload(): File name: " + event.getFile().getFileName());
             System.err.println("********** ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
 
@@ -134,13 +140,12 @@ public class ProfileManagementManagedBean implements Serializable {
 
             fileOutputStream.close();
             inputStream.close();
-            getUserSessionBeanLocal().uploadAvatar(selectedUserToUpdate, selectedUserToUpdate.getEmail());
-            setPath("../uploadedFiles/" + selectedUserToUpdate.getEmail() + ".jpg");
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
-            System.out.println("Uploaded profile picture");
-            System.out.println("Uploaded profile picture");
-            System.out.println("Uploaded profile picture");
+            getUserSessionBeanLocal().uploadAvatar(selectedUserToUpdate, concatedPath);
+            this.setPath(concatedPath);
+            System.out.println(concatedPath);
             setHasAvatar(true);
+            this.selectedUserToUpdate.setAvatar(concatedPath);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
         } catch (UserNotFoundException ex) {
@@ -211,23 +216,7 @@ public class ProfileManagementManagedBean implements Serializable {
         List<Tag> toReturn = new ArrayList<>();
         Boolean notExist = true;
 
-        for (Tag t : countries) {
-            for (String c : currUserTagStr) {
-                String temp = t.getTag_name();
-                if (temp.equals(c)) {
-                    notExist = false;
-                    break;
-                }
-            }
-
-            if (notExist) {
-                toReturn.add(t);
-            } else {
-                notExist = true;
-            }
-        }
-
-        return toReturn;
+        return countries;
     }
 
     public void updateUserTags(ActionEvent event) throws IOException {

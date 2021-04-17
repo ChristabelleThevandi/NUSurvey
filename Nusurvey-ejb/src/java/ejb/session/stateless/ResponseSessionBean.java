@@ -11,7 +11,14 @@ import entity.QuestionWrapper;
 import entity.SurveyResponse;
 import entity.Survey;
 import entity.User;
+import enumeration.TransactionType;
+import exception.SurveyNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,9 +30,16 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ResponseSessionBean implements ResponseSessionBeanLocal {
 
+
+    @EJB
+    private TransactionSessionBeanLocal transactionSessionBean;
+    
+    
+
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
 
+    
     public ResponseSessionBean() {
     }
 
@@ -63,10 +77,23 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         User surveyeePersisted = em.find(User.class, surveyee.getUserId());
         newResponse.setSurveyee(surveyeePersisted);
         surveyeePersisted.getResponses().add(newResponse);
-        surveyeePersisted.getSurveyTaken().add(surveyPersisted);
-
+        
         em.persist(newResponse);
         em.flush();
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
+        LocalDate localDate = LocalDate.now();
+        try 
+        {
+            transactionSessionBean.createNewTransaction(surveyeePersisted.getCreditCard(), surveyPersisted.getPrice_per_response(), TransactionType.INCOME, surveyPersisted.getSurveyId(),localDate.toString());
+        } catch (SurveyNotFoundException exc)
+        {
+            try {
+                throw new SurveyNotFoundException("Cannot find the survey");
+            } catch (SurveyNotFoundException ex) {
+                Logger.getLogger(ResponseSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         return newResponse.getId();
     }

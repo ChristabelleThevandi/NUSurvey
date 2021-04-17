@@ -162,6 +162,15 @@
                             </p:selectOneMenu>
                         </p:panelGrid>
                         <br/>
+                        <figure class="avatar">
+                            <p:growl id="avatar" showDetail="true"/>
+                            <p:graphicImage library="images" height="120" width="120" alt="img" url="../uploadedFiles/#{questionWrapper.imgPath}" cache="false" rendered ="#{questionWrapper.hasImage}"/>
+                        </figure>
+                  
+                        <p:commandButton value="Upload Picture" actionListener="#{createSurveyManagedBean.doUpdateProfile}" update="photoForm" oncomplete="PF('dialogUploadPicture').show()" icon="ui-icon-pencil" title="Update"> 
+                            <f:attribute name = "qW" value = "#{questionWrapper}" />
+                        </p:commandButton>
+                        <br/>
                         <p:panel id="mcqOption" visible="#{questionWrapper.question.mcq}" toggleable="true" >
                             <h:outputText value="Options:" />
                             <ui:repeat value="#{questionWrapper.mcq}" var="mcqoption" id="optionsRepeat" >
@@ -228,6 +237,21 @@
             </h:form>
 
         </h:panelGroup>
+    
+        <h:form id="photoForm">
+            <h:panelGroup>
+                <p:dialog id="dialogUpdatePicture" widgetVar="dialogUploadPicture" header="Upload Picture" closable="true">
+                    <p:messages id="messagesUploadPicture" redisplay="false" />
+                    <p:panel header="File Upload">
+                        <p:messages  redisplay="false">
+                            <p:autoUpdate />
+                        </p:messages>
+                        <p:fileUpload listener="#{createSurveyManagedBean.handleFileUpload}" multiple="false" update="@form surveyForm">
+                        </p:fileUpload>
+                    </p:panel>
+                </p:dialog>
+            </h:panelGroup>
+        </h:form>
     </ui:define>
 
 </ui:composition>

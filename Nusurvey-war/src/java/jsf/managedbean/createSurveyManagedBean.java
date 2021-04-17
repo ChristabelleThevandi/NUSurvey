@@ -43,7 +43,7 @@ import javax.inject.Named;
 import javax.faces.view.ViewScoped;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
-
+import java.util.UUID;
 /**
  *
  * @author miche
@@ -93,7 +93,10 @@ public class createSurveyManagedBean implements Serializable {
     private Long optionId;
     private Long checkboxOptionId;
     private Boolean hasCreditCard;
-
+    private Boolean hasAvatar;
+    private String path;
+    private QuestionWrapper qWrap;
+    
     public createSurveyManagedBean() {
         faculties = new FacultyType[]{FacultyType.ART, FacultyType.BUSINESS,
             FacultyType.COMPUTING, FacultyType.DENTISTRY,
@@ -116,6 +119,7 @@ public class createSurveyManagedBean implements Serializable {
         if(currUser.getCreditCard() != null) {
             this.hasCreditCard = true;
         }
+        this.hasAvatar = false;
     }
 
     @PostConstruct
@@ -274,13 +278,16 @@ public class createSurveyManagedBean implements Serializable {
 
     public void deleteQuestion(String id) {
         QuestionWrapper temp = new QuestionWrapper();
+        System.out.println(id);
+        int index = 0;
         for (QuestionWrapper q : questions) {
             if (q.getTempId().equals(Long.parseLong(id))) {
                 temp = q;
                 break;
             }
+            index++;
         }
-        this.questions.remove(temp);
+        this.questions.remove(index);
     }
 
     public void deleteOption(String id) {
@@ -338,7 +345,7 @@ public class createSurveyManagedBean implements Serializable {
         return selectedFaculties;
     }
 
-    public void handleFileUpload(FileUploadEvent event) {
+    /*public void handleFileUpload(FileUploadEvent event) {
         Long qwTempId = (Long) event.getComponent().getAttributes().get("questionWrapperTempId");
         try {
             String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + qwTempId + ".jpg";
@@ -384,8 +391,62 @@ public class createSurveyManagedBean implements Serializable {
         } catch (IOException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
         }
-    }
+    } */
 
+    public void handleFileUpload(FileUploadEvent event) {
+        try {
+            String uuid = UUID.randomUUID().toString();
+            String newFilePath = FacesContext.getCurrentInstance().getExternalContext().getInitParameter("alternatedocroot_1") + System.getProperty("file.separator") + uuid + event.getFile().getFileName();
+
+            System.err.println("********** ManagedBean.handleFileUpload(): File name: " + uuid + event.getFile().getFileName());
+            System.err.println("********** ManagedBean.handleFileUpload(): newFilePath: " + newFilePath);
+            
+            File file = new File(newFilePath);
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+            int a;
+            int BUFFER_SIZE = 8192;
+            byte[] buffer = new byte[BUFFER_SIZE];
+
+            InputStream inputStream = event.getFile().getInputStream();
+
+            while (true) {
+                a = inputStream.read(buffer);
+
+                if (a < 0) {
+                    break;
+                }
+
+                fileOutputStream.write(buffer, 0, a);
+                fileOutputStream.flush();
+            }
+
+            fileOutputStream.close();
+            inputStream.close();
+            
+            for (QuestionWrapper qWrapper : questions)
+            {
+                if (qWrapper.getTempId() == this.qWrap.getTempId())
+                {
+                    qWrapper.setImgPath(uuid + event.getFile().getFileName());
+                    qWrapper.setHasImage(true);
+                    break;
+                }
+            }
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "File uploaded successfully", ""));
+            System.out.println("Uploaded profile picture");
+            this.qWrap = null;
+        } catch (IOException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "File upload error: " + ex.getMessage(), ""));
+        }
+    }
+    
+    public void doUpdateProfile(ActionEvent event) {
+        System.out.println("Selected this button");
+        this.qWrap = (QuestionWrapper)event.getComponent().getAttributes().get("qW");
+        System.out.println(qWrap.getTempId());    
+    }
+    
     public List<Tag> getCurrentUserTags() {
         return currentUserTags;
     }
@@ -619,5 +680,29 @@ public class createSurveyManagedBean implements Serializable {
 
     public void setHasCreditCard(Boolean hasCreditCard) {
         this.hasCreditCard = hasCreditCard;
+    }
+
+    public Boolean getHasAvatar() {
+        return hasAvatar;
+    }
+
+    public void setHasAvatar(Boolean hasAvatar) {
+        this.hasAvatar = hasAvatar;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public QuestionWrapper getqWrap() {
+        return qWrap;
+    }
+
+    public void setqWrap(QuestionWrapper qWrap) {
+        this.qWrap = qWrap;
     }
 }
