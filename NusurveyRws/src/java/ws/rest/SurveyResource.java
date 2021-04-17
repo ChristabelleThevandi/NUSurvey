@@ -191,53 +191,24 @@ public class SurveyResource {
         try {
             System.out.println("tset");
             User currentUser = userSessionBean.retrieveUserByEmail(email);
-            List<Survey> surveys = currentUser.getMySurveys();
+            List<Survey> surveys = new ArrayList<>();
+            
+            List<SurveyResponse> responses = currentUser.getResponses();
+            for (SurveyResponse r : responses)
+            {
+                surveys.add(r.getSurvey());
+            }
+            
             for (Survey survey : surveys) {
-
-                survey.getCreator().getSurveyTaken().clear();
-                survey.getCreator().getMySurveys().clear();
-                survey.getCreator().setCreditCard(null);
-                survey.getCreator().getTransactions().clear();
-                survey.getCreator().getResponses().clear();
-                survey.getSurveyees().clear();
-                survey.getTransactions().clear();
-                survey.getResponses().clear();
-
-                for (QuestionWrapper q : survey.getQuestionWrappers()) {
-                    if (q.getQuestion().getType().equals(QuestionType.MCQ)) {
-                        for (MultipleChoiceOption m : q.getMcq()) {
-                            m.setQuestionWrapper(null);
-                            m.setMultipleChoiceAnswer(null);
-                        }
-                        q.getCheckbox().clear();
-                        q.setSlider(null);
-                        q.setText(null);
-                    } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
-                        for (CheckboxOption c : q.getCheckbox()) {
-                            c.setQuestionWrapper(null);
-                            c.setCheckboxAnswer(null);
-                        }
-                        q.getMcq().clear();
-                        q.setSlider(null);
-                        q.setText(null);
-                    } else if (q.getQuestion().getType().equals(QuestionType.SLIDEBAR)) {
-                        q.getSlider().setSliderAnswer(null);
-                        q.getSlider().setQuestionWrapper(null);
-                        q.getCheckbox().clear();
-                        q.getMcq().clear();
-                        q.setText(null);
-                    } else if (q.getQuestion().getType().equals(QuestionType.TEXT)) {
-                        q.getText().setTextAnswer(null);
-                        q.getText().setQuestionWrapper(null);
-                        q.getCheckbox().clear();
-                        q.setSlider(null);
-                        q.getMcq().clear();
-                    }
-
-                    q.getQuestion().setQuestionWrapper(null);
-                    q.setSurvey(null);
-                    q.getAnswerWrappers().clear();
-                }
+                    survey.getCreator().getSurveyTaken().clear();
+                    survey.getCreator().getMySurveys().clear();
+                    survey.getCreator().setCreditCard(null);
+                    survey.getCreator().getTransactions().clear();
+                    survey.getCreator().getResponses().clear();
+                    survey.getSurveyees().clear();
+                    survey.getTransactions().clear();
+                    survey.getResponses().clear();
+                    survey.getQuestionWrappers().clear();
             }
             GenericEntity<List<Survey>> genericEntity = new GenericEntity<List<Survey>>(surveys) {
             };
