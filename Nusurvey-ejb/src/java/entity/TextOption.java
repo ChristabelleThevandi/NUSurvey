@@ -64,4 +64,12 @@ public class TextOption implements Serializable {
         this.textOptionId = textOptionId;
     }
 
+    public TextAnswer getTextAnswer() {
+        return textAnswer;
+    }
+
+    public void setTextAnswer(TextAnswer textAnswer) {
+        this.textAnswer = textAnswer;
+    }
+
 }

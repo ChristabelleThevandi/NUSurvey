@@ -97,4 +97,12 @@ public class SliderOption implements Serializable {
         this.sliderOptionId = sliderOptionId;
     }
 
+    public SliderAnswer getSliderAnswer() {
+        return sliderAnswer;
+    }
+
+    public void setSliderAnswer(SliderAnswer sliderAnswer) {
+        this.sliderAnswer = sliderAnswer;
+    }
+
 }

@@ -27,6 +27,7 @@ public class TextAnswer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String answerText;
     @OneToOne
     private TextOption answerGiven;
 
@@ -79,6 +80,14 @@ public class TextAnswer implements Serializable {
     @Override
     public String toString() {
         return "entity.TextAnswer[ id=" + id + " ]";
+    }
+
+    public String getAnswerText() {
+        return answerText;
+    }
+
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
     }
 
 }

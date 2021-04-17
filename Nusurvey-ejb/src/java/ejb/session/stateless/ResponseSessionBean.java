@@ -40,23 +40,11 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
 //            a.setOption(optionPickedPersisted);
             if(a.getCheckboxAnswer() != null) {
                 em.persist(a.getCheckboxAnswer());
-                em.persist(a.getMultipleChoiceAnswer());
-                em.persist(a.getSliderAnswer());
-                em.persist(a.getTextAnswer());
             } else if(a.getMultipleChoiceAnswer() != null) {
-       //         em.persist(a.getCheckboxAnswer());
                 em.persist(a.getMultipleChoiceAnswer());
-//                em.persist(a.getSliderAnswer());
-//                em.persist(a.getTextAnswer());
             } else if(a.getSliderAnswer() != null) {
-                em.persist(a.getCheckboxAnswer());
-                em.persist(a.getMultipleChoiceAnswer());
                 em.persist(a.getSliderAnswer());
-                em.persist(a.getTextAnswer());
             } else if(a.getTextAnswer() != null) {
-                em.persist(a.getCheckboxAnswer());
-                em.persist(a.getMultipleChoiceAnswer());
-                em.persist(a.getSliderAnswer());
                 em.persist(a.getTextAnswer());
             }
             
@@ -75,6 +63,7 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         User surveyeePersisted = em.find(User.class, surveyee.getUserId());
         newResponse.setSurveyee(surveyeePersisted);
         surveyeePersisted.getResponses().add(newResponse);
+        surveyeePersisted.getSurveyTaken().add(surveyPersisted);
         
         em.persist(newResponse);
         em.flush();
