@@ -90,6 +90,9 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         LocalDate localDate = LocalDate.now();
         try {
             transactionSessionBean.createNewTransaction(surveyeePersisted.getCreditCard(), surveyPersisted.getPrice_per_response(), TransactionType.INCOME, surveyPersisted.getSurveyId(), localDate.toString());
+            Double oriBalance = surveyeePersisted.getCreditCard().getBalance();
+            oriBalance += surveyPersisted.getPrice_per_response();
+            surveyeePersisted.getCreditCard().setBalance(oriBalance);
         } catch (SurveyNotFoundException exc) {
             try {
                 throw new SurveyNotFoundException("Cannot find the survey");

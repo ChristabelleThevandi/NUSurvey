@@ -10,12 +10,13 @@
         <p:panel header="My Surveys">
             <h:panelGroup>
                 <ui:repeat value="#{viewSurveyDetailsManagedBean.questionWrappers}" var="questionWrapper" id="questionsRepeat">
+                    <hr />
                     <div style="margin-bottom: 30px; margin-top: 30px">
                         <h:outputText value="#{questionWrapper.question.title}" style="font-weight: bold; margin: 10;font-size: 15pt" />
                     </div>
                     <p:chart type="pie" model="#{viewSurveyDetailsManagedBean.getPieChart()}" style="width:400px;height:300px" rendered="#{questionWrapper.question.mcq}"/>
                     <p:chart type="bar" model="#{viewSurveyDetailsManagedBean.getBarChart()}" style="height:300px;width:400px" rendered="#{questionWrapper.question.checkbox}"/>
-                    <h:outputLabel value="Average Answer Value: #{viewSurveyDetailsManagedBean.getSliders()}" style="margin-left: 10px" rendered="#{questionWrapper.question.slider}" />
+                    <h:outputLabel value="Average Answer Value: #{viewSurveyDetailsManagedBean.getSliders()}" style="margin-left: 10px;" rendered="#{questionWrapper.question.slider}" />
                     <p:dataTable value="#{questionWrapper.answerWrappers}" var="answerWrapper" styleClass="centeredColumn" rendered="#{questionWrapper.question.text}">
                         <p:column headerText="Response Answers" styleClass="centeredColumn">
                             <h:outputText value="#{answerWrapper.textAnswer.answerText}" />

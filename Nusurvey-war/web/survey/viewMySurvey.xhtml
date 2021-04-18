@@ -7,28 +7,32 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content">
-         <p:panel header="My Surveys">
-        
-            <p:dataTable value="#{viewMySurveyManagedBean.surveys}" var="survey" styleClass="centeredColumn">
-                <p:column headerText="Survey" styleClass="centeredColumn">
+        <p:panel header="My Surveys">
+
+            <p:dataTable value="#{viewMySurveyManagedBean.surveys}" var="survey" styleClass="centeredColumn"
+                         id="dataTableAllSurveys" widgetVar="dataTableAllSurveys" rowKey="#{survey.surveyId}" rowIndexVar="row"
+                         filteredValue="#{productManagementManagedBean.filteredSurveys}"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="10,20,50">
+
+                <p:column headerText="Survey" styleClass="centeredColumn" sortBy="#{survey.title}">
                     <h:outputText value="#{survey.title}" />
                 </p:column>
-                
-                <p:column headerText="Responses" styleClass="centeredColumn">
+
+                <p:column headerText="Responses" styleClass="centeredColumn" sortBy="#{survey.responses.size()}">
                     <h:outputText value="#{survey.responses.size()}" />
                 </p:column>
-              
+
                 <p:column headerText="View Results (Close survey to view)" styleClass="centeredColumn">
                     <p:link outcome="viewSurveyDetails" value="View Survey Results" disabled="#{survey.surveyOpen}">
                         <f:param name="surveyId" value="#{survey.surveyId}" />
                     </p:link>
                 </p:column>
-                <p:column headerText="Close Survey" styleClass="centeredColumn">
+                <p:column headerText="Close Survey" styleClass="centeredColumn" >
                     <p:commandButton value="Close" actionListener="#{viewMySurveyManagedBean.closeSurvey(survey)}" style="background-image:none;background-color:darkred; color: white" rendered="#{survey.surveyOpen}" />
                     <p:outputLabel value="Survey is Closed" rendered="#{!survey.surveyOpen}" style="text-align: center" />
                 </p:column>
             </p:dataTable>
-         </p:panel>
+        </p:panel>
     </ui:define>
 
 </ui:composition>
