@@ -41,7 +41,7 @@ public class CreditCard implements Serializable {
 
     public CreditCard() {
         this.transactions=new ArrayList<>();
-        this.balance = 0.00;
+        this.balance = 1500.00;
     }
 
     public CreditCard(String name, String card_number, String cvv, String expiry_date) {
@@ -50,15 +50,11 @@ public class CreditCard implements Serializable {
         this.cvv = cvv;
         this.expiry_date = expiry_date;
         this.transactions=new ArrayList<>();
-        this.balance = 0.00;
+        this.balance = 1500.00;
     }
 
-    
-    
-    
     public Long getCreditCardId() {
         //assumption initial balance
-        this.balance = 200.0;
         return creditCardId;
     }
 

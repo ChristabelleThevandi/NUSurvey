@@ -47,7 +47,7 @@ public class Survey implements Serializable {
     private String description;
     private String title;
     private Integer max_surveyees;
-    private final Double price_per_response = 0.1;
+    private final Double price_per_response = 0.01;
     private Double reward;
 
     @ManyToMany(mappedBy = "surveyTaken")

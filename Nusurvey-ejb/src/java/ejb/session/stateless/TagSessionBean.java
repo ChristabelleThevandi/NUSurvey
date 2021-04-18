@@ -42,10 +42,15 @@ public class TagSessionBean implements TagSessionBeanLocal {
         return tags;
     }
     
+    @Override
     public Tag retrieveTagByTagName(String name) {
         System.out.println("name " + name);
         Query query = entityManager.createQuery("SELECT t FROM Tag t WHERE t.tag_name= :name");
         query.setParameter("name", name);
-        return (Tag) query.getSingleResult();
+        Tag t = (Tag) query.getSingleResult();
+        if(t != null) {
+            return t;
+        }
+        return null;
     }
 }

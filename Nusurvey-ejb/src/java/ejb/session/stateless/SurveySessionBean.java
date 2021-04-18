@@ -71,7 +71,14 @@ public class SurveySessionBean implements SurveySessionBeanLocal {
             survey.getResponses();
             survey.getSurveyees();
             survey.getTags();
-            return survey;
+            
+            if (survey.getMax_surveyees() > survey.getResponses().size())
+            {
+                return survey;
+            }
+            else {
+                throw new SurveyNotFoundException("Survey has reached maximum number of response");
+            }
         }
     }
 

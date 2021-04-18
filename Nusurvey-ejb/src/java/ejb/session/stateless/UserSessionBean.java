@@ -258,7 +258,10 @@ public class UserSessionBean implements UserSessionBeanLocal {
         List<Survey> temp = query.getResultList();
         for (Survey s : temp) {
             if (!s.getSurveyees().contains(currentUser) && !s.getCreator().equals(user) && s.getFaculties().contains(currentUser.getFaculty())) {
-                recommendationSurvey.add(s);
+                if (s.getMax_surveyees() > s.getResponses().size())
+                {
+                    recommendationSurvey.add(s);
+                }
             }
         }
         return recommendationSurvey;
