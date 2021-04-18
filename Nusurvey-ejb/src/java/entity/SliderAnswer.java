@@ -26,6 +26,8 @@ public class SliderAnswer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private int answerValue;
 
     @OneToOne
     private SliderOption optionGiven;
@@ -77,6 +79,14 @@ public class SliderAnswer implements Serializable {
     @Override
     public String toString() {
         return "entity.SliderAnswer[ id=" + id + " ]";
+    }
+
+    public int getAnswerValue() {
+        return answerValue;
+    }
+
+    public void setAnswerValue(int answerValue) {
+        this.answerValue = answerValue;
     }
 
 }

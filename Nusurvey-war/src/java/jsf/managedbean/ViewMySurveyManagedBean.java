@@ -38,11 +38,14 @@ public class ViewMySurveyManagedBean implements Serializable {
     private User currentUser;
     private List<Survey> surveys;
 
+    private List<Survey> filteredSurveys;
+
     /**
      * Creates a new instance of ViewMySurveyManagedBean
      */
     public ViewMySurveyManagedBean() {
         surveys = new ArrayList<>();
+        filteredSurveys = new ArrayList<>();
     }
 
     @PostConstruct
@@ -90,6 +93,14 @@ public class ViewMySurveyManagedBean implements Serializable {
 
     public void setSurveys(List<Survey> surveys) {
         this.surveys = surveys;
+    }
+
+    public List<Survey> getFilteredSurveys() {
+        return filteredSurveys;
+    }
+
+    public void setFilteredSurveys(List<Survey> filteredSurveys) {
+        this.filteredSurveys = filteredSurveys;
     }
 
 }
