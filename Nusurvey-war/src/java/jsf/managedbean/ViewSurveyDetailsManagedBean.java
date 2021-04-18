@@ -26,13 +26,16 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.axes.cartesian.CartesianScales;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
 import org.primefaces.model.charts.bar.BarChartDataSet;
-import org.primefaces.model.charts.bar.BarChartModel;
+import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.charts.bar.BarChartOptions;
 import org.primefaces.model.charts.optionconfig.legend.Legend;
 import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
@@ -53,8 +56,10 @@ public class ViewSurveyDetailsManagedBean implements Serializable {
     private List<QuestionWrapper> questionWrappers;
     private List<PieChartModel> pieCharts;
     private List<BarChartModel> barCharts;
+    private List<Double> sliders = new ArrayList<>();
     private int pieChartIndex = 0;
     private int barChartIndex = 0;
+    private int slidersIndex = 0;
 
     /**
      * Creates a new instance of ViewSurveyDetailsManagedBean
@@ -79,7 +84,36 @@ public class ViewSurveyDetailsManagedBean implements Serializable {
 
         this.questionWrappers = this.survey.getQuestionWrappers();
         iterateMcqAnswers();
-//        iterateCheckboxAnswers();
+        iterateCheckboxAnswers();
+        iterateSliderAnswers();
+//        iterateTextAnswers();
+    }
+    
+//    public void iterateTextAnswers() {
+//        
+//    }
+
+    public Double getSliders() {
+        int temp = this.slidersIndex;
+        if (temp >= sliders.size()) {
+            return this.sliders.get(temp - 1);
+        }
+        this.slidersIndex++;
+        return this.sliders.get(temp);
+    }
+
+    public void iterateSliderAnswers() {
+        for (QuestionWrapper qw : this.questionWrappers) {
+            Double averageAnswers = 0.0;
+            if (qw.getQuestion().getSlider()) {
+                List<AnswerWrapper> answerWrappers = qw.getAnswerWrappers();
+                for (AnswerWrapper aw : answerWrappers) {
+                    averageAnswers += aw.getSliderAnswer().getAnswerValue();
+                }
+                averageAnswers /= answerWrappers.size();
+                sliders.add(averageAnswers);
+            }
+        }
     }
 
     public PieChartModel getPieChart() {
@@ -91,15 +125,6 @@ public class ViewSurveyDetailsManagedBean implements Serializable {
         return this.pieCharts.get(temp);
     }
 
-    public BarChartModel getBarChart() {
-        int temp = this.barChartIndex;
-        if (temp >= barCharts.size()) {
-            return this.barCharts.get(temp - 1);
-        }
-        this.barChartIndex++;
-        return this.barCharts.get(temp);
-    }
-    
     public void iterateMcqAnswers() {
         for (QuestionWrapper qw : this.questionWrappers) {
             HashMap<MultipleChoiceOption, Integer> mcqoptions = new HashMap<>();
@@ -114,104 +139,6 @@ public class ViewSurveyDetailsManagedBean implements Serializable {
             }
         }
     }
-
-//    public void iterateCheckboxAnswers() {
-//        for (QuestionWrapper qw : this.questionWrappers) {
-//            HashMap<CheckboxOption, Integer> checkboxOptions = new HashMap<>();
-//            if (qw.getQuestion().getCheckbox()) {
-//                List<AnswerWrapper> answerWrappers = qw.getAnswerWrappers();
-//                for (AnswerWrapper aw : answerWrappers) {
-//                    List<CheckboxOption> temp = aw.getCheckboxAnswer().getOptionsGiven();
-//                    for (CheckboxOption box : temp) {
-//                        checkboxOptions.put(box, checkboxOptions.getOrDefault(temp, 0) + 1);
-//                        System.out.println(checkboxOptions.getOrDefault(temp, 0));
-//                    }
-//                }
-//                generateBarChart(checkboxOptions);
-//            }
-//        }
-//    }
-//    
-//    public void generateBarChart(HashMap<CheckboxOption, Integer> hashmap) {
-//        BarChartModel barModel = new BarChartModel();
-//        ChartData data = new ChartData();
-//
-//        BarChartDataSet barDataSet = new BarChartDataSet();
-//        barDataSet.setLabel("My First Dataset");
-//
-//        List<Number> values = new ArrayList<>();
-//        values.add(65);
-//        values.add(59);
-//        values.add(80);
-//        values.add(81);
-//        values.add(56);
-//        values.add(55);
-//        values.add(40);
-//        barDataSet.setData(values);
-//
-//        List<String> bgColor = new ArrayList<>();
-//        bgColor.add("rgba(255, 99, 132, 0.2)");
-//        bgColor.add("rgba(255, 159, 64, 0.2)");
-//        bgColor.add("rgba(255, 205, 86, 0.2)");
-//        bgColor.add("rgba(75, 192, 192, 0.2)");
-//        bgColor.add("rgba(54, 162, 235, 0.2)");
-//        bgColor.add("rgba(153, 102, 255, 0.2)");
-//        bgColor.add("rgba(201, 203, 207, 0.2)");
-//        barDataSet.setBackgroundColor(bgColor);
-//
-//        List<String> borderColor = new ArrayList<>();
-//        borderColor.add("rgb(255, 99, 132)");
-//        borderColor.add("rgb(255, 159, 64)");
-//        borderColor.add("rgb(255, 205, 86)");
-//        borderColor.add("rgb(75, 192, 192)");
-//        borderColor.add("rgb(54, 162, 235)");
-//        borderColor.add("rgb(153, 102, 255)");
-//        borderColor.add("rgb(201, 203, 207)");
-//        barDataSet.setBorderColor(borderColor);
-//        barDataSet.setBorderWidth(1);
-//
-//        data.addChartDataSet(barDataSet);
-//
-//        List<String> labels = new ArrayList<>();
-//        labels.add("January");
-//        labels.add("February");
-//        labels.add("March");
-//        labels.add("April");
-//        labels.add("May");
-//        labels.add("June");
-//        labels.add("July");
-//        data.setLabels(labels);
-//        barModel.setData(data);
-//
-//        //Options
-//        BarChartOptions options = new BarChartOptions();
-//        CartesianScales cScales = new CartesianScales();
-//        CartesianLinearAxes linearAxes = new CartesianLinearAxes();
-//        linearAxes.setOffset(true);
-//        CartesianLinearTicks ticks = new CartesianLinearTicks();
-//        ticks.setBeginAtZero(true);
-//        linearAxes.setTicks(ticks);
-//        cScales.addYAxesData(linearAxes);
-//        options.setScales(cScales);
-//
-//        Title title = new Title();
-//        title.setDisplay(true);
-//        title.setText("Bar Chart");
-//        options.setTitle(title);
-//
-//        Legend legend = new Legend();
-//        legend.setDisplay(true);
-//        legend.setPosition("top");
-//        LegendLabel legendLabels = new LegendLabel();
-//        legendLabels.setFontStyle("bold");
-//        legendLabels.setFontColor("#2980B9");
-//        legendLabels.setFontSize(24);
-//        legend.setLabels(legendLabels);
-//        options.setLegend(legend);
-//
-//        barModel.setOptions(options);
-//        this.barCharts.add(barModel);
-//    }
 
     public void generatePieChart(HashMap<MultipleChoiceOption, Integer> hashmap) {
         pieCharts.add(new PieChartModel());
@@ -228,6 +155,60 @@ public class ViewSurveyDetailsManagedBean implements Serializable {
         pieCharts.get(pieCharts.size() - 1).setShowDataLabels(true);
         pieCharts.get(pieCharts.size() - 1).setDiameter(150);
         pieCharts.get(pieCharts.size() - 1).setShadow(false);
+    }
+
+    public BarChartModel getBarChart() {
+        int temp = this.barChartIndex;
+        if (temp >= barCharts.size()) {
+            return this.barCharts.get(temp - 1);
+        }
+        this.barChartIndex++;
+        return this.barCharts.get(temp);
+    }
+
+    public void iterateCheckboxAnswers() {
+        for (QuestionWrapper qw : this.questionWrappers) {
+            HashMap<CheckboxOption, Integer> checkboxOptions = new HashMap<>();
+            if (qw.getQuestion().getCheckbox()) {
+                List<AnswerWrapper> answerWrappers = qw.getAnswerWrappers();
+                for (AnswerWrapper aw : answerWrappers) {
+                    List<CheckboxOption> temp = aw.getCheckboxAnswer().getOptionsGiven();
+                    System.out.println(aw.getCheckboxAnswer().getOptionsGiven() + "qqqqqqq");
+                    for (CheckboxOption box : temp) {
+                        checkboxOptions.put(box, checkboxOptions.getOrDefault(box, 0) + 1);
+                    }
+                }
+                System.out.println("masuk generate checkbox");
+                generateBarChart(checkboxOptions);
+            }
+        }
+    }
+
+    public void generateBarChart(HashMap<CheckboxOption, Integer> hashmap) {
+        BarChartModel model = new BarChartModel();
+
+        ChartSeries options = new ChartSeries();
+
+        Iterator it = hashmap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry) it.next();
+            CheckboxOption temp = (CheckboxOption) pair.getKey();
+            Integer temp2 = (Integer) pair.getValue();
+            System.out.println(temp2 + "aaaaaaa");
+            options.set(temp.getContent(), temp2);
+        }
+
+        model.addSeries(options);
+
+        model.setLegendPosition("ne");
+
+        Axis xAxis = model.getAxis(AxisType.X);
+        xAxis.setLabel("Option");
+
+        Axis yAxis = model.getAxis(AxisType.Y);
+        yAxis.setLabel("Responses");
+
+        this.barCharts.add(model);
     }
 
     public Survey getSurvey() {

@@ -6,10 +6,12 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 /**
@@ -30,9 +32,9 @@ public class CheckboxOption implements Serializable {
 
     private Long tempId;
     private boolean isSelected;
-    
-    @ManyToOne
-    private CheckboxAnswer checkboxAnswer;
+
+    @ManyToMany(mappedBy = "optionsGiven")
+    private List<CheckboxAnswer> checkboxAnswers;
 
     public CheckboxOption() {
         super();
@@ -83,12 +85,17 @@ public class CheckboxOption implements Serializable {
         this.isSelected = isSelected;
     }
 
-    public CheckboxAnswer getCheckboxAnswer() {
-        return checkboxAnswer;
+    public List<CheckboxAnswer> getCheckboxAnswers() {
+        return checkboxAnswers;
     }
 
-    public void setCheckboxAnswer(CheckboxAnswer checkboxAnswer) {
-        this.checkboxAnswer = checkboxAnswer;
+    public void setCheckboxAnswers(List<CheckboxAnswer> checkboxAnswers) {
+        this.checkboxAnswers = checkboxAnswers;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        CheckboxOption option = (CheckboxOption) obj;
+        return this.equals(option);
+    }
 }

@@ -6,6 +6,7 @@
 package ejb.session.stateless;
 
 import entity.AnswerWrapper;
+import entity.CheckboxOption;
 import entity.Question;
 import entity.QuestionWrapper;
 import entity.SurveyResponse;
@@ -15,6 +16,7 @@ import enumeration.TransactionType;
 import exception.SurveyNotFoundException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,16 +32,12 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ResponseSessionBean implements ResponseSessionBeanLocal {
 
-
     @EJB
     private TransactionSessionBeanLocal transactionSessionBean;
-    
-    
 
     @PersistenceContext(unitName = "Nusurvey-ejbPU")
     private EntityManager em;
 
-    
     public ResponseSessionBean() {
     }
 
@@ -49,10 +47,17 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         newResponse.getAnswerWrappers().size();
         List<AnswerWrapper> answerWrappers = newResponse.getAnswerWrappers();
         for (AnswerWrapper a : answerWrappers) {
-//            QuestionOption optionPicked = a.getOption();
-//            QuestionOption optionPickedPersisted = em.find(QuestionOption.class, optionPicked.getOptionId());
-//            a.setOption(optionPickedPersisted);
             if (a.getCheckboxAnswer() != null) {
+                List<CheckboxOption> optionPicked = a.getCheckboxAnswer().getOptionsGiven();
+                List<CheckboxOption> temp = new ArrayList<>();
+                CheckboxOption optionPickedPersisted = new CheckboxOption();
+                for (CheckboxOption option : optionPicked) {
+                    optionPickedPersisted = em.find(CheckboxOption.class, option.getCheckboxOptionId());
+                    temp.add(optionPickedPersisted);
+                    optionPickedPersisted.getCheckboxAnswers().add(a.getCheckboxAnswer());
+                }
+                a.getCheckboxAnswer().setOptionsGiven(temp);
+                System.out.println(a.getCheckboxAnswer().getOptionsGiven().size() + "SIZE");
                 em.persist(a.getCheckboxAnswer());
             } else if (a.getMultipleChoiceAnswer() != null) {
                 em.persist(a.getMultipleChoiceAnswer());
@@ -77,17 +82,15 @@ public class ResponseSessionBean implements ResponseSessionBeanLocal {
         User surveyeePersisted = em.find(User.class, surveyee.getUserId());
         newResponse.setSurveyee(surveyeePersisted);
         surveyeePersisted.getResponses().add(newResponse);
-        
+
         em.persist(newResponse);
         em.flush();
-        
+
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
         LocalDate localDate = LocalDate.now();
-        try 
-        {
-            transactionSessionBean.createNewTransaction(surveyeePersisted.getCreditCard(), surveyPersisted.getPrice_per_response(), TransactionType.INCOME, surveyPersisted.getSurveyId(),localDate.toString());
-        } catch (SurveyNotFoundException exc)
-        {
+        try {
+            transactionSessionBean.createNewTransaction(surveyeePersisted.getCreditCard(), surveyPersisted.getPrice_per_response(), TransactionType.INCOME, surveyPersisted.getSurveyId(), localDate.toString());
+        } catch (SurveyNotFoundException exc) {
             try {
                 throw new SurveyNotFoundException("Cannot find the survey");
             } catch (SurveyNotFoundException ex) {

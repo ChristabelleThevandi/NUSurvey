@@ -89,7 +89,7 @@ public class SurveyResource {
                 } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
                     for (CheckboxOption c : q.getCheckbox()) {
                         c.setQuestionWrapper(null);
-                        c.setCheckboxAnswer(null);
+                        c.setCheckboxAnswers(null);
                     }
                     q.getMcq().clear();
                     q.setSlider(null);
@@ -151,7 +151,7 @@ public class SurveyResource {
                     } else if (q.getQuestion().getType().equals(QuestionType.CHECKBOX)) {
                         for (CheckboxOption c : q.getCheckbox()) {
                             c.setQuestionWrapper(null);
-                            c.setCheckboxAnswer(null);
+                            c.setCheckboxAnswers(null);
                         }
                         q.getMcq().clear();
                         q.setSlider(null);
