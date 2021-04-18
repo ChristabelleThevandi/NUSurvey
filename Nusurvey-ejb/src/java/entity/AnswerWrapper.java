@@ -42,6 +42,8 @@ public class AnswerWrapper implements Serializable {
 
     @OneToOne
     private SurveyResponse response;
+    
+    private Long questionWrapperId;
 
     public Long getId() {
         return id;
@@ -122,6 +124,14 @@ public class AnswerWrapper implements Serializable {
     @Override
     public String toString() {
         return "entity.AnswerWrapper[ id=" + id + " ]";
+    }
+
+    public Long getQuestionWrapperId() {
+        return questionWrapperId;
+    }
+
+    public void setQuestionWrapperId(Long questionWrapperId) {
+        this.questionWrapperId = questionWrapperId;
     }
 
 }
